@@ -316,7 +316,7 @@ function ProcessPageInit() {
                            }
 
                            ProcessPagereloadCtrls(msg);
-                           $(".tncload").load('TermsAndCondition.html');
+                           $(".tncload").load('terms/');
                            initCompleted = true;
                        },
                        error: function (msg) {
@@ -357,7 +357,7 @@ function ProcessPagereloadCtrls(msg) {
 
     if (TransJson.next_action == "Redirect") {
         if (dbgFlag) {
-            location.href = 'thankyou.html';
+            location.href = 'thankyou/';
             return;
         }
         WebViewBridge.call('exitSigningRoom', { 'status': 'SigningComplete' });
@@ -1011,9 +1011,9 @@ function fnSignStatus(signStatus, currSignor) {
             var imgDiv = $("<div class='doc-icon-wrapper'>");
             var img;
             if (CollectSigsJson.doc_index_id == ele.doc_index_id) {
-                img = $("<img class='doc-icon-selected' src='assets/images/doc_iconX2.png' >");
+                img = $("<img class='doc-icon-selected' src='/assets/images/doc_iconX2.png' >");
             } else {
-                img = $("<img class='doc-icon' src='assets/images/doc_iconX2.png' >");
+                img = $("<img class='doc-icon' src='/assets/images/doc_iconX2.png' >");
             }
 
             var divTitle = $("<div><p class='text-center panel-document-title'><span>" + ele.template_type_desc + "</span></p><p class='panel-document-number'>" + docNumber + "</p></div>");
