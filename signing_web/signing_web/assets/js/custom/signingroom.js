@@ -1,6 +1,5 @@
 var TransJson;
 var CollectSigsJson;
-var BackImages;
 var UserConsent;
 var signStatus;
 var CollectedImagesText;
@@ -306,7 +305,7 @@ function ProcessPageInit() {
 
         if (xhr.status == 302) {
             WebViewBridge.call('exitSigningRoom', { 'status': 'SessionTimeout' });
-            return false;
+            return;
         }
 
         ProcessPagereloadCtrls(data);
@@ -375,13 +374,16 @@ function ProcessPagereloadCtrls(data) {
     });
 
     CollectSigsJson = JSON.parse(TransJson.collect_signatures);     // TODO: why server added json.dumps to this field?
-    BackImages = TransJson.list_doc_background_images;
     UserConsent = TransJson.user_consent;
     signStatus = TransJson.sign_status;
     CollectedImagesText = TransJson.list_collected_sigs;
     CurrentSigBlock = CollectSigsJson.sig_block;
-    fnApplyBackImages(BackImages);
-    fnGetInitialFlag(CollectSigsJson);
+
+    // apply background images
+    fnApplyBackImages(TransJson.list_doc_background_images);
+
+    hasInitial = (CollectSigsJson.initial == 'Y');
+
     if (TransJson.signable_doc != 'N') {
 
         if (CurrentSigBlock != null) {
@@ -624,21 +626,24 @@ function SaveSignatures() {
     return false;
 }
 
-function fnApplyBackImages(myBackimages) {
-    if (myBackimages != null) {
+/**
+ * Apply background images
+ */
+function fnApplyBackImages(imgs) {
+
+    if (imgs != null) {
+
         $("[id^=BackImage_]").remove();
        
-        //  $("[id^=BackImage_]").empty();
-        $.each(myBackimages, function (key, value) {
-            var element = document.createElement("img");
-            element.id = "BackImage_" + value.PageNo;
-            //   element.src = value.Value;
-            element.setAttribute('class', 'document-img');
-            //   element.setAttribute('data-original', value.Value);
-            element.setAttribute('src', "data:image/png;base64," + value.Value);
-            document.getElementById('cont1').appendChild(element);
-            // element.lazyload();
+        $.each(imgs, function(idx, value) {
+
+            $("<img>").attr({
+                id:  "BackImage_" + value.PageNo,
+                src: "data:image/png;base64," + value.Value
+            }).addClass("document-img").appendTo('#cont1');
+
         });
+
         if ($(window).width() > 1024) {
             $(".document-img").width("1190");
             $(".document-img-container").css('left', '0.01px');
@@ -1110,11 +1115,6 @@ function fnClearSigAndInitials() {
 
     fnClearAllSigsAndInitials();
 }
-
-function fnGetInitialFlag(collectSigJson) {
-    hasInitial = collectSigJson.initial == 'Y' ? true : false;
-}
-
 
 function fnCls(e) {
     document.getElementById(e).style.visibility = "hidden";
