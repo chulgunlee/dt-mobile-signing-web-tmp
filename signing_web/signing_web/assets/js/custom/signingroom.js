@@ -180,7 +180,7 @@ $(document).ready(function () {
         var result = CheckFullySigned(CurrentSigBlock);
         if (result == 200) return;
         if (txtFiledNotEntered == null) {
-            $('html, body').animate({ scrollTop: $("#" + (CurrentSigBlock[result].IsInitial ? "initial" : "sig") + "_" + CurrentSigBlock[result].SigName).parent('div').position().top }, 'slow');
+            $('html, body').animate({ scrollTop: $("#" + (CurrentSigBlock[result].is_initial ? "initial" : "sig") + "_" + CurrentSigBlock[result].sig_name).parent('div').position().top }, 'slow');
             //$("#sig_" + CurrentSigBlock[0].SigName).get(0).scrollIntoView();
             window.scroll(0, -100);
         } else {
@@ -224,7 +224,7 @@ $(document).ready(function () {
             //var imgData = apiSign.getSignatureImage();
             //$("#id_image1").prop("src", $("#BUYER_SIG").val());
             // Move to the first signature to capture.  
-            $('html, body').animate({ scrollTop: $("#" + (CurrentSigBlock[result].IsInitial ? "initial" : "sig") + "_" + CurrentSigBlock[0].SigName).parent('div').position().top }, 'slow');
+            $('html, body').animate({ scrollTop: $("#" + (CurrentSigBlock[result].is_initial ? "initial" : "sig") + "_" + CurrentSigBlock[0].sig_name).parent('div').position().top }, 'slow');
             //$("#sig_" + CurrentSigBlock[0].SigName).get(0).scrollIntoView();
 
             if (AsssignSigCtrilId != '') {
@@ -262,7 +262,7 @@ $(document).ready(function () {
             //var imgData = apiSign.getSignatureImage();
             //$("#id_image1").prop("src", $("#BUYER_SIG").val());
             // Move to the first signature to capture.  
-            $('html, body').animate({ scrollTop: $("#" + (CurrentSigBlock[result].IsInitial ? "initial" : "sig") + "_" + CurrentSigBlock[0].SigName).parent('div').position().top }, 'slow');
+            $('html, body').animate({ scrollTop: $("#" + (CurrentSigBlock[result].is_initial ? "initial" : "sig") + "_" + CurrentSigBlock[0].sig_name).parent('div').position().top }, 'slow');
             //$("#sig_" + CurrentSigBlock[0].SigName).get(0).scrollIntoView();
 
             if (AsssignSigCtrilId != '') {
@@ -648,18 +648,18 @@ function fnApplySignatures(myDocumentArray) {
     if (myDocumentArray.sig_block != null) {
         $.each(myDocumentArray.sig_block, function (key, value) {
 
-            if (value.IsInitial == false) {
+            if (value.is_initial == false) {
 
-                var tempWidth = parseInt(fnExtractControlWidth(value.SigStyle));
+                var tempWidth = parseInt(fnExtractControlWidth(value.sig_style));
                 if (tempWidth > 0) {
                     imgWidth = tempWidth - 25;
                 }
 
-                var s1 = "<div class='document-sign-holder' style='" + fnApplyHigherResolution(value.SigStyle) + "' onclick=imgCtrl('" + value.SigName + "','sig');>";
-                s1 = s1 + "<span class='fa fa-pencil-square pull-left sign-holder-icon'  id='sig_" + value.SigName + "'></span>";
-                s1 = s1 + " <a class='text-center sign-holder-text'    id='label_sig_" + value.SigName + "'>Click to sign</a>";
-                s1 = s1 + "<img   id='image_sig_" + value.SigName + "'   width=" + imgWidth + "px height='30px'  style='display:none'/>";
-                s1 = s1 + " <span class='fa fa-times-circle pull-right sign-holder-icon-close'  style='display:none'  id='delete_sig_" + value.SigName + "'></span></div>";
+                var s1 = "<div class='document-sign-holder' style='" + fnApplyHigherResolution(value.sig_style) + "' onclick=imgCtrl('" + value.sig_name + "','sig');>";
+                s1 = s1 + "<span class='fa fa-pencil-square pull-left sign-holder-icon' id='sig_" + value.sig_name + "'></span>";
+                s1 = s1 + " <a class='text-center sign-holder-text' id='label_sig_" + value.sig_name + "'>Click to sign</a>";
+                s1 = s1 + "<img id='image_sig_" + value.sig_name + "' width=" + imgWidth + "px height='30px'  style='display:none'/>";
+                s1 = s1 + " <span class='fa fa-times-circle pull-right sign-holder-icon-close'  style='display:none'  id='delete_sig_" + value.sig_name + "'></span></div>";
                 $('#cont1').append(s1);
             }
         });
@@ -669,18 +669,18 @@ function fnApplySignatures(myDocumentArray) {
 
 function fnApplyInitials(myDocumentArray) {
     var imgWidth = '60';
-    if (myDocumentArray.SigBlock != null) {
-        $.each(myDocumentArray.SigBlock, function (key, value) {
-            if (value.IsInitial == true) {
-                var tempWidth = parseInt(fnExtractControlWidth(value.SigStyle));
+    if (myDocumentArray.sig_block != null) {
+        $.each(myDocumentArray.sig_block, function (key, value) {
+            if (value.is_initial == true) {
+                var tempWidth = parseInt(fnExtractControlWidth(value.sig_style));
                 if (tempWidth > 0) {
                     imgWidth = tempWidth - 25;
                 }
 
-                var s1 = "<div class='document-sign-holder document-sign-holder-initial-div' style='" + fnApplyHigherResolution(value.SigStyle) + "' onclick=imgCtrl('" + value.SigName + "','initial');>";
-                s1 = s1 + "<span class='fa fa-pencil-square pull-left sign-holder-icon-initial' id='initial_" + value.SigName + "'></span>";
-                s1 = s1 + "<img id='image_initial_" + value.SigName + "'  width=" + imgWidth + "px height='15px' class='sig-img-initial' style='vertical-align: top; display: none;'>";
-                s1 = s1 + "<a class='text-center sign-holder-text sign-holder-text-initial after' id='label_initial_" + value.SigName + "' style='display: block;'>Initial</a>";
+                var s1 = "<div class='document-sign-holder document-sign-holder-initial-div' style='" + fnApplyHigherResolution(value.sig_style) + "' onclick=imgCtrl('" + value.sig_name + "','initial');>";
+                s1 = s1 + "<span class='fa fa-pencil-square pull-left sign-holder-icon-initial' id='initial_" + value.sig_name + "'></span>";
+                s1 = s1 + "<img id='image_initial_" + value.sig_name + "'  width=" + imgWidth + "px height='15px' class='sig-img-initial' style='vertical-align: top; display: none;'>";
+                s1 = s1 + "<a class='text-center sign-holder-text sign-holder-text-initial after' id='label_initial_" + value.sig_name + "' style='display: block;'>Initial</a>";
                 $('#cont1').append(s1);
             }
         });
@@ -770,7 +770,7 @@ function ImageCtrlDeleteClicked(ctrl, sigOrInitial) {
         if (CurrentSigBlock.length == getUnsingedSigsCount(CurrentSigBlock)) {
             $("#id_start").text("Start");
         } else {
-            $('html, body').animate({ scrollTop: $("#" + (CurrentSigBlock[result].IsInitial ? "initial" : "sig") + "_" + CurrentSigBlock[result].SigName).parent('div').position().top }, 'slow');
+            $('html, body').animate({ scrollTop: $("#" + (CurrentSigBlock[result].is_initial ? "initial" : "sig") + "_" + CurrentSigBlock[result].sig_name).parent('div').position().top }, 'slow');
             window.scroll(0, -100);
             $("#id_start").text("Next");
         }
@@ -864,7 +864,7 @@ function ImageCtrlClicked(ctrl) {
         $("#id_start").text(TransJson.NextAction);
     } else {
         if (txtFiledNotEntered == null) {
-            $('html, body').animate({ scrollTop: $("#" + (CurrentSigBlock[result].IsInitial ? "initial" : "sig") + "_" + CurrentSigBlock[result].SigName).parent('div').position().top }, 'slow');
+            $('html, body').animate({ scrollTop: $("#" + (CurrentSigBlock[result].is_initial ? "initial" : "sig") + "_" + CurrentSigBlock[result].sig_name).parent('div').position().top }, 'slow');
             window.scroll(0, -100);
             $("#id_start").text("Next");
             //$("#sig_" + CurrentSigBlock[result].SigName).get(0).scrollIntoView();
