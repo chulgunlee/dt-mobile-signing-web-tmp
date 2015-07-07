@@ -788,11 +788,11 @@ function ImageCtrlDeleteClicked(ctrl, sigOrInitial) {
 
 //clear all signatures and also set Collected = false;
 function fnClearAllSigsAndInitials() {
-    $.each(CollectSigsJson.SigBlock, function (key, value) {
+    $.each(CollectSigsJson.sig_block, function (key, value) {
         value.Collected = false;
         var ctrlId;
-        ctrlId = value.SigName;
-        if (value.IsInitial == true) {
+        ctrlId = value.sig_name;
+        if (value.is_initial == true) {
             $("#label_initial_" + ctrlId).removeClass('hide');
             $("#label_initial_" + ctrlId).show();
             $("#image_initial_" + ctrlId).prop('src', '');
