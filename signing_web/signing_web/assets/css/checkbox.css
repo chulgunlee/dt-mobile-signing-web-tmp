@@ -116,7 +116,7 @@ z-index: 2;
 .check-icon .roundedTwo label {
      width: 15px;
      height: 15px;
-     cursor:none;
+     cursor: default;
 }
 
 .check-icon .roundedTwo label:after {

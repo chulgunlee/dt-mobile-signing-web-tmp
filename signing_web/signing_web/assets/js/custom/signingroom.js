@@ -1,7 +1,6 @@
 var TransJson;
 var CollectSigsJson;
 var UserConsent;
-var signStatus;
 var CollectedImagesText;
 var strCurrentActiveSigBlock;
 var CurrentSigBlock;
@@ -375,7 +374,6 @@ function ProcessPagereloadCtrls(data) {
 
     CollectSigsJson = JSON.parse(TransJson.collect_signatures);     // TODO: why server added json.dumps to this field?
     UserConsent = TransJson.user_consent;
-    signStatus = TransJson.sign_status;
     CollectedImagesText = TransJson.list_collected_sigs;
     CurrentSigBlock = CollectSigsJson.sig_block;
 
@@ -393,8 +391,10 @@ function ProcessPagereloadCtrls(data) {
         fnApplyTextFileds(CollectSigsJson);
     }
 
-    currentSignor = CollectSigsJson.sig_type;
-    fnSignStatus(signStatus, currentSignor);
+    currentSignor = CollectSigsJson.sig_type;           // TODO: remove global var currentSignor
+
+    fnSignStatus(TransJson.sign_status, currentSignor, CollectSigsJson.doc_index_id);
+
     if (CollectedImagesText != null) {
         ApplyCollectedImagesText(CollectedImagesText);
     }
@@ -1006,36 +1006,49 @@ function fnApplyDateFileds(myDocumentArray, elem) {
     }
 }
 
-function fnSignStatus(signStatus, currSignor) {
+
+/**
+ * Create the docs list on the left pane
+ *
+ */
+function fnSignStatus(signStatus, currSignor, currentDocId) {
 
     $("#id_sign_status_docs").empty();
 
+    // html for checkmark
+    var checkmark = $("<div class='doc-selected-wrapper check-icon'><div class='roundedTwo docSelector'><input type='checkbox' disabled='disabled' checked='checked'><label></label>");
     var docNumber = 0;
-    var divPencil;
+
     $.each(signStatus.doc_sign_status, function (n, ele) {
 
         if (currSignor == ele.signer_type) {
             docNumber += 1;
-            var li = $("<li class='panel-document text-center doc_popup' id=" + ele.doc_index_id + ">");
-            var imgDiv = $("<div class='doc-icon-wrapper'>");
-            var img;
-            if (CollectSigsJson.doc_index_id == ele.doc_index_id) {
-                img = $("<img class='doc-icon-selected' src='/assets/images/doc_iconX2.png' >");
-            } else {
-                img = $("<img class='doc-icon' src='/assets/images/doc_iconX2.png' >");
+
+            // doc item displayed in the left pane
+            var li = $("<li class='panel-document text-center doc_popup'>").attr("id", "doc-" + ele.doc_index_id);
+
+            // image base for the doc item
+            var imgDiv = $("<div>").addClass('doc-icon-wrapper');
+            $("<img>").attr('src', '/assets/images/doc_iconX2.png')
+                      .addClass((currentDocId == ele.doc_index_id) ? 'doc-icon-selected' : 'doc-icon')
+                      .appendTo(imgDiv);
+
+            // add signed checkmark to signed docs
+            if (ele.signer_status.toUpperCase() == 'SIGNED' && ele.signer_type.toUpperCase() == currSignor.toUpperCase()) {
+                checkmark.clone().appendTo(imgDiv);
             }
 
-            var divTitle = $("<div><p class='text-center panel-document-title'><span>" + ele.template_type_desc + "</span></p><p class='panel-document-number'>" + docNumber + "</p></div>");
-            img.appendTo(imgDiv);
             imgDiv.appendTo(li);
-            if (ele.signer_status.toUpperCase() == 'SIGNED' && ele.signer_type.toUpperCase() == currSignor.toUpperCase()) {
-                divPencil = $("<div class='doc-selected-wrapper check-icon'><div class='roundedTwo docSelector'><input type='checkbox' value='None' id=cbx" + ele.doc_index_id + " name=cbx" + ele.doc_index_id + " disabled='disabled' checked='checked'><label for=cbx" + ele.doc_index_id + "></label>");
-                divPencil.appendTo(imgDiv);
-            }
-            divTitle.appendTo(li);
+
+            // doc title
+            $("<p class='text-center panel-document-title'>").html(ele.template_type_desc).appendTo(li);
+            $("<p class='panel-document-number'>").html(docNumber).appendTo(li);
+
+            // display the doc
             $("#id_sign_status_docs").append(li);
 
-            $('#' + ele.DocIndexId).on(wchEvent, function (evt) {
+            // load doc onclick
+            $('#doc-' + ele.doc_index_id).on(wchEvent, function (evt) {
                 fnLoadUserSelectedDoc(ele.doc_index_id);
             });
         }
