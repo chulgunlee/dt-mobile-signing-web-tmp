@@ -296,36 +296,30 @@ $(document).ready(function () {
 });
 
 
+/**
+ * Get the initial data of signing room.
+ * TODO: remove masterIndxId global var dependency
+ */
 function ProcessPageInit() {
 
-    //var signingRoomIndexId = { docMasterIndexId: masterIndxId };
-    //var json = JSON.stringify(signingRoomIndexId);
-    $.ajax(
-                   {
-                       type: "GET",
-                       url: signingRoomApiUri + "init/" + masterIndxId,
-                       //data: masterIndxId,
-                       //contentType: "application/json; charset=utf-8",
-                       //dataType: "json",
-                       //async: false,
-                       success: function (msg, textStatus, xhr) {
+    $.get(signingRoomApiUri + 'init/' + masterIndxId, function(data, textStatus, xhr) {
 
-                           if (xhr.status == 302) {
-                               WebViewBridge.call('exitSigningRoom', { 'status': 'SessionTimeout' });
-                               return false;
-                           }
+        if (xhr.status == 302) {
+            WebViewBridge.call('exitSigningRoom', { 'status': 'SessionTimeout' });
+            return false;
+        }
 
-                           ProcessPagereloadCtrls(msg);
-                           $(".tncload").load('terms/');
-                           initCompleted = true;
-                       },
-                       error: function (msg) {
-                           WebViewBridge.call('exitSigningRoom', { 'status': 'TechnicalDifficulty' });
-                       }
-                   });
+        ProcessPagereloadCtrls(data);
+        $(".tncload").load('terms/');
+        initCompleted = true;
 
-    return false;
+    }).fail(function(data) {
+        WebViewBridge.call('exitSigningRoom', { 'status': 'TechnicalDifficulty' });
+    });
 }
+
+
+
 function CheckuserConsentAction() {
     if (currentSignor == "BUYER") {
         if (UserConsent.outByerConsent == "" || UserConsent.outByerConsent == 'W') {
@@ -350,10 +344,16 @@ $('#id_terms_and_conditions, #id_signature_initials_modalPopup, #id_saveexit_mod
 $('#id_saveexit_model, #id_withdraw_model').on('shown.bs.modal', function () {
     $('.ellipsis-style').popover('hide');
 });
-function ProcessPagereloadCtrls(msg) {
+
+
+
+/**
+ * Deal with page init data and build signing room page
+ */
+function ProcessPagereloadCtrls(data) {
     var delayTooltip = false;
     //TransJson = JSON.parse(msg.d);
-    TransJson = msg.d;
+    TransJson = data.d;
 
     if (TransJson.next_action == "Redirect") {
         if (dbgFlag) {
@@ -383,8 +383,11 @@ function ProcessPagereloadCtrls(msg) {
     fnApplyBackImages(BackImages);
     fnGetInitialFlag(CollectSigsJson);
     if (TransJson.signable_doc != 'N') {
-        fnApplySignatures(CollectSigsJson);
-        fnApplyInitials(CollectSigsJson);
+
+        if (CurrentSigBlock != null) {
+            fnApplySignatures(CurrentSigBlock);
+            fnApplyInitials(CurrentSigBlock);
+        }
         fnApplyTextFileds(CollectSigsJson);
     }
 
@@ -643,48 +646,49 @@ function fnApplyBackImages(myBackimages) {
     }
 }
 
-function fnApplySignatures(myDocumentArray) {
+function fnApplySignatures(sigBlocks) {
     var imgWidth = '60';
-    if (myDocumentArray.sig_block != null) {
-        $.each(myDocumentArray.sig_block, function (key, value) {
 
-            if (value.is_initial == false) {
+    $.each(sigBlocks, function (key, value) {
 
-                var tempWidth = parseInt(fnExtractControlWidth(value.sig_style));
-                if (tempWidth > 0) {
-                    imgWidth = tempWidth - 25;
-                }
+        if (!value.is_initial) {
 
-                var s1 = "<div class='document-sign-holder' style='" + fnApplyHigherResolution(value.sig_style) + "' onclick=imgCtrl('" + value.sig_name + "','sig');>";
-                s1 = s1 + "<span class='fa fa-pencil-square pull-left sign-holder-icon' id='sig_" + value.sig_name + "'></span>";
-                s1 = s1 + " <a class='text-center sign-holder-text' id='label_sig_" + value.sig_name + "'>Click to sign</a>";
-                s1 = s1 + "<img id='image_sig_" + value.sig_name + "' width=" + imgWidth + "px height='30px'  style='display:none'/>";
-                s1 = s1 + " <span class='fa fa-times-circle pull-right sign-holder-icon-close'  style='display:none'  id='delete_sig_" + value.sig_name + "'></span></div>";
-                $('#cont1').append(s1);
+            var tempWidth = parseInt(fnExtractControlWidth(value.sig_style));
+            if (tempWidth > 0) {
+                imgWidth = tempWidth - 25;
             }
-        });
-    }
+
+            var s1 = "<div class='document-sign-holder' style='" + fnApplyHigherResolution(value.sig_style) + "' onclick=imgCtrl('" + value.sig_name + "','sig');>";
+            s1 = s1 + "<span class='fa fa-pencil-square pull-left sign-holder-icon' id='sig_" + value.sig_name + "'></span>";
+            s1 = s1 + " <a class='text-center sign-holder-text' id='label_sig_" + value.sig_name + "'>Click to sign</a>";
+            s1 = s1 + "<img id='image_sig_" + value.sig_name + "' width=" + imgWidth + "px height='30px'  style='display:none'/>";
+            s1 = s1 + " <span class='fa fa-times-circle pull-right sign-holder-icon-close'  style='display:none'  id='delete_sig_" + value.sig_name + "'></span></div>";
+            $('#cont1').append(s1);
+        }
+    });
 }
 
 
-function fnApplyInitials(myDocumentArray) {
-    var imgWidth = '60';
-    if (myDocumentArray.sig_block != null) {
-        $.each(myDocumentArray.sig_block, function (key, value) {
-            if (value.is_initial == true) {
-                var tempWidth = parseInt(fnExtractControlWidth(value.sig_style));
-                if (tempWidth > 0) {
-                    imgWidth = tempWidth - 25;
-                }
+function fnApplyInitials(sigBlocks) {
 
-                var s1 = "<div class='document-sign-holder document-sign-holder-initial-div' style='" + fnApplyHigherResolution(value.sig_style) + "' onclick=imgCtrl('" + value.sig_name + "','initial');>";
-                s1 = s1 + "<span class='fa fa-pencil-square pull-left sign-holder-icon-initial' id='initial_" + value.sig_name + "'></span>";
-                s1 = s1 + "<img id='image_initial_" + value.sig_name + "'  width=" + imgWidth + "px height='15px' class='sig-img-initial' style='vertical-align: top; display: none;'>";
-                s1 = s1 + "<a class='text-center sign-holder-text sign-holder-text-initial after' id='label_initial_" + value.sig_name + "' style='display: block;'>Initial</a>";
-                $('#cont1').append(s1);
+    var imgWidth = '60';
+
+    $.each(sigBlocks, function (key, value) {
+
+        if (value.is_initial) {
+
+            var tempWidth = parseInt(fnExtractControlWidth(value.sig_style));
+            if (tempWidth > 0) {
+                imgWidth = tempWidth - 25;
             }
-        });
-    }
+
+            var s1 = "<div class='document-sign-holder document-sign-holder-initial-div' style='" + fnApplyHigherResolution(value.sig_style) + "' onclick=imgCtrl('" + value.sig_name + "','initial');>";
+            s1 = s1 + "<span class='fa fa-pencil-square pull-left sign-holder-icon-initial' id='initial_" + value.sig_name + "'></span>";
+            s1 = s1 + "<img id='image_initial_" + value.sig_name + "'  width=" + imgWidth + "px height='15px' class='sig-img-initial' style='vertical-align: top; display: none;'>";
+            s1 = s1 + "<a class='text-center sign-holder-text sign-holder-text-initial after' id='label_initial_" + value.sig_name + "' style='display: block;'>Initial</a>";
+            $('#cont1').append(s1);
+        }
+    });
 }
 
 
