@@ -7,6 +7,7 @@ from django.conf.urls.static import static
 
 urlpatterns = patterns('',
     url(r'^signingroom/', include('signingroom.signingroom.urls')),
+    url(r'^doclist/', include('signingroom.doclist.urls')),
 )
 
 
