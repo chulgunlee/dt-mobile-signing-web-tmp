@@ -1,5 +1,5 @@
 """
-Django settings for signing_web project.
+Django settings for signingroom project.
 """
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -33,7 +33,7 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.common.CommonMiddleware',
 )
 
-ROOT_URLCONF = 'signing_web.urls'
+ROOT_URLCONF = 'signingroom.urls'
 
 TEMPLATES = [
     {
@@ -51,18 +51,13 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'signing_web.wsgi.application'
+WSGI_APPLICATION = 'signingroom.wsgi.application'
 
 
 # Database
 # https://docs.djangoproject.com/en/1.8/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-    }
-}
+DATABASES = {}
 
 
 # Internationalization
@@ -82,8 +77,8 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.8/howto/static-files/
 
-STATIC_URL = '/assets/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'assets')
+STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 REST_FRAMEWORK = {
     'DEFAULT_RENDERER_CLASSES': (

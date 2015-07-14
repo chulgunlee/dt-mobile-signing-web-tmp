@@ -6,7 +6,7 @@ from django.conf.urls import include, url, patterns
 from django.conf.urls.static import static
 
 urlpatterns = patterns('',
-    url(r'^signingroom/', include('signingroom.urls')),
+    url(r'^signingroom/', include('signingroom.signingroom.urls')),
 )
 
 

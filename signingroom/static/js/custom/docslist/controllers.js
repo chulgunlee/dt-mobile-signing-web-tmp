@@ -160,7 +160,7 @@ function DocsListCtrlr($scope, $http, headerService) {
         $('#doc-preview-overlay button.close').hide();
         $('#doc-preview-overlay .modal-header h4').text("");
         $('#doc-preview-overlay .modal-header').hide();
-        $('#doc-preview-overlay .modal-body').html('<img src="assets/images/loading-tr.gif" /><h3>Downloading <strong>' + docType + '</strong> preview...</h3>');
+        $('#doc-preview-overlay .modal-body').html('<img src="/static/images/loading-tr.gif" /><h3>Downloading <strong>' + docType + '</strong> preview...</h3>');
     };
     $http.get(apiUri, {timeout: defaults.ajaxTimeout}).success(function (data, status) {
         if (status == 302) {

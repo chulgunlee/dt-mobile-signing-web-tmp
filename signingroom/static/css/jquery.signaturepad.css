@@ -158,7 +158,7 @@
    * IE will ignore this line because of the hotspot position
    * Unfortunately we need this twice, because some browsers ignore the hotspot inside the .cur
    */
-  cursor: url("../../assets/cursors/pen.cur") 16 16, crosshair;
+  cursor: url("../cursors/pen.cur") 16 16, crosshair;
 
   -ms-touch-action: none;
   -webkit-user-select: none;

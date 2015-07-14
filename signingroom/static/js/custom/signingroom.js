@@ -1041,7 +1041,7 @@ function fnSignStatus(signStatus, currSignor, currentDocId) {
 
             // image base for the doc item
             var imgDiv = $("<div>").addClass('doc-icon-wrapper');
-            $("<img>").attr('src', '/assets/images/doc_iconX2.png')
+            $("<img>").attr('src', '/static/images/doc_iconX2.png')
                       .addClass((currentDocId == ele.doc_index_id) ? 'doc-icon-selected' : 'doc-icon')
                       .appendTo(imgDiv);
 
