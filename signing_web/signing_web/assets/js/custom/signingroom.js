@@ -40,6 +40,27 @@ $(document).ajaxComplete(function (event, jqxhr, settings) {
     }
 });
 
+// add user code header to all ajax requests
+$(document).ajaxSend(function(event, xhr, settings) {
+    function sameOrigin(url) {
+        // url could be relative or scheme relative or absolute
+        var host = document.location.host; // host + port
+        var protocol = document.location.protocol;
+        var sr_origin = '//' + host;
+        var origin = protocol + sr_origin;
+        // Allow absolute or scheme relative URLs to same origin
+        return (url == origin || url.slice(0, origin.length + 1) == origin + '/') ||
+            (url == sr_origin || url.slice(0, sr_origin.length + 1) == sr_origin + '/') ||
+            // or any other URL that isn't scheme relative or absolute i.e relative.
+            !(/^(\/\/|http:|https:).*/.test(url));
+    }
+
+    if (sameOrigin(settings.url)) {
+        xhr.setRequestHeader("User-Code", userCode);
+    }
+});
+
+
 /*
 $(document).ajaxStop(function () {
     $("img.document-img").lazyload({
@@ -141,8 +162,8 @@ $(document).ready(function () {
             }
 
             for (var i = 0; i < CurrentSigBlock.length; i++) {
-                if (!CurrentSigBlock[i].Collected) {
-                    $('html, body').animate({ scrollTop: $("#" + (CurrentSigBlock[i].IsInitial ? "initial" : "sig") + "_" + CurrentSigBlock[i].SigName).parent('div').position().top }, 'slow');
+                if (!CurrentSigBlock[i].collected) {
+                    $('html, body').animate({ scrollTop: $("#" + (CurrentSigBlock[i].is_initial ? "initial" : "sig") + "_" + CurrentSigBlock[i].sig_name).parent('div').position().top }, 'slow');
                     //$("#sig_" + CurrentSigBlock[i].SigName).get(0).scrollIntoView();
 
                     return false;
@@ -260,6 +281,7 @@ $(document).ready(function () {
             //var imgData = apiSign.getSignatureImage();
             //$("#id_image1").prop("src", $("#BUYER_SIG").val());
             // Move to the first signature to capture.  
+            var result = CheckFullySigned(CurrentSigBlock);
             $('html, body').animate({ scrollTop: $("#" + (CurrentSigBlock[result].is_initial ? "initial" : "sig") + "_" + CurrentSigBlock[0].sig_name).parent('div').position().top }, 'slow');
             //$("#sig_" + CurrentSigBlock[0].SigName).get(0).scrollIntoView();
 
@@ -320,13 +342,13 @@ function ProcessPageInit() {
 
 function CheckuserConsentAction() {
     if (currentSignor == "BUYER") {
-        if (UserConsent.outByerConsent == "" || UserConsent.outByerConsent == 'W') {
+        if (UserConsent.buyer_consent == "N" && UserConsent.buyer_consent_withdraw == 'N') {
             $('#id_terms_and_conditions').modal('show');
         }
     }
 
     if (currentSignor == "COBUYER") {
-        if (UserConsent.outCoBuyerConsent == "" || UserConsent.outCoBuyerConsent == 'W') {
+        if (UserConsent.cobuyer_consent == "N" && UserConsent.cobuyer_consent_withdraw == 'N') {
             $('#id_terms_and_conditions').modal('show');
         }
     }
@@ -527,35 +549,35 @@ function ButtonUserConsent(action) {
 
 function SaveSignatures() {
 
-    if (TransJson.signableDoc == 'N') {
-        CollectSigsJson.strAction = "ACK";
+    if (TransJson.signable_doc == 'N') {
+        CollectSigsJson.str_action = "ACK";      // TODO: what's this?
     }
 
-    if (CollectSigsJson.SigBlock != null) {
-        if (TransJson.signableDoc != 'N') {
+    if (CollectSigsJson.sig_block != null) {
+        if (TransJson.signable_doc != 'N') {
             if (currentSignor == "BUYER") {
-                CollectSigsJson.Signature = $("#BUYER_SIG").val().replace("data:image/png;base64,", "");
-                if (CollectSigsJson.Initial == 'Y') {
-                    CollectSigsJson.InitalSignature = $("#BUYER_INITIAL").val().replace("data:image/png;base64,", "");
+                CollectSigsJson.signature = $("#BUYER_SIG").val().replace("data:image/png;base64,", "");
+                if (CollectSigsJson.initial == 'Y') {
+                    CollectSigsJson.inital_signature = $("#BUYER_INITIAL").val().replace("data:image/png;base64,", "");
                 }
             }
 
             if (currentSignor == "COBUYER") {
-                CollectSigsJson.Signature = $("#COBUYER_SIG").val().replace("data:image/png;base64,", "");
-                if (CollectSigsJson.Initial == 'Y') {
-                    CollectSigsJson.InitalSignature = $("#COBUYER_INITIAL").val().replace("data:image/png;base64,", "");
+                CollectSigsJson.signature = $("#COBUYER_SIG").val().replace("data:image/png;base64,", "");
+                if (CollectSigsJson.initial == 'Y') {
+                    CollectSigsJson.inital_signature = $("#COBUYER_INITIAL").val().replace("data:image/png;base64,", "");
                 }
             }
 
             if (currentSignor == "DEALER") {
-                CollectSigsJson.Signature = $("#DEALER_SIG").val().replace("data:image/png;base64,", "");
-                if (CollectSigsJson.Initial == 'Y') {
-                    CollectSigsJson.InitalSignature = $("#DEALER_INITIAL").val().replace("data:image/png;base64,", "");
+                CollectSigsJson.signature = $("#DEALER_SIG").val().replace("data:image/png;base64,", "");
+                if (CollectSigsJson.initial == 'Y') {
+                    CollectSigsJson.inital_signature = $("#DEALER_INITIAL").val().replace("data:image/png;base64,", "");
                 }
             }
 
-            for (K = 0; K <= CollectSigsJson.SigBlock.length - 1; K++) {
-                CollectSigsJson.SigBlock[K].Collected = true;
+            for (K = 0; K <= CollectSigsJson.sig_block.length - 1; K++) {
+                CollectSigsJson.sig_block[K].collected = true;
             }
 
             if (CollectSigsJson.DateFiledBlock != null) {
@@ -577,11 +599,11 @@ function SaveSignatures() {
         }
     }
     //CollectSigsJson.SigBlock[1].Collected = true;
-    if (CollectSigsJson.strAction == null) {
-        CollectSigsJson.strAction = "";
+    if (CollectSigsJson.str_action == null) {
+        CollectSigsJson.str_action = "";
     }
-    if (CollectSigsJson.strAction.toUpperCase() != "FINISH" && CollectSigsJson.strAction.toUpperCase() != 'NEW SELECTION' && CollectSigsJson.strAction.toUpperCase() != 'ACK') {
-        CollectSigsJson.strAction = "SAVE";
+    if (CollectSigsJson.str_action.toUpperCase() != "FINISH" && CollectSigsJson.str_action.toUpperCase() != 'NEW SELECTION' && CollectSigsJson.str_action.toUpperCase() != 'ACK') {
+        CollectSigsJson.str_action = "SAVE";
     }
 
     //var SigningRoomConsent = { 'pCollectsignatures': CollectSigsJson };
@@ -590,7 +612,7 @@ function SaveSignatures() {
     {
         type: "POST",
         //url: "SigningRoomService.asmx/SigningRoomSigsSave",
-        url: signingRoomApiUri + "sigsave",
+        url: signingRoomApiUri + "sigsave/",
         data: sigsData,
         contentType: "application/json; charset=utf-8",
         dataType: "json",
@@ -749,7 +771,7 @@ function imgCtrl(ctrl, sigOrInitial) {
 
 function ImageCtrlDeleteClicked(ctrl, sigOrInitial) {
 
-    CurrentSigBlock[findItem(CurrentSigBlock, ctrl)].Collected = false;
+    CurrentSigBlock[findItem(CurrentSigBlock, ctrl)].collected = false;
     if (sigOrInitial == 'initial') {
         $("#initial_" + ctrl).removeClass('hide');
         $("#initial_" + ctrl).show();
@@ -866,7 +888,7 @@ function ImageCtrlClicked(ctrl) {
     }
 
     fnApplyDateFileds(CollectSigsJson, e);
-    CurrentSigBlock[findItem(CurrentSigBlock, e)].Collected = true;
+    CurrentSigBlock[findItem(CurrentSigBlock, e)].collected = true;
     var txtFld;
     var result = CheckFullySigned(CurrentSigBlock);
     if (result == 200) {
@@ -923,13 +945,13 @@ function fnAssignSigImagetoCtrl(ctrl) {
         e = ctrl.replace("sig_", "");
     }
 
-    CurrentSigBlock[findItem(CurrentSigBlock, e)].Collected = true;
+    CurrentSigBlock[findItem(CurrentSigBlock, e)].collected = true;
     fnApplyDateFileds(CollectSigsJson, e);
     var result = CheckFullySigned(CurrentSigBlock);
     if (result == 200) {
         $("#id_start").text(TransJson.NextAction);
     } else {
-        $('html, body').animate({ scrollTop: $("#" + (CurrentSigBlock[result].IsInitial ? "initial" : "sig") + "_" + CurrentSigBlock[result].SigName).parent('div').position().top }, 'slow');
+        $('html, body').animate({ scrollTop: $("#" + (CurrentSigBlock[result].is_initial ? "initial" : "sig") + "_" + CurrentSigBlock[result].sig_name).parent('div').position().top }, 'slow');
         window.scroll(0, -100);
     }
 
@@ -937,16 +959,6 @@ function fnAssignSigImagetoCtrl(ctrl) {
 
     $("#id_location1").text(intUnSignedSigs + " locations");
 
-}
-
-
-function findItem(arr, value) {
-    for (var i = 0; i < arr.length; i++) {
-        if (arr[i].SigName === value) {
-            return (i);
-        }
-    }
-    return (-1);
 }
 
 
@@ -1078,8 +1090,8 @@ function fnLoadUserSelectedDoc(docIndexId) {
 
 
 function fnLoadNewSelectionWithSaveDoc(docIndexId, action) {
-    CollectSigsJson.strAction = 'Save';
-    CollectSigsJson.UserSelectedDocIndexId = docIndexId;
+    CollectSigsJson.str_action = 'Save';
+    CollectSigsJson.user_selected_doc_index_id = docIndexId;
     SaveSignatures();
 }
 
@@ -1088,8 +1100,8 @@ function fnLoadNewSelectionDoc(docIndexId) {
     if (typeof docIndexId === 'undefined')
         docIndexId = $("#id_saveexit_model_side_panel").attr('docIndexId');
     fnClearSigAndInitials();
-    CollectSigsJson.strAction = 'New Selection';
-    CollectSigsJson.UserSelectedDocIndexId = docIndexId;
+    CollectSigsJson.str_action = 'New Selection';
+    CollectSigsJson.user_selected_doc_index_id = docIndexId;
     SaveSignatures();
 }
 
@@ -1189,13 +1201,16 @@ function fnAssignCurrentSig(e) {
 
 function findItem(arr, value) {
     for (var i = 0; i < arr.length; i++) {
-        if (arr[i].SigName === value) {
+        if (arr[i].sig_name === value) {
             return (i);
         }
     }
     return (-1);
 }
 
+/**
+ * Actually function name should be "findFirstUnsignedBlock"
+ */
 function CheckFullySigned(arr) {
 
     txtFiledNotEntered = null;
@@ -1203,13 +1218,13 @@ function CheckFullySigned(arr) {
     if (arr == null) return (200); //nothing to sign either because it was already signed or it's non-signable document
 
     for (var j = 0; j < arr.length; j++) {
-        if (arr[j].Collected) {
-            atLeastoneSignCollected = true;
+        if (arr[j].collected) {
+            atLeastoneSignCollected = true;             // charlee: this is used to decide whether to save the doc when switching doc....
         }
     }
 
     for (var i = 0; i < arr.length; i++) {
-        if (!arr[i].Collected) {
+        if (!arr[i].collected) {
             return (i);
         }
     }
