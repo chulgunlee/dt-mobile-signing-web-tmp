@@ -19,18 +19,26 @@ SECRET_KEY = '!)8jshnj*q(+bq$#dv-3=w4^^hz4mup3gmdovl*ys!w9%@+$(+'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
-
 ALLOWED_HOSTS = []
+TEMPLATE_DEBUG = DEBUG
+MAIN_DB_CONNECTION_KEY = 'Deal'
 
 
 # Application definition
 
 INSTALLED_APPS = (
+    'signingroom.doclist',
+    'signingroom.signingroom',
+    'signingroom.fakeapi',
     'rest_framework',
 )
 
 MIDDLEWARE_CLASSES = (
+    'doorman_middleware.tenant_middleware.TenantMiddleware',
+    'django_tenant_templates.middleware.TenantMiddleware',
     'django.middleware.common.CommonMiddleware',
+    'dt_django_base.core.middleware.context_middleware.ContextMiddleware',
+    'dt_django_base.core.middleware.sqlalchemy_middleware.SQLAlchemyMiddleware',
 )
 
 ROOT_URLCONF = 'signingroom.urls'
@@ -50,6 +58,17 @@ TEMPLATES = [
         },
     },
 ]
+
+# Additional locations of static files
+STATICFILES_DIRS = (
+    # Put strings here, like "/home/html/static" or "C:/www/django/static".
+    # Always use forward slashes, even on Windows.
+    # Don't forget to use absolute paths, not relative paths.
+    os.path.join(BASE_DIR, '..', 'static'),
+)
+
+# SQLTap
+SQLTAP_ENABLED = os.environ.get('SQLTAP_ENABLED', False)
 
 WSGI_APPLICATION = 'signingroom.wsgi.application'
 
