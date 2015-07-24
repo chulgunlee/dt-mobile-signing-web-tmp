@@ -10,13 +10,6 @@ from dtplatform.conf import settings as platform_settings
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/1.8/howto/deployment/checklist/
-
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '!)8jshnj*q(+bq$#dv-3=w4^^hz4mup3gmdovl*ys!w9%@+$(+'
-
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 ALLOWED_HOSTS = []
@@ -24,14 +17,12 @@ TEMPLATE_DEBUG = DEBUG
 MAIN_DB_CONNECTION_KEY = 'Deal'
 
 
-# Application definition
 
-INSTALLED_APPS = (
-    'signingroom.doclist',
-    'signingroom.signingroom',
-    'signingroom.fakeapi',
-    'rest_framework',
-)
+# Quick-start development settings - unsuitable for production
+# See https://docs.djangoproject.com/en/1.8/howto/deployment/checklist/
+
+# SECURITY WARNING: keep the secret key used in production secret!
+SECRET_KEY = '!)8jshnj*q(+bq$#dv-3=w4^^hz4mup3gmdovl*ys!w9%@+$(+'
 
 MIDDLEWARE_CLASSES = (
     'doorman_middleware.tenant_middleware.TenantMiddleware',
@@ -41,36 +32,42 @@ MIDDLEWARE_CLASSES = (
     'dt_django_base.core.middleware.sqlalchemy_middleware.SQLAlchemyMiddleware',
 )
 
+
 ROOT_URLCONF = 'signingroom.urls'
 
-TEMPLATES = [
-    {
-        'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [ os.path.join(BASE_DIR, 'templates') ],
-        'APP_DIRS': True,
-        'OPTIONS': {
-            'context_processors': [
-                'django.template.context_processors.debug',
-                'django.template.context_processors.request',
-                'django.contrib.auth.context_processors.auth',
-                'django.contrib.messages.context_processors.messages',
-            ],
-        },
-    },
-]
+WSGI_APPLICATION = 'signingroom.wsgi.application'
+
+# Application definition
+
+INSTALLED_APPS = (
+    'signingroom.doclist',
+    'signingroom.signingroom',
+    'signingroom.fakeapi',
+    'django.contrib.staticfiles',
+    'rest_framework',
+    'dt_django_base',
+)
+
+TEMPLATE_DIRS = (
+    # Put strings here, like "/home/html/django_templates"
+    # or "C:/www/django/templates".
+    # Always use forward slashes, even on Windows.
+    # Don't forget to use absolute paths, not relative paths.
+    os.path.abspath(os.path.join(BASE_DIR, 'templates')),
+)
+
 
 # Additional locations of static files
 STATICFILES_DIRS = (
     # Put strings here, like "/home/html/static" or "C:/www/django/static".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
-    os.path.join(BASE_DIR, '..', 'static'),
+    os.path.join(BASE_DIR, '..', 'static'),             # TODO: DUMMY DIR TO bypass dt_django_base SQLTAP issue
 )
 
 # SQLTap
 SQLTAP_ENABLED = os.environ.get('SQLTAP_ENABLED', False)
 
-WSGI_APPLICATION = 'signingroom.wsgi.application'
 
 
 # Database
