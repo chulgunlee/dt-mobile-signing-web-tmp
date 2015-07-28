@@ -43,7 +43,6 @@ INSTALLED_APPS = (
     'signingroom.doclist',
     'signingroom.signingroom',
     'signingroom.fakeapi',
-    'django.contrib.staticfiles',
     'rest_framework',
     'dt_django_base',
 )
@@ -62,7 +61,7 @@ STATICFILES_DIRS = (
     # Put strings here, like "/home/html/static" or "C:/www/django/static".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
-    os.path.join(BASE_DIR, '..', 'static'),             # TODO: DUMMY DIR TO bypass dt_django_base SQLTAP issue
+    os.path.join(BASE_DIR, 'static'),             # TODO: DUMMY DIR TO bypass dt_django_base SQLTAP issue
 )
 
 # SQLTap
