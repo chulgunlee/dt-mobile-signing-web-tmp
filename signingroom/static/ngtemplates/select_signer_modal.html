@@ -1,0 +1,36 @@
+<div class="modal" data-keyboard="false" data-backdrop="static" id="signers-container" tabindex="-1" role="dialog" aria-labelledby="select_signer_modal" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content signer-modal-content">
+            <div class="modal-header">
+                <div class="row">
+                    <div class="col-md-12 modal-header-wrapper">
+                        <button class="btn btn-link cancel-link pull-left" data-dismiss="modal">Cancel</button>
+                        <p class="modal-title modal-text">Select signer(s)</p>
+                        <button class="btn btn-link pull-right continue-link" type="button" ng-click="onContinueClick();" ng-disabled="selectedSigners.length==0">Continue</button>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-body signer-modal-body">
+                <ul class="row list-inline signers-list" ng-class="'room-for-'+signers.length">
+                    <li ng-repeat="signer in signers" class="col-sm-4 modal-body-wrapper signers-list-item signer-{{signer.Type.toLowerCase()}}" ng-click="onSignerSelected($index, $event);">
+                        <div class="signer">
+                            <div class="thumbnail signer-thumbnail">
+                                <div class="fa fa-user fa-3x user-icon"></div>
+                                <div class="caption text-center thumbnail_caption modal-text">
+                                    <div class="ellipsis multiline" style="width:90px;height:35px;">{{signer.FullName}}</div>
+                                    <p>({{signer.Type}})</p>
+                                </div>
+                            </div>
+                            <div class="caption text-center">
+                                <div class="roundedTwo">
+                                    <input type="checkbox" value="None" id="signer-selected-{{$index}}-cbx" name="signer-selected-{{$index}}-cbx" ng-checked="signer.IsSelected" disabled="disabled" />
+                                    <label for="signer-selected-{{$index}}-cbx"></label>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>

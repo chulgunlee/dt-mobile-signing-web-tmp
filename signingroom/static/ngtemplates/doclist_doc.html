@@ -1,0 +1,32 @@
+<div class="document">
+    <a ng-show="doc.IsSignable" class="status-badge" id="signing-status-for-{{doc.TemplateTypeID}}" ng-click="onRibbonClicked($index);" ng-class="doc.RibbonColor">
+        <div class="status">
+            {{doc.SigningStatus}}
+        </div>
+    </a>
+    <a ng-hide="doc.IsSignable" class="status-badge" ng-click="onRibbonClicked($index);" ng-class="doc.RibbonColor">
+        <div class="status">
+            {{doc.SigningStatus}}
+        </div>
+    </a>
+    <div class="doc-selected-wrapper" ng-click="onDocSelected(doc.DocIndexId);">
+        <div class="roundedTwo docSelector">
+            <input type="checkbox" value="None" id="doc-{{$index}}-cbx" name="doc-{{$index}}-cbx" disabled="disabled" ng-checked="doc.IsSelected" />
+            <label for="doc-{{$index}}-cbx"></label>
+        </div>
+    </div>
+    <div class="doc-body" id="doc-body-{{doc.DocIndexId}}" ng-click="showPreview(doc.DocIndexId, doc.TemplateDescription);">
+        <img class="doc-icon" src="/static/images/doc_iconX2.png" width="104" height="134" />
+        <p class="text-center doc-title"><strong>{{doc.TemplateDescription}}</strong></p>
+    </div>
+    <div id="signeesFor{{doc.TemplateTypeID}}" style="display: none">
+        <ul>
+            <li ng-repeat="signee in doc.Signers" ng-class="{'last':$last}">
+                <div>
+                    <span class="ellipsis pull-left">{{signee.FullName}} ({{signee.Type}})</span>
+                    <span class="signed-status-style pull-right" ng-class="signee.SignStatus=='Signed' && 'signed-color' || 'not-signed-color'">{{signee.SignStatus}}</span>
+                </div>
+            </li>
+        </ul>
+    </div>
+</div>

@@ -11,3 +11,8 @@ Project structure
 - `/signingroom/`: application related modules
 - `/common/`: common components (currently only the web proxy view)
 - `/static/`: static assets (including the front-end of the signingroom)
+
+## `pip` index
+
+`-i http://10.134.8.12:8000/simple/`
+
