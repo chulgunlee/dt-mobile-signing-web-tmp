@@ -1,6 +1,7 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
 
+import os
 import json
 from django.views.generic.base import View
 
@@ -19,7 +20,7 @@ class DocPackageView(APIView):
         mobile_manager = getManager(MobileManager, request.context_data)
         doc_pkg = mobile_manager.get_doc_pkg(pkg_id)
 
-        doc_pkg = {}
+        doc_pkg = json.load(open(os.path.dirname(__file__) + '/doc_list_response.json'))
 
         return Response(doc_pkg)
         

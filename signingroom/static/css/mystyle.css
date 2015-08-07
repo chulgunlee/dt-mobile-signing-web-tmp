@@ -1,0 +1,199 @@
+html, body {
+    background: #f2f6f9;
+}
+
+.doclist-header {
+    margin: 30px 19px 19px;
+    min-height: 34px;
+    border-bottom: solid 1px #dfe4e8;
+    box-shadow: 0 1px 0 #f2f6f7;
+    font-weight: bold;
+}
+
+.doclist-container {
+}
+
+.doclist-bottom-bar {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    height: 64px;
+    background: #3a3a3a;
+    left: 0;
+}
+
+.document {
+    position: relative;
+    background: #fff;
+    border: solid 1px #e5ebed;
+    border-radius: 2px;
+    box-shadow: 0 1px 1px rgba(221, 222, 225, .8);
+    width: 169px;
+    height: 197px;
+    margin-bottom: 28px;
+    margin-left: 34px;
+    overflow: hidden;
+}
+
+
+/* document sign status badge */
+.status-badge {
+    position: absolute;
+    display: block;
+    width: 128px;
+    height: 128px;
+    text-align: center;
+    transform: rotate(-45deg);
+    -webkit-transform: rotate(-45deg);
+    transform-origin: 0 0;
+    -webkit-transform-origin: 0 0;
+    left: -90px;
+}
+
+.status-badge.signed {
+    background: #20AC52;
+}
+
+.status-badge.not-signed {
+    background: #D3DAE0;
+}
+
+.status-badge.partially-signed {
+    background: #FED100;
+}
+
+.status-badge.submitted {
+    background: #484848;
+}
+
+.status-badge .status {
+    position: absolute;
+    width: 100%;
+    padding: 0 20px 8px;
+    line-height: 14px;
+    font-size: 14px;
+    left: 0;
+    bottom: 0;
+    color: #fff;
+}
+
+
+/* document body */
+.doc-body {
+    padding: 80px 10px 10px;
+}
+
+/* bottom bar */
+.doclist-bottom-bar {
+    padding: 10px;
+    z-index: 1000;
+}
+
+.doclist-bottom-bar .btn {
+    height: 44px;
+    padding: 10px 22px;
+    margin-right: 10px;
+}
+
+.doclist-bottom-bar .btn:disabled {
+    background: #737373;
+    border-color: #737373;
+}
+
+.doclist-bottom-bar .btn span.glyphicon {
+    margin-right: 10px;
+}
+
+/* signstatus popover */
+
+.signstatus-popover {           /* position hack for popover */
+    margin-left: 170px;
+    margin-top: 150px !important;
+}
+
+.signstatus-popover .popover-content {
+    padding: 0;
+}
+
+.signstatus-row {
+    min-width: 328px;
+    white-space: nowrap;
+    padding: 6px 14px;
+    border-bottom: solid 1px #EBEBEB;
+}
+
+.signstatus-row:last-child {
+    border-bottom: none;
+}
+
+/* overwrite bootstrap popover setup */
+.popover {
+    max-width: 400px !important;
+}
+
+/* modal dialog fix */
+.modal.center {
+    top: 20%;
+}
+
+.modal-header button.btn-link {
+    margin: 0;
+    padding: 0;
+    position: absolute;
+    left: 20px;
+    top: 0;
+}
+
+.modal-header .modal-title {
+    text-align: center;
+    font-weight: bold;
+}
+
+/* signer selection modal */
+
+#signers-container .modal-dialog {
+    width: 526px !important;
+}
+
+#signers-container .modal-content {
+    border-radius: 3px !important;
+}
+
+.signer-modal-body {
+    padding: 35px 0 35px 28px;
+    background: #F2F6F9;
+}
+
+.signers-list {
+    margin: 0 0 35px 0 !important;
+}
+
+.signers-list>li {
+    display: inline-block;
+}
+
+.signer {
+    display: block;
+    background: #fff;
+    width: 143px;
+    height: 191px;
+    border-radius: 2px;
+    border: solid 1px #DEE6E9;
+    margin-right: 22px;
+}
+
+.signer-caption {
+    text-align: center;
+    margin-top: 129px;
+}
+
+.signer-name {
+    font-weight: bold;
+}
+
+.signer-selected-wrapper {
+    position: relative;
+}
+
+.signer-badge {
+}

@@ -1,10 +1,8 @@
 <div class="document">
-    <a ng-show="doc.IsSignable" class="status-badge" id="signing-status-for-{{doc.TemplateTypeID}}" ng-click="onRibbonClicked($index);" ng-class="doc.RibbonColor">
-        <div class="status">
-            {{doc.SigningStatus}}
-        </div>
-    </a>
-    <a ng-hide="doc.IsSignable" class="status-badge" ng-click="onRibbonClicked($index);" ng-class="doc.RibbonColor">
+    <a class="status-badge partially-signed" id="signing-status-for-{{doc.TemplateTypeID}}" ng-class="doc.RibbonColor"
+        bs-popover data-template-url="/static/ngtemplates/signstatus_popover.html" data-container="body"
+        data-placement="top" data-auto-close="true" data-viewport="{ 'selector': 'body', 'padding': 10 }"
+    >
         <div class="status">
             {{doc.SigningStatus}}
         </div>
@@ -15,8 +13,8 @@
             <label for="doc-{{$index}}-cbx"></label>
         </div>
     </div>
+
     <div class="doc-body" id="doc-body-{{doc.DocIndexId}}" ng-click="showPreview(doc.DocIndexId, doc.TemplateDescription);">
-        <img class="doc-icon" src="/static/images/doc_iconX2.png" width="104" height="134" />
         <p class="text-center doc-title"><strong>{{doc.TemplateDescription}}</strong></p>
     </div>
     <div id="signeesFor{{doc.TemplateTypeID}}" style="display: none">

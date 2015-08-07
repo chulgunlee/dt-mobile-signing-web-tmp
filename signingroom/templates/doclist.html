@@ -3,29 +3,40 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=us-ascii" />
-    <title><%: Page.Title %> - Dealertrack</title>
+    <title>Document List - Dealertrack</title>
     <meta name="viewport" content="user-scalable=no, initial-scale=1.0, maximum-scale=1.0, width=device-width" />
+    <link href="/static/css/reset.css" rel="stylesheet">
+    <link href="/static/css/angular-motion.css" rel="stylesheet" />
     <!-- Bootstrap 3.2  CSS-->
     <link href="/static/css/bootstrap/bootstrap.min.css" rel="stylesheet" />
     <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet" />
     <!-- Custom  CSS-->
-    <link href="/static/css/styles.min.css" rel="stylesheet" />
-    <link href="/static/css/checkbox.min.css" rel="stylesheet" />
-    <link href="/static/css/docslist/styles.min.css" rel="stylesheet" />
+    <link href="/static/css/checkbox.css" rel="stylesheet" />
+    <link href="/static/css/mystyle.css" rel="stylesheet" />
 </head>
-<body ng-app="docsListApp">
+<body ng-app="docListApp">
     {% verbatim %}
-    <div id="body" class="container ng-cloak" ng-controller="DocsListCtrlr" ng-cloak>
-        <div class="row clearfix">
-            <!-- Main Content -->
-            <div id="docs-list-container" class="col-md-12">
 
+    <style type="text/ng-template" id="signstatus-template">
+    </style>
 
-                <h3 class="dtc_user">{{customers}}</h3>
+    <div id="doclist" class="container-fluid" ng-controller="DocListCtrl" ng-cloak>
 
-                <!-- Document List -->
-                <doc doc="doc" master-index-id="masterIndexId" ng-repeat="doc in documents" docs-repeat-complete></doc>
-            </div>
+        <!-- Floating button bar -->
+        <bottom-bar></bottom-bar>
+
+        <!-- Doc List Title -->
+        <div class="row doclist-header">
+            Required for Funding
+        </div>
+
+        <div class="row doclist-container">
+
+            <!-- Document List -->
+            <doc class="pull-left" doc="doc" master-index-id="masterIndexId" ng-repeat="doc in data.documents" docs-repeat-complete></doc>
+        </div>
+
+        <!--
             <div id="doc-mix-warning" class="modal child-modal" role="dialog" data-backdrop="static">
                 <div class="modal-dialog modal-sm">
                     <div class="modal-content">
@@ -39,15 +50,17 @@
                     </div>
                 </div>
             </div>
+        -->
 
         </div>
     </div>
 
 
+    {% endverbatim %}
 
 
+    {% comment %}
     <doc-list>
-        <doc-list-header></doc-list-header>
         <loading-modal></loading-modal>
         <doc-list-load-failed></doc-list-load-failed>
         <ws-call-failed-modal></ws-call-failed-modal>
@@ -55,25 +68,21 @@
         <doc-removal-notice-modal></doc-removal-notice-modal>
         <doc-preview-modal></doc-preview-modal>
     </doc-list>
+    {% endcomment %}
 
 
-    {% endverbatim %}
     <script>
-        var masterIndxId = {{ master_index_id }};
+        var packageId = {{ master_index_id }};
         var dealerId = 0;
-        var apiUri = '/api/doccenter/';
+        var apiUri = '/api/';
     </script>
 
-    <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
-    <script src="/static/js/custom/jquery.ellipsis.js"></script>
-    <script src="/static/js/custom/jquery.pluralize.js"></script>
     <script src="/static/js/angular/angular.min.js"></script>
     <script src="/static/js/angular/angular-resource.min.js"></script>
+    <script src="/static/js/angular/angular-animate.min.js"></script>
     <script src="/static/js/angular/angular-route.min.js"></script>
-    <script src="/static/js/custom/webviewbridge.js"></script>
-    <script src="/static/js/custom/docslist/main.js"></script>
+    <script src="/static/js/angular/angular-strap.js"></script>
+    <script src="/static/js/angular/angular-strap.tpl.js"></script>
     <script src="/static/js/custom/docslist/controllers.js"></script>
-
-    <script src="/static/js/bootstrap/bootstrap.min.js"></script>
 </body>
 </html>
