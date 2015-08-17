@@ -2,6 +2,10 @@ html, body {
     background: #f2f6f9;
 }
 
+#doclist {
+    padding-bottom: 84px;           /* to display margin at the bottom which partially covered by the bottom bar */
+}
+
 .doclist-header {
     margin: 30px 19px 19px;
     min-height: 34px;
@@ -160,12 +164,12 @@ html, body {
 }
 
 .signer-modal-body {
-    padding: 35px 0 35px 28px;
+    padding: 35px 35px 35px 28px;
     background: #F2F6F9;
 }
 
 .signers-list {
-    margin: 0 0 35px 0 !important;
+    margin: 0 -35px 35px 0 !important;
 }
 
 .signers-list>li {
@@ -174,12 +178,12 @@ html, body {
 
 .signer {
     display: block;
-    background: #fff;
+    background: #fff url(../images/avatar.png) no-repeat center 48px;
     width: 143px;
     height: 191px;
     border-radius: 2px;
     border: solid 1px #DEE6E9;
-    margin-right: 22px;
+    margin-right: 20px;
 }
 
 .signer-caption {

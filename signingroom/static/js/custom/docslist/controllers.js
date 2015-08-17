@@ -55,6 +55,7 @@ myApp.factory('DocService', ['$http', function($http) {
     var service = {
 
         documents: [],
+        otherDocuments: [],
         customers: [],
 
         refresh: function(packageId) {
@@ -66,6 +67,7 @@ myApp.factory('DocService', ['$http', function($http) {
                 }
 
                 service.documents = data.Documents;
+                service.otherDocuments = data.OtherDocuments;
                 service.customers = data.Customers;
             });
 
