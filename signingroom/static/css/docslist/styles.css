@@ -1,0 +1,297 @@
+﻿.document a {
+    text-decoration: none;
+}
+
+.doc-body {
+    top: 70px;
+    position: absolute;
+    width: 158px;
+    left: 0;
+    height: 145px;
+}
+
+.doc-icon {
+    margin-top: -20px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.doc-title {
+    max-width: 95%;
+}
+
+.doc-selected-wrapper {
+    width: 80px;
+    height: 80px;
+    float: right;
+    top: 0;
+    position: absolute;
+    right: 0;
+}
+
+#doc-preview-overlay .modal-body {
+    text-align: center;
+    background: #f0eff4;
+    -ms-border-radius: 0 0 10px 10px;
+    border-radius: 0 0 10px 10px;
+}
+
+#doc-preview-overlay.preview-loaded .modal-body {
+    padding: 0;
+}
+
+#doc-preview-overlay.preview-loaded .modal-header {
+    padding: 0 10px;
+}
+
+@media only screen and (min-device-width: 768px) and (max-device-width: 1024px) and (orientation: landscape) {
+    #doc-preview-overlay.preview-loaded .modal-dialog {
+        width: 900px;
+    }
+
+        #doc-preview-overlay.preview-loaded .modal-dialog img {
+            width: 890px;
+        }
+}
+
+@media only screen and (min-device-width: 768px) and (max-device-width: 1024px) and (orientation: portrait) {
+    #doc-preview-overlay.preview-loaded .modal-dialog {
+        width: 710px;
+    }
+
+        #doc-preview-overlay.preview-loaded .modal-dialog img {
+            width: 700px;
+        }
+}
+
+.none {
+    border-right: 70px solid transparent;
+    border-top: 70px solid transparent;
+}
+/*.status {
+    width: auto;
+}*/
+.green .status {
+    top: -50px;
+    left: 15px;
+}
+
+.gray .status {
+    top: -60px;
+    left: 13px;
+    line-height: 12px;
+}
+
+.yellow .status {
+    top: -55px;
+    left: 13px;
+    line-height: 12px;
+}
+
+.fa-file-pdf-o {
+    margin-top: -15px;
+}
+
+#signers-container {
+    top: 30%;
+}
+
+    #signers-container .modal-header-wrapper {
+        height: 30px;
+    }
+
+        #signers-container .modal-header-wrapper button {
+            padding: 0;
+            text-decoration: none;
+        }
+
+        .signers-list {
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .signers-list li {
+            width: 120px;
+        }
+
+        .signer-modal-body {
+            padding: 15px 10px;
+        }
+
+        .room-for-1 {
+            width: 120px;
+        }
+
+        .room-for-2 {
+            width: 240px;
+        }
+
+        .room-for-3 {
+            width: 360px;
+        }
+
+.child-modal {
+    margin-top: 15%;
+}
+
+    .child-modal .alert {
+        margin-bottom: 0;
+    }
+
+    /*#doc-mix-warning .fa-check {
+        color: #3CB9E5;
+    }*/
+
+
+.child-modal .close {
+    -ms-opacity: .8;
+    opacity: .8;
+    -webkit-filter: alpha(opacity=80);
+    -moz-filter: alpha(opacity=80);
+    -o-filter: alpha(opacity=80);
+    filter: alpha(opacity=80);
+        color: #3cb9e5;
+}
+
+.child-modal .close:hover, .child-modal .close:focus {
+    -ms-opacity: 1;
+    opacity: 1;
+    -webkit-filter: alpha(opacity=100);
+    -moz-filter: alpha(opacity=100);
+    -o-filter: alpha(opacity=100);
+    filter: alpha(opacity=100);
+}
+
+#signers-container .continue-link:disabled {
+    color: gainsboro;
+}
+
+#signers-container .roundedTwo {
+    margin-top: 15px;
+}
+
+.signers-list-item-disabled .signer .user-icon,
+.signers-list-item-disabled .signer .signer-name-type .signer-name,
+.signers-list-item-disabled .signer .signer-name-type .signer-type {
+    color: gainsboro;
+}
+
+.signers-list-item-disabled .roundedTwo {
+    background: gainsboro;
+}
+
+#doc-preview-overlay.modal {
+    z-index: 9999;
+}
+
+.signed-status-style {
+    width: auto;
+}
+
+.popover-content ul {
+    width: auto;
+}
+
+    .popover-content ul li {
+        border-bottom: #ccc solid 1px;
+        height: 32px;
+    }
+
+        .popover-content ul li.last {
+            border: none;
+        }
+
+        .popover-content ul li div {
+            padding: 5px;
+            color: #999 !important;
+            display: block;
+            font-family: 'Helvetica Neue', 'Helvetica', 'Arial', 'sans-serif';
+            font-size: 12px;
+        }
+
+            .popover-content ul li div span {
+                margin: 2px 5px;
+            }
+.navbar-header-style {
+    z-index: 1039;
+}
+.navbar-style {
+    margin-left: 0;
+}
+/*.dtc_user {
+    margin-top: 0;
+}#docs-list-container {
+    margin-top: 80px;
+}*/
+#docs-list-container .warning {
+    margin-top: 80px;
+}
+/**************************** data loading indicator ***********************************************************/
+#data-loading-indicator {
+    margin-top: 80px;
+    font-size: 1.2em;
+}
+
+    #data-loading-indicator img {
+        margin: 0 5px;
+    }
+/***************************************************************************************************************/
+
+/******************************select signer popup************************************************************/
+#signers-container .modal-header {
+    padding-bottom: 0;
+}
+/*************************************************************************************************************/
+
+#data-retrieval-error {
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 80px;
+    width: 70%;
+}
+#remote-call-failed-msg-box button:hover,
+#doc-removal-notice button:hover {
+    text-decoration: none;
+}
+#remote-call-failed-msg-box {
+    margin-top: 160px;
+}
+
+#doc-preview-overlay h3 img {
+    width: 850px;
+}
+
+button#id_Sign_btn:disabled {
+    color: #dcdcdc !important;
+}
+
+button#id_Sign_btn:hover {
+    text-decoration: none;
+}
+
+button#id_Sign_btn {
+    padding: 14px 10px;
+}
+
+.thumbnail_caption div {
+    margin: 0;
+    padding: 0;
+    font-family: 'Helvetica Neue','Helvetica','Arial','sans-serif';
+    color: #999;
+    font-size: 12px;
+    height: 35px;
+    width: 90px;
+}
+/****************************ellipsis jquery plugin**************************************/
+.ellipsis {
+	white-space: nowrap;
+	overflow: hidden;
+}
+
+.ellipsis.multiline {
+	white-space: normal;
+}
+/****************************************************************************************/
+#docs-list-container .ellipsis {
+    width: 150px;
+}

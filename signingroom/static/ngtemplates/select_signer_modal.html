@@ -1,0 +1,38 @@
+<div class="modal" data-keyboard="false" data-backdrop="static" id="signers-container" tabindex="-1" role="dialog" aria-labelledby="select_signer_modal" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content signer-modal-content">
+            <div class="modal-header">
+                <div class="row">
+                    <div class="col-md-12 modal-header-wrapper">
+                        <button class="btn btn-link" ng-click="$hide()">Cancel</button>
+                        <p class="modal-title modal-text">Select Signer(s)</p>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-body signer-modal-body">
+                <ul class="row signers-list" ng-class="'room-for-'+signers.length">
+                    <li ng-repeat="signer in signers" class="modal-body-wrapper signers-list-item signer-{{signer.Type.toLowerCase()}}" ng-click="onSignerSelected($index, $event);">
+                        <div class="signer">
+                            <div class="signer-selected-wrapper">
+                                <div class="roundedTwo docSelector">
+                                    <input type="checkbox" value="None" disabled="disabled" id="signer-{{$index}}-cbx">
+                                    <label for="signer-{{$index}}-cbx"></label>
+                                </div>
+                            </div>
+                            <div class="signer-caption">
+                                <div class="signer-name">{{signer.FullName}}</div>
+                                <div class="signer-type">({{signer.Type}})</div>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+                
+
+                <div class="row text-center">
+                    <button class="sign-button btn btn-lg btn-primary">Continue</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
