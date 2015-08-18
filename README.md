@@ -1,7 +1,7 @@
 dt-mobile-signing-web
 =====================
 
-Mobile Signing Room Web Application
+Mobile Signing Room Web Application Demo based on Mocked Api responses.
 
 
 Project structure
