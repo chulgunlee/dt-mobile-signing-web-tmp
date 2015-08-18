@@ -1,0 +1,25 @@
+<nav class="navbar navbar-default navbar-fixed-top  navbar-header-style ng-cloak" role="navigation" ng-cloak>
+    <!-- navbar container -->
+    <div id="id_document_contract_nav" class="">
+        <!--  navbar-brand name center align -->
+        <span class="navbar-brand">{{headerText}}</span>
+
+        <!-- navbar left -->
+        <ul class="nav navbar-nav navbar-left">
+            <li>
+                <a href="#" class="navbar-style" id="back-lnk">
+                    <i class="fa fa-chevron-left back-icon-style"></i>
+                    &nbsp;Back
+                </a>
+            </li>
+        </ul>
+        <ul class="nav navbar-nav navbar-left" ng-show="isAnyDocSelected">
+            <li>
+                <button type="button" class="btn btn-link left-sign-style" id="id_Sign_btn" ng-disabled="isNoSignableDocsFound" ng-click="onSelectSigners();">Sign</button>
+            </li>
+            <li>
+                <a href="#" class="fa fa-print fa-2x print-navbar" ng-click="onPrintClicked();"></a>
+            </li>
+        </ul>
+    </div>
+</nav>

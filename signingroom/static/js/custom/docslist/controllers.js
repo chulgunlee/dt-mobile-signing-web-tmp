@@ -1,7 +1,6 @@
 ﻿var defaults = {
     'docListHeader': 'Contract Documents',
     'apiUri': apiUri,
-    ajaxTimeout: ajaxTimeout,
     'http_config': {
         headers: {
             'Authorization': 'Basic Y2FkbmFsbDpkdGRldnVzcjg4',
@@ -11,121 +10,101 @@
 };
 
 /* Controllers declarations */
-var myApp = angular.module('docsListApp', [])
-    .directive('docsRepeatCompleted', onDocsRepeatCompleted)
-    .service('headerService', ['$rootScope', HeaderSvc])
-    .controller('HeaderCtrlr', ['$scope', 'headerService', HeaderCtrlr])
-    .controller('DocsListCtrlr', ['$scope', '$http', 'headerService', DocsListCtrlr]);
+var myApp = angular.module('docListApp', ['ngResource', 'ngRoute', 'ngAnimate', 'mgcrea.ngStrap'])
+    .directive('docsRepeatCompleted', onDocsRepeatCompleted);
 
-/* Header Service */
-function HeaderSvc($rootScope) {
-    var headerText = defaults.docListHeader;
-    var documentsSelected = 0;
-    var signableDocsCount = 0;
-    var selectedDocIndxs = [];
-    //var signedDocsFoundInSelectionCount = 0;
 
-    var setHeaderText = function (text) {
-        headerText = text;
-        $rootScope.$broadcast('HEADER_TEXT_UPDATED', headerText);
-    };
+/**
+ * Configures the doc list app in 2 ways:
+ *
+ *   1. Sets a HTTP request timeout
+ *   2. Configures an interceptor to handle SMSession expiration
+ */
+myApp.config(['$httpProvider', function($httpProvider) {
+    // TODO (Paul):  Set this to a sensible value
+    $httpProvider.defaults.timeout = 0;
+    $httpProvider.interceptors.push(function ($q) {
+        return {
+            responseError: function(response) {
+                // TODO (Paul):  1. Refine detection of SM redirect.  2. Figure out how to change flow of control (raise exception?)
+                if (response.status === 302) {
+                    alert('SiteMinder session expired (302)');
+                }
 
-    var getHeaderText = function () {
-        return documentsSelected > 0 ? headerText : defaults.docListHeader;
-    };
-
-    //var fireSignedDocsFoundInSelectionCountChanged = function () {
-    //    $rootScope.$broadcast('SIGNED_DOCS_IN_SELECTION_COUNT_CHANGED');
-    //};
-
-    //var getSignedDocsFoundInSelection = function () {
-    //    return signedDocsFoundInSelectionCount;
-    //};
-
-    return {
-        setHeaderText: setHeaderText,
-        getHeaderText: getHeaderText,
-        setDocumentsSelected: function (count) {
-            documentsSelected = count;
-            $rootScope.$broadcast('DOCUMENTS_COUNT_CHANGED', documentsSelected);
-        },
-        getDocumentsSelected: function () {
-            return documentsSelected;
-        },
-        setSelectedDocIndxs: function(indxsArr) {
-            selectedDocIndxs = indxsArr;
-            $rootScope.$broadcast('SELECTED_DOC_INDXS_CHANGED', selectedDocIndxs);
-        },
-        getSelectedDocIndxs: function() {
-            return selectedDocIndxs;
-        },
-        addSignableDoc: function() {
-            signableDocsCount++;
-            $rootScope.$broadcast('SIGNABLE_DOCS_COUNT_CHANGED', signableDocsCount);
-        },
-        removeSignableDoc: function() {
-            signableDocsCount--;
-            $rootScope.$broadcast('SIGNABLE_DOCS_COUNT_CHANGED', signableDocsCount);
+                return response
+            }
         }
-        //signedDocAddedToSelection: function () {
-        //    signedDocsFoundInSelectionCount++;
-        //    fireSignedDocsFoundInSelectionCountChanged();
-        //},
-        //signedDocRemovedFromSelection: function () {
-        //    signedDocsFoundInSelectionCount--;
-        //    fireSignedDocsFoundInSelectionCountChanged();
-        //},
-        //getSignedDocsFoundInSelection: getSignedDocsFoundInSelection
+    });
+}]);
+
+
+/**
+ * DocList resource factory
+ */
+myApp.factory('DocList', ['$resource', function($resource) {
+    return $resource('/api/doclist/:masterIndexId', null, {
+        saveToSession: {method: 'PUT', url: '/api/doclist/:masterIndexId/session/'},
+        getDocPreview: {method: 'GET', url: '/api/doclist/:masterIndexId/docs/:docIndexId/preview/'}
+    });
+}]);
+
+
+
+myApp.factory('DocService', ['$http', function($http) {
+
+    var service = {
+
+        documents: [],
+        otherDocuments: [],
+        customers: [],
+
+        refresh: function(packageId) {
+            
+            $http.get(defaults.apiUri + 'packages/' + packageId).success(function(data, status) {
+                if (status == 302) {
+                    // TODO: session time out
+                    return;
+                }
+
+                service.documents = data.Documents;
+                service.otherDocuments = data.OtherDocuments;
+                service.customers = data.Customers;
+            });
+
+            // extract data from response and save it to DocService
+        },
+
+        isSelected: function() {        // TODO: not good name
+            return service.documents.map(function(doc) { return doc.IsSelected; })
+                            .reduce(function(p, c) { return p || c }, false);
+        },
+
+        selectedDocuments: function() {
+            return service.documents.filter(function(doc) { return doc.IsSelected; })
+        },
+
     };
-}
 
-/* Header Controller */
-function HeaderCtrlr($scope, headerService) {
-    $scope.headerText = headerService.getHeaderText();
-    //$scope.isDebug = dbgFlag;
-    $scope.isAnyDocSelected = false;
-    $scope.isNoSignableDocsFound = true;
-    $scope.selectedDocIndxs = [];
-    $scope.$on('HEADER_TEXT_UPDATED', function (response) {
-        $scope.headerText = headerService.getHeaderText();
-    });
-    $scope.$on('DOCUMENTS_COUNT_CHANGED', function () {
-        $scope.isAnyDocSelected = headerService.getDocumentsSelected() > 0;
-    });
-    $scope.$on('SELECTED_DOC_INDXS_CHANGED', function () {
-        $scope.selectedDocIndxs = headerService.getSelectedDocIndxs();
-    });
-    $scope.$on('SIGNABLE_DOCS_COUNT_CHANGED', function(evt, signableDocsCount) {
-        $scope.isNoSignableDocsFound = signableDocsCount <= 0;
-    });
-    //$scope.$on('SIGNED_DOCS_IN_SELECTION_COUNT_CHANGED', function () {
-    //    $scope.isSignedDocsInSelectionFound = headerService.getSignedDocsFoundInSelection() > 0;
-    //});
-    $scope.onSelectSigners = function () {
+    return service;
 
-        //if ($scope.isSignedDocsInSelectionFound) {
-        //    $('#doc-mix-warning').on('hidden.bs.modal', function (e) {
-        //        $('#signers-container').modal('show');
-        //    });
-        //    $('#doc-mix-warning').modal('show');
-        //}
-        //else
-        $('#signers-container').modal('show');
-    };
-    $scope.onPrintClicked = function() {
-        var indxs = $scope.selectedDocIndxs.map(function (doc) {
-            return doc.DocIndexId;
-        });
-        var printoutApiUrl = defaults.apiUri + 'printouts/' + indxs.join(';') + '?docMstrIndxId=' + masterIndxId;
-        //alert('Click OK to call WebviewBridge now. (url: '+printoutApiUrl+')');
-        WebViewBridge.call('print', { 'url': printoutApiUrl });
-    };
-}
+}]);
 
 
-/* DocsList Controller */
-function DocsListCtrlr($scope, $http, headerService) {
-    var apiUri = defaults.apiUri + 'contractdetails/' + masterIndxId;
+myApp.controller('DocListCtrl', ['$scope', 'DocService', function($scope, docService) {
+
+    $scope.data = docService;
+
+    docService.refresh(packageId);
+
+    return;
+
+
+    /**
+     * setPreviewOrverlay
+     *
+     * @param imgUrls
+     * @param docType
+     */
     var setPreviewOverlay = function (imgUrls, docType) {
         $('#doc-preview-overlay .modal-body img').fadeOut(function () {
             $('#doc-preview-overlay .modal-header').fadeIn(function () {
@@ -133,28 +112,25 @@ function DocsListCtrlr($scope, $http, headerService) {
                 $('#doc-preview-overlay .modal-header h4').fadeIn();
             });
             $('#doc-preview-overlay .modal-body h3').fadeOut(function () {
-                //if (mode == 'window') {
-                //    $('#docPreviewOverlay .modal-body h3').html('Click <a href="' + pdfUrl + '" target="_blank">here</a> to view <strong>' + docType + '</strong><h5><em>New window will be open</em></h5>');
-                //    $('#docPreviewOverlay .modal-body h3 a').bind('click', function () {
-                //        $('#docPreviewOverlay').modal('hide');
-                //    });
-                //} else {
                 $('#doc-preview-overlay').addClass('preview-loaded');
                 $('#doc-preview-overlay button.close').show();
-                //$('#docPreviewOverlay .modal-body h3').html('<iframe style="width:100%;" scrolling="no" src="' + pdfUrl + '" onload="resizeIt(this, ' + pagesCount + ');" />');
-                //var height = resizeIt(null, pagesCount);
                 var imgsHtml = '';
                 var i;
                 for (i in imgUrls) {
                     imgsHtml += '<img src="' + imgUrls[i] + '" />';
                 }
-                //$('#docPreviewOverlay .modal-body h3').html('<embed style="width:100%; height:' + height + ';margin-left:25px;" src="' + pdfUrl + '" type="application/pdf"/>');
                 $('#doc-preview-overlay .modal-body h3').html(imgsHtml);
-                //;}
                 $('#doc-preview-overlay .modal-body h3').fadeIn();
             });
         });
     };
+
+
+    /**
+     * initPreviewOverlay
+     *
+     * @param docType
+     */
     var initPreviewOverlay = function (docType) {
         $('#doc-preview-overlay').removeClass('preview-loaded');
         $('#doc-preview-overlay button.close').hide();
@@ -162,50 +138,28 @@ function DocsListCtrlr($scope, $http, headerService) {
         $('#doc-preview-overlay .modal-header').hide();
         $('#doc-preview-overlay .modal-body').html('<img src="/static/images/loading-tr.gif" /><h3>Downloading <strong>' + docType + '</strong> preview...</h3>');
     };
-    $http.get(apiUri, {timeout: defaults.ajaxTimeout}).success(function (data, status) {
-        if (status == 302) {
-            WebViewBridge.call('exitSigningRoom', { status: 'SessionTimeout' });
-            return;
-        }
-        $scope.documents = data["Documents"];
-        $scope.customers = data["Customers"].join(' & ');
-        $scope.signers = data["Signers"];
-        $scope.getSelectedDocsCount = function () {
-            return $scope.documents.filter(function (el) { return el.IsSelected; }).length;
-        };
-        $scope.isAnyDocSelected = function () {
-            return $scope.getSelectedDocsCount() > 0;
-        };
-        $scope.updateHeader = function () {
-            var count = $scope.getSelectedDocsCount();
-            headerService.setDocumentsSelected(count);
-            headerService.setHeaderText($().pluralize(count+' Document') + " Selected");
-        };
-        for (var docIndex = 0; docIndex < $scope.documents.length; docIndex++) {
-            var doc = $scope.documents[docIndex];
-            if (doc.IsSignable && doc.SigningStatus !== 'Signed')
-                $scope.onDocSelected(docIndex);
-        }
-        $scope.dataLoaded = true;
-    }).error(function (data, status, headers, config) {
-        $scope.apiCallFailed = true;
-    });
+
+
+    /**
+     * initSelectedSigners
+     */
     $scope.initSelectedSigners = function () {
         var dx, sx;
         $scope.selectedSigners = [];
+
+
         for (dx in $scope.selectedDocs) {
             if ($scope.selectedDocs[dx].SigningStatus == 'Signed')
                 continue;
+
+
             for (sx in $scope.selectedDocs[dx].Signers) {
                 if ($scope.selectedDocs[dx].Signers[sx].SignStatus == 'Signed')
                     continue;
-                //if ($scope.selectedSigners.indexOf($scope.selectedDocs[dx].Signers[sx]) < 0)
-                //    $scope.selectedSigners.push($scope.selectedDocs[dx].Signers[sx]);
                 var seen = false;
                 $.each($scope.selectedSigners, function (i, el) {
                     if (el.Type == $scope.selectedDocs[dx].Signers[sx].Type) {
                         seen = true;
-                        //return;
                     }
                 });
                 if (!seen) {
@@ -216,8 +170,15 @@ function DocsListCtrlr($scope, $http, headerService) {
                 }
             }
         }
-        //debugger;
     };
+
+
+    /**
+     * onSignerSelected
+     *
+     * @param indx
+     * @param event
+     */
     $scope.onSignerSelected = function(indx, event) {
         //check if signer container is disabled, then prevent action
         if ($(event.currentTarget).hasClass('signers-list-item-disabled'))
@@ -231,6 +192,12 @@ function DocsListCtrlr($scope, $http, headerService) {
             $scope.selectedSigners.splice(ix, 1);
         $scope.updateSelectedDocs();
     };
+
+
+    /**
+     * updateSelectedDocs
+     *
+     */
     $scope.updateSelectedDocs = function() {
         $.each($scope.selectedDocs, function (i, selDoc) {
             selDoc.anyReqdSignerSelected = false;
@@ -244,16 +211,12 @@ function DocsListCtrlr($scope, $http, headerService) {
             });
         });
     };
-    $('#signers-container').on('show.bs.modal', function () {
-        $scope.SelectSigners();
-    });
-    $('#signers-container').on('shown.bs.modal', function () {
-        if ($scope.isSignedDocFoundInSelection())
-            $('#doc-mix-warning').modal('show');
-    });
-    $('.child-modal').on('show.bs.modal', function () {
-        $(this).css('z-index', 9999);
-    });
+
+
+    /**
+     * onContinueClick
+     *
+     */
     $scope.onContinueClick = function () {
         try {
             if ($scope.isDocRemovalReqd()) {
@@ -272,8 +235,14 @@ function DocsListCtrlr($scope, $http, headerService) {
             $('#remote-call-failed-msg-box').modal('show');
             WebViewBridge.call('exitSigningRoom', { 'status': 'RedirectError' });
         }
-        //PageMethods.ProcessRequest(JSON.stringify($scope.selectedDocs), function(result) {});
     };
+
+
+    /**
+     * isDocRemovalReqd
+     *
+     * @returns {boolean}
+     */
     $scope.isDocRemovalReqd = function () {
         var retVal = false;
         $.each($scope.selectedDocs, function (i, selDoc) {
@@ -282,6 +251,12 @@ function DocsListCtrlr($scope, $http, headerService) {
         });
         return retVal;
     };
+
+
+    /**
+     * onOkToRemoveDocsWOSingers
+     *
+     */
     $scope.onOkToRemoveDocsWOSingers = function() {
         var idxToRemove = [];
         $.each($scope.selectedDocs, function(i, selDoc) {
@@ -295,10 +270,18 @@ function DocsListCtrlr($scope, $http, headerService) {
         $('#doc-removal-notice').modal('hide');
         $scope.onContinueClick();
     };
+
+
+    /**
+     * onFormSubmit
+     *
+     * @param docs
+     * @param signers
+     */
     $scope.onFormSubmit = function(docs, signers) {
         var sessionObj = { 'documents': docs, 'signers': signers };
-        //var sessionData = JSON.stringify(sessionObj).toString();
-        $http.post(defaults.apiUri + 'doclist/session', sessionObj, {timeout: defaults.ajaxTimeout}).success(function (data, status, headers, config) {
+        $http.post(defaults.apiUri + 'doclist/session', sessionObj).success(function (data, status) {
+            // TODO (Paul): Remove SMSession expiration handling
             if (status == 302) {
                 $('#remote-call-failed-msg-box .modal-body').html('Your session has expired. Please login again to continue signing.');
                 $('#remote-call-failed-msg-box').modal('show');
@@ -310,7 +293,6 @@ function DocsListCtrlr($scope, $http, headerService) {
                     location.href = 'SigningRoom.aspx?docmasterindexid=' + masterIndxId;
                     return;
                 }
-//		alert('Will be calling `lock` now...');
                 WebViewBridge.call('lock', { '': '' }, function(params) {
                     //lock acquired (supposedly)
                     location.href = 'SigningRoom.aspx?docmasterindexid=' + masterIndxId;
@@ -326,6 +308,13 @@ function DocsListCtrlr($scope, $http, headerService) {
             WebViewBridge.call('exitSigningRoom', { status: 'RedirectError' });
         });
     };
+
+
+    /**
+     * SelectSigners
+     *
+     * @constructor
+     */
     $scope.SelectSigners = function () {
         var ix;
         $scope.initSelectedSigners();
@@ -342,6 +331,12 @@ function DocsListCtrlr($scope, $http, headerService) {
             }
         }
     };
+
+
+    /**
+     * disableUnneededSigners
+     *
+     */
     $scope.disableUnneededSigners = function () {
         $('.signers-list-item').each(function () {
             if ($(this).hasClass('signers-list-item-disabled'))
@@ -354,14 +349,21 @@ function DocsListCtrlr($scope, $http, headerService) {
             $(this).addClass('signers-list-item-disabled');
         });
     };
+
+
+    /**
+     * onDocSelected
+     *
+     * @param docIndex
+     */
     $scope.onDocSelected = function (docIndex) {
-        //alert(docIndex);
-        //if (typeof docIndex !== 'undefined')
+
+        // changed selected status
         $scope.documents[docIndex].IsSelected = !$scope.documents[docIndex].IsSelected;
-        //$('#doc-' + docIndex + '-cbx').prop('checked', $scope.documents[docIndex].IsSelected);
+
+
         if ($scope.documents[docIndex].IsSelected) {
             if ($scope.documents[docIndex].SigningStatus === 'Signed')
-                //headerService.signedDocAddedToSelection();
                 $scope.$broadcast('SIGNED_DOC_ADDED_TO_SELECTION');
             else {
                 $scope.selectedDocs.push($scope.documents[docIndex]);
@@ -370,7 +372,6 @@ function DocsListCtrlr($scope, $http, headerService) {
             }
         } else {
             if ($scope.documents[docIndex].SigningStatus === 'Signed')
-                //headerService.signedDocRemovedFromSelection();
                 $scope.$broadcast('SIGNED_DOC_REMOVED_FROM_SELECTION');
             else {
                 var elIndx = $scope.selectedDocs.indexOf($scope.documents[docIndex]);
@@ -382,38 +383,50 @@ function DocsListCtrlr($scope, $http, headerService) {
         headerService.setSelectedDocIndxs($scope.selectedDocs);
         $scope.updateHeader();
     };
-    $scope.$on('SIGNED_DOC_ADDED_TO_SELECTION', function () {
-        $scope.signedDocsInSelectionCount++;
-    });
-    $scope.$on('SIGNED_DOC_REMOVED_FROM_SELECTION', function () {
-        $scope.signedDocsInSelectionCount--;
-    });
+
+
+    /**
+     * isSignedDocFoundInSelection
+     *
+     * @returns {boolean}
+     */
     $scope.isSignedDocFoundInSelection = function () {
         return $scope.signedDocsInSelectionCount > 0;
     };
+
+
+    /**
+     * onRibbonClicked
+     *
+     * @param index
+     */
     $scope.onRibbonClicked = function (index) {
         DismissPopoverByIx(index);
     };
+
+
+    /**
+     * onDocBodyClicked
+     *
+     * @param docIndexId
+     * @param docType
+     */
     $scope.onDocBodyClicked = function (docIndexId, docType) {
         initPreviewOverlay(docType);
         apiUri = defaults['apiUri'] + 'docpreviews/' + docIndexId + '?docMstrIndxId=' + masterIndxId;
-        //var pdfUrl = 'data:application/pdf;base64,';
         $('#doc-preview-overlay').addClass('doc-preview-modal-' + docIndexId);
         $('#doc-preview-overlay').modal('show');
         if ($scope.docsPreview[docIndexId] == null) {
-            $http.get(apiUri, {timeout: defaults.ajaxTimeout}).success(function (data, status) {
+            $http.get(apiUri).success(function (data, status) {
+                // TODO (Paul): Remove SMSession expiration handling
                 if (status == 302) {
                     WebViewBridge.call('exitSigningRoom', { status: 'SessionTimeout' });
                     return;
                 }
                 var key = Object.keys(data)[0];
-                //alert(data[key].length);
-                //$scope.docsPreview[key] = data[key].Pdf;
                 $scope.docsPreview[key] = data[key];
-                //var pdfUrl = $scope.docsPreview[key];
                 setPreviewOverlay($scope.docsPreview[key], docType);
             }).error(function () {
-                //alert('The document preview you requested cannot be retrived at this time! Please, try again later.');
                 $('#remote-call-failed-msg-box .modal-body').html('The document preview you requested is not available at this time. Please, try again later.');
                 $('#remote-call-failed-msg-box').modal('show');
                 $('#doc-preview-overlay').modal('hide');
@@ -422,17 +435,43 @@ function DocsListCtrlr($scope, $http, headerService) {
             setPreviewOverlay($scope.docsPreview[docIndexId], docType);
         }
     };
-    $scope.dataLoaded = false;
-    $scope.apiCallFailed = false;
-    $scope.docsPreview = {};
-    $scope.selectedDocs = [];
-    $scope.selectedSigners = [];
-    $scope.signedDocsInSelectionCount = 0;
-}
+
+
+    /***************************************************************************
+     * Event handlers
+     */
+
+    $scope.$on('SIGNED_DOC_ADDED_TO_SELECTION', function () {
+        $scope.signedDocsInSelectionCount++;
+    });
+
+
+    $scope.$on('SIGNED_DOC_REMOVED_FROM_SELECTION', function () {
+        $scope.signedDocsInSelectionCount--;
+    });
+
+
+    $('#signers-container').on('show.bs.modal', function () {
+        $scope.SelectSigners();
+    });
+
+
+    $('#signers-container').on('shown.bs.modal', function () {
+        if ($scope.isSignedDocFoundInSelection())
+            $('#doc-mix-warning').modal('show');
+    });
+
+
+    $('.child-modal').on('show.bs.modal', function () {
+        $(this).css('z-index', 9999);
+    });
+}]);
+
+
 /**** Directives *******/
+// TODO: what's this? why bind directive on last doc...
 function onDocsRepeatCompleted() {
     return function (scope, element, attrs) {
-        //debugger;
         if (scope.$last) {
             $('[id*=signing-status-for]').each(function () {
                 if ($(this).hasClass('none')) return;
@@ -449,6 +488,181 @@ function onDocsRepeatCompleted() {
         }
     };
 }
+
+
+
+
+
+myApp.directive('docList', function() {
+    return {
+
+    }
+});
+
+
+myApp.directive('docListLoadFailed', function() {
+    return {
+        templateUrl: '/static/ngtemplates/doclist_load_failed.html'
+    }
+});
+
+
+myApp.directive('docPreviewModal', function() {
+    return {
+        templateUrl: '/static/ngtemplates/doc_preview.html',
+        restrict: 'E',
+        scope: {
+
+        },
+        link: function() {},
+        controller: ['$scope', function($scope) {
+            $scope.pageUrls = [];
+
+            this.showPreview = function(pageUrls) {
+                $scope.pageUrls = pageUrls;
+                alert('showPreview');
+                console.log(arguments);
+            };
+        }]
+    }
+});
+
+
+
+myApp.directive('loadingModal', function() {
+    return {
+        templateUrl: '/static/ngtemplates/loading_modal.html'
+    }
+});
+
+
+myApp.directive('selectSignerModal', function() {
+    return {
+        templateUrl: '/static/ngtemplates/select_signer_modal.html'
+    }
+});
+
+
+myApp.directive('docRemovalNoticeModal', function() {
+    return {
+        templateUrl: '/static/ngtemplates/doc_removal_notice_modal.html'
+    }
+});
+
+
+myApp.directive('wsCallFailedModal', function() {
+    return {
+        templateUrl: '/static/ngtemplates/ws_call_failed_modal.html'
+    }
+});
+
+
+myApp.directive('doc', function() {
+    return {
+        templateUrl: '/static/ngtemplates/doclist_doc.html',
+        restrict: 'E',
+
+        scope: {
+            doc: '=',
+            masterIndexId: '='
+        },
+
+        controller: ['$scope', 'DocList', '$rootScope', function($scope, DocList, $rootScope) {
+            // used for caching a document preview
+            $scope.preview = null;
+
+
+
+            /**
+             *
+             * @param index
+             */
+            $scope.onRibbonClicked = function(index) {
+                // Close all pop overs whose id does not match index?? (current impl)
+                // I think the desired behavior is to close all irrelevant popovers..
+                alert('onRibbonClicked!');
+            };
+
+
+            /**
+             * Loads preview from webservice
+             *
+             *
+             * Note: No more caching.  Preview pages are sent from the server as URLs to images so the browser will cache the images.
+             *
+             * @param docIndexId
+             * @param templateDescription
+             */
+            $scope.showPreview = function(docIndexId, templateDescription) {
+                // Show loading modal
+                alert('show loading modal');
+
+                DocList.getDocPreview({masterIndexId: $scope.masterIndexId, docIndexId: docIndexId}, function (data) {
+                    $scope.preview = data;
+                }, function (response) {
+                    // TODO (Paul): Implement error handling
+                    alert('failed');
+                });
+            };
+
+
+            /**
+             *
+             * @param docIndex
+             */
+            $scope.onDocSelected = function(docIndex) {
+                console.log('onDocSelected(' + docIndex + ')');
+
+                // Toggle doc selected status
+                $scope.doc.IsSelected = !$scope.doc.IsSelected;
+
+                // update watch expressions
+            };
+        }],
+//        require: 'docPreviewModal',
+        link: function(scope, element, attrs, docPreviewModalCtrl) {
+ //           alert('ok');
+        }
+    }
+});
+
+myApp.directive('bottomBar', [ 'DocService', '$modal', function(docService, $modal) {
+    return {
+        templateUrl: '/static/ngtemplates/bottom_bar.html',
+        restrict: 'E',
+        scope: {
+        },
+
+        link: function(scope, element) {
+            scope.data = docService;
+
+            // signer selecting modal dialog
+            var signerDialog = $modal({ 
+                title: 'Select Signer(s)',
+                show: false,
+                placement: 'center',
+                scope: scope,
+                templateUrl: '/static/ngtemplates/select_signer_modal.html'
+            });
+
+            // TODO: dummy data for signer dialog
+            scope.signers = [
+                { Type: 'dealer', FullName: 'Dealer J' },
+                { Type: 'buyer', FullName: 'Charlee Li' },
+                { Type: 'cobuyer', FullName: 'Evins' }
+            ];
+
+            // open sign dialog
+            scope.selectSigner = function() {
+                
+                console.log(scope.data.selectedDocuments());
+                signerDialog.show();
+            };
+        }
+    };
+}]);
+
+
 /**** Helper functions ****/
 function DismissPopoverByIx(index) {
     $('[id*=signing-status-for]').each(function (ix) {
@@ -456,5 +670,3 @@ function DismissPopoverByIx(index) {
             $(this).popover('hide');
     });
 }
-
-

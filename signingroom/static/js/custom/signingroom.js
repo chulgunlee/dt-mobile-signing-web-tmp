@@ -20,8 +20,11 @@ var atLeastoneSignCollected;
 var signingRoomApiUri = apiUri + 'signingroom/';
 var isSaveExitPending = false;
 
+
 $(document).ajaxStart(function () {
-    if (modalShown) return;
+    if (modalShown) {
+        return
+    }
     if (!initCompleted) {
         $('form').hide();
         $('.slide-out-div').hide();
@@ -29,9 +32,11 @@ $(document).ajaxStart(function () {
     $('#loading-splash').modal('show');
 });
 
-$(document).ajaxComplete(function (event, jqxhr, settings) {
 
-    if (settings.url.toLowerCase().indexOf('terms') >= 0) return;
+$(document).ajaxComplete(function (event, jqxhr, settings) {
+    if (settings.url.toLowerCase().indexOf('terms') >= 0) {
+        return
+    }
     $('#loading-splash').modal('hide');
     modalShown = false;
     if (initCompleted) {
@@ -39,6 +44,7 @@ $(document).ajaxComplete(function (event, jqxhr, settings) {
         $('.slide-out-div').show();
     }
 });
+
 
 // add user code header to all ajax requests
 $(document).ajaxSend(function(event, xhr, settings) {
@@ -61,28 +67,13 @@ $(document).ajaxSend(function(event, xhr, settings) {
 });
 
 
-/*
-$(document).ajaxStop(function () {
-    $("img.document-img").lazyload({
-        effect: "fadeIn",
-        skip_invisible: false
-    });
-});
-*/
-
 $('#loading-splash').on('shown.bs.modal', function (e) {
     modalShown = true;
 });
 
-$(document).ready(function () {
-    //disable_scroll();
-    $('#loading-splash').modal('show');
-    /*
-    $("img.document-img").lazyload({
-        effect: "fadeIn"
-    }).removeClass("document-img");
-    */
 
+$(document).ready(function () {
+    $('#loading-splash').modal('show');
     var ua = navigator.userAgent;
     wchEvent = (ua.match(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i)) ? "tap" : "click";
 
@@ -100,14 +91,11 @@ $(document).ready(function () {
     $("#id_button_disclosure").click(function (e) {
         e.preventDefault();
         $('#id_terms_and_conditions').modal('show');
-        //return SaveSignatures();
         return false;
     });
 
-
     $("#id_less_sign").click(function (e) {
         e.preventDefault();
-        //alert("hi");
         if ($("#id_less_sign").attr("ctrl") == 1) {
             apiSign.clearCanvas();
         } else {
@@ -116,14 +104,11 @@ $(document).ready(function () {
         return false;
     });
 
-
     $("#id_button_signaturecapture_modal").click(function (e) {
         e.preventDefault();
         $('#id_signature_initials_modalPopup').modal('show');
-        //return SaveSignatures();
         return false;
     });
-
 
     $("#id_clearSig1").click(function (e) {
         e.preventDefault();
@@ -144,17 +129,13 @@ $(document).ready(function () {
     });
 
     $("#id_start").click(function (e) {
-
         e.preventDefault();
 
         if ($("#id_start").text() == "Start" || $("#id_start").text() == "Next") {
-
             if (!checkSigFiledsUpdated(currentSignor, hasInitial)) {
                 if (hasInitial) {
-                    //closeKeyBoard();
                     $('#id_signature_initials_modalPopup').modal('show');
                 } else {
-                    //closeKeyBoard();
                     $('#id_signature_modal').modal('show');
                 }
 
@@ -164,8 +145,6 @@ $(document).ready(function () {
             for (var i = 0; i < CurrentSigBlock.length; i++) {
                 if (!CurrentSigBlock[i].collected) {
                     $('html, body').animate({ scrollTop: $("#" + (CurrentSigBlock[i].is_initial ? "initial" : "sig") + "_" + CurrentSigBlock[i].sig_name).parent('div').position().top }, 'slow');
-                    //$("#sig_" + CurrentSigBlock[i].SigName).get(0).scrollIntoView();
-
                     return false;
                 }
             }
@@ -176,19 +155,16 @@ $(document).ready(function () {
             }
 
         } else {
-
             if ($("#id_start").text() == "Finish") {
                 CollectSigsJson.strAction = "FINISH";
             }
             $("#id_start").prop("disabled", true);
             SaveSignatures();
-
         }
 
     });
 
     $("#id_start").tooltip();
-
 
     $('#id_location1').click(function (e) {
         e.preventDefault();
@@ -200,10 +176,8 @@ $(document).ready(function () {
         if (result == 200) return;
         if (txtFiledNotEntered == null) {
             $('html, body').animate({ scrollTop: $("#" + (CurrentSigBlock[result].is_initial ? "initial" : "sig") + "_" + CurrentSigBlock[result].sig_name).parent('div').position().top }, 'slow');
-            //$("#sig_" + CurrentSigBlock[0].SigName).get(0).scrollIntoView();
             window.scroll(0, -100);
         } else {
-            //alert(txtFiledNotEntered);
             $("#" + txtFiledNotEntered).focus();
             txtFiledNotEntered = null;
         }
@@ -237,17 +211,9 @@ $(document).ready(function () {
             }
             apiSign.clearCanvas();
 
-            //$("#id_clickToSign,#id_edit_img").addClass('hide');
-
-            //$("#id_regenSignatureCanvas,#id_cancel_img").removeClass('hide');
-            //var imgData = apiSign.getSignatureImage();
-            //$("#id_image1").prop("src", $("#BUYER_SIG").val());
-            // Move to the first signature to capture.  
             $('html, body').animate({ scrollTop: $("#" + (CurrentSigBlock[result].is_initial ? "initial" : "sig") + "_" + CurrentSigBlock[0].sig_name).parent('div').position().top }, 'slow');
-            //$("#sig_" + CurrentSigBlock[0].SigName).get(0).scrollIntoView();
 
             if (AsssignSigCtrilId != '') {
-                //$("#" + AsssignSigCtrilId )
                 fnAssignSigImagetoCtrl(AsssignSigCtrilId);
             }
 
@@ -275,20 +241,11 @@ $(document).ready(function () {
             }
             hasInitial == true ? apiIntial.clearCanvas() : apiSign.clearCanvas();
 
-            //$("#id_clickToSign,#id_edit_img").addClass('hide');
-
-            //$("#id_regenSignatureCanvas,#id_cancel_img").removeClass('hide');
-            //var imgData = apiSign.getSignatureImage();
-            //$("#id_image1").prop("src", $("#BUYER_SIG").val());
-            // Move to the first signature to capture.  
+            // Move to the first signature to capture.
             var result = CheckFullySigned(CurrentSigBlock);
             $('html, body').animate({ scrollTop: $("#" + (CurrentSigBlock[result].is_initial ? "initial" : "sig") + "_" + CurrentSigBlock[0].sig_name).parent('div').position().top }, 'slow');
-            //$("#sig_" + CurrentSigBlock[0].SigName).get(0).scrollIntoView();
 
             if (AsssignSigCtrilId != '') {
-                //$("#" + AsssignSigCtrilId )
-
-
                 fnAssignSigImagetoCtrl(AsssignSigCtrilId);
             }
 
@@ -308,11 +265,7 @@ $(document).ready(function () {
         if (TransJson.FullReviewRequired == '1')
             $('#id_start').tooltip('show');
     });
-    //id_cancel_img
-    //alert("h1");
     window.WebViewBridge.type = 'ios';
-    //alert("hi");
-
 });
 
 
@@ -339,7 +292,6 @@ function ProcessPageInit() {
 }
 
 
-
 function CheckuserConsentAction() {
     if (currentSignor == "BUYER") {
         if (UserConsent.buyer_consent == "N" && UserConsent.buyer_consent_withdraw == 'N') {
@@ -354,13 +306,17 @@ function CheckuserConsentAction() {
     }
 }
 
+
 $('#id_terms_and_conditions, #id_signature_initials_modalPopup, #id_saveexit_model, #id_withdraw_model').on('shown.bs.modal', function () {
     $('.footer_link_container .fa-ellipsis-h').hide();
 });
+
+
 $('#id_terms_and_conditions, #id_signature_initials_modalPopup, #id_saveexit_model, #id_withdraw_model').on('hidden.bs.modal', function () {
     $('.footer_link_container .fa-ellipsis-h').show();
-
 });
+
+
 $('#id_saveexit_model, #id_withdraw_model').on('shown.bs.modal', function () {
     $('.ellipsis-style').popover('hide');
 });
@@ -372,7 +328,6 @@ $('#id_saveexit_model, #id_withdraw_model').on('shown.bs.modal', function () {
  */
 function ProcessPagereloadCtrls(data) {
     var delayTooltip = false;
-    //TransJson = JSON.parse(msg.d);
     TransJson = data.d;
 
     if (TransJson.next_action == "Redirect") {
@@ -426,7 +381,6 @@ function ProcessPagereloadCtrls(data) {
 
     if (strCurrentActiveSigBlock != CollectSigsJson.sig_type) {
         $("#id_signor_alert").text(CollectSigsJson.signee_name);
-        //  $("#b111").click();
         $("#id_signIn_modal").modal();
         delayTooltip = true;
     }
@@ -451,7 +405,6 @@ function ProcessPagereloadCtrls(data) {
                 $("#id_start").show();
         }
     } else {
-
         $("#id_start").text(TransJson.next_action);
         $("#id_start").prop("disabled", false);
         $("#id_location1").parent().hide();
@@ -460,11 +413,9 @@ function ProcessPagereloadCtrls(data) {
     $("#id_signee_inital").text(CollectSigsJson.signee_name);
     $("#id_signee_sig").text(CollectSigsJson.signee_name);
 
-
     if (!hasInitial) {
         apiSign = apiSign1;
     }
-
 
     if (currentSignor.toUpperCase() == 'DEALER') {
         $("#id_withdrawAnchor").css('pointer-events', 'none');
@@ -487,7 +438,6 @@ function ProcessPagereloadCtrls(data) {
 
 
 function ApplyCollectedImagesText(CollectedSigsTextArray) {
-
     $.each(CollectedSigsTextArray, function (key, value) {
         var element;
         if (value.DataType == "SIG") {
@@ -495,37 +445,27 @@ function ApplyCollectedImagesText(CollectedSigsTextArray) {
             element.src = value.Value;
         } else {
             element = document.createElement("label");
-            //element.setAttribute("type", "button");            
-            //element.value = value.Value;
             element.innerText = value.Value;
-            // element.setAttribute("style", "background-color: yellow");
         }
 
         element.id = "__DEL__" + value.SignName;
-        //document.getElementById('DocsView').appendChild(element);
         document.getElementById('cont1').appendChild(element);
         document.getElementById("__DEL__" + value.SignName).setAttribute('style', fnApplyHigherResolution(value.Param));
-        //element.src = value.Value;
     });
 }
 
 
 function ButtonUserConsent(action) {
-
     UserConsent.current_signer = currentSignor;
     UserConsent.consent_action = action;
-    //var SigningRoomConsent = { 'userConsent': UserConsent };
     var jsonUserConsent = JSON.stringify({ userconsent: UserConsent });
-    //debugger;
     $.ajax(
     {
         type: "POST",
-        //url: "SigningRoomService.asmx/UserConsentUpdate",
         url: signingRoomApiUri + "consent",
         data: jsonUserConsent,
         contentType: "application/json; charset=utf-8",
         dataType: "json",
-        //async: false,
         success: function (msg, textStatus, xhr) {
             if (xhr.status == 302) {
                 WebViewBridge.call('exitSigningRoom', { 'status': 'SessionTimeout' });
@@ -540,12 +480,13 @@ function ButtonUserConsent(action) {
                 WebViewBridge.call('exitSigningRoom', { 'status': 'WithdrawConsent' });
             }
         },
-        error: function (msg) {
+        error: function () {
             WebViewBridge.call('exitSigningRoom', { 'status': 'TechnicalDifficulty' });
         }
     });
     return false;
 }
+
 
 function SaveSignatures() {
 
@@ -594,11 +535,8 @@ function SaveSignatures() {
             }
 
         } else {
-            //if (!isNewDocSelected)
-            //CollectSigsJson.strAction = "ACK";
         }
     }
-    //CollectSigsJson.SigBlock[1].Collected = true;
     if (CollectSigsJson.str_action == null) {
         CollectSigsJson.str_action = "";
     }
@@ -606,17 +544,14 @@ function SaveSignatures() {
         CollectSigsJson.str_action = "SAVE";
     }
 
-    //var SigningRoomConsent = { 'pCollectsignatures': CollectSigsJson };
     var sigsData = JSON.stringify(CollectSigsJson);
     $.ajax(
     {
         type: "POST",
-        //url: "SigningRoomService.asmx/SigningRoomSigsSave",
         url: signingRoomApiUri + "sigsave/",
         data: sigsData,
         contentType: "application/json; charset=utf-8",
         dataType: "json",
-        //async: false,
         success: function (msg, textStatus, xhr) {
 
             if (xhr.status == 302) {
@@ -648,22 +583,19 @@ function SaveSignatures() {
     return false;
 }
 
+
 /**
  * Apply background images
  */
 function fnApplyBackImages(imgs) {
-
     if (imgs != null) {
-
         $("[id^=BackImage_]").remove();
        
         $.each(imgs, function(idx, value) {
-
             $("<img>").attr({
                 id:  "BackImage_" + value.PageNo,
                 src: "data:image/png;base64," + value.Value
             }).addClass("document-img").appendTo('#cont1');
-
         });
 
         if ($(window).width() > 1024) {
@@ -673,13 +605,12 @@ function fnApplyBackImages(imgs) {
     }
 }
 
+
 function fnApplySignatures(sigBlocks) {
     var imgWidth = '60';
 
     $.each(sigBlocks, function (key, value) {
-
         if (!value.is_initial) {
-
             var tempWidth = parseInt(fnExtractControlWidth(value.sig_style));
             if (tempWidth > 0) {
                 imgWidth = tempWidth - 25;
@@ -697,13 +628,10 @@ function fnApplySignatures(sigBlocks) {
 
 
 function fnApplyInitials(sigBlocks) {
-
     var imgWidth = '60';
 
     $.each(sigBlocks, function (key, value) {
-
         if (value.is_initial) {
-
             var tempWidth = parseInt(fnExtractControlWidth(value.sig_style));
             if (tempWidth > 0) {
                 imgWidth = tempWidth - 25;
@@ -732,6 +660,7 @@ function fnExtractControlWidth(styles) {
     }
 }
 
+
 function fnApplyHigherResolution(styles) {
     var multiFactor = 1.00;
     var resultVal;
@@ -759,8 +688,6 @@ function fnApplyHigherResolution(styles) {
 }
 
 
-
-
 function imgCtrl(ctrl, sigOrInitial) {
     if (document.getElementById(sigOrInitial + "_" + ctrl).style.display != 'none') {
         ImageCtrlClicked(document.getElementById(sigOrInitial + "_" + ctrl));
@@ -769,8 +696,8 @@ function imgCtrl(ctrl, sigOrInitial) {
     }
 }
 
-function ImageCtrlDeleteClicked(ctrl, sigOrInitial) {
 
+function ImageCtrlDeleteClicked(ctrl, sigOrInitial) {
     CurrentSigBlock[findItem(CurrentSigBlock, ctrl)].collected = false;
     if (sigOrInitial == 'initial') {
         $("#initial_" + ctrl).removeClass('hide');
@@ -779,7 +706,6 @@ function ImageCtrlDeleteClicked(ctrl, sigOrInitial) {
         $("#label_initial_" + ctrl).show();
         $("#image_initial_" + ctrl).prop('src', '');
         $("#image_initial_" + ctrl).hide();
-        //$("#remove_initial_" + ctrl).hide();
     } else {
         $("#delete_sig_" + ctrl).hide();
         $("#image_sig_" + ctrl).prop("src", "");
@@ -808,6 +734,7 @@ function ImageCtrlDeleteClicked(ctrl, sigOrInitial) {
     }
 }
 
+
 //clear all signatures and also set Collected = false;
 function fnClearAllSigsAndInitials() {
     $.each(CollectSigsJson.sig_block, function (key, value) {
@@ -819,7 +746,6 @@ function fnClearAllSigsAndInitials() {
             $("#label_initial_" + ctrlId).show();
             $("#image_initial_" + ctrlId).prop('src', '');
             $("#image_initial_" + ctrlId).hide();
-            //$("#remove_initial_" + ctrlId).hide();
         } else {
             $("#delete_sig_" + ctrlId).hide();
             $("#image_sig_" + ctrlId).prop("src", "");
@@ -838,19 +764,21 @@ function fnClearAllSigsAndInitials() {
     $("#id_start").text("Start");
 }
 
+
 function fnClearDateField(ctrl) {
     if ($("#" + ctrl + "_date").length > 0) {
         document.getElementById("cont1").removeChild($("#" + ctrl + "_date")[0].parentElement);
     }
 }
 
+
 function fnSetNoOfSigToCapture() {
     var intUnSignedSigs = getUnsingedSigsCount(CurrentSigBlock);
     $("#id_location1").text(intUnSignedSigs + " locations");
 }
 
-function ImageCtrlClicked(ctrl) {
 
+function ImageCtrlClicked(ctrl) {
     if (TransJson.FullReviewRequired == "1") {
         $('#id_start').tooltip('show');
         return false;
@@ -858,10 +786,8 @@ function ImageCtrlClicked(ctrl) {
 
     if (!checkSigFiledsUpdated(currentSignor, hasInitial)) {
         if (hasInitial) {
-            //closeKeyBoard();
             $('#id_signature_initials_modalPopup').modal('show');
         } else {
-            //closeKeyBoard();
             $('#id_signature_modal').modal('show');
         }
         AsssignSigCtrilId = ctrl.id;
@@ -898,13 +824,9 @@ function ImageCtrlClicked(ctrl) {
             $('html, body').animate({ scrollTop: $("#" + (CurrentSigBlock[result].is_initial ? "initial" : "sig") + "_" + CurrentSigBlock[result].sig_name).parent('div').position().top }, 'slow');
             window.scroll(0, -100);
             $("#id_start").text("Next");
-            //$("#sig_" + CurrentSigBlock[result].SigName).get(0).scrollIntoView();
         } else {
-
-            //document.getElementById(txtFiledNotEntered).focus();
             $("#" + txtFiledNotEntered).focus();
             txtFiledNotEntered = null;
-            // alert("hi");
         }
 
     }
@@ -912,8 +834,8 @@ function ImageCtrlClicked(ctrl) {
     var intUnSignedSigs = getUnsingedSigsCount(CurrentSigBlock);
 
     $("#id_location1").text(intUnSignedSigs + " locations");
-
 }
+
 
 function getUnsingedSigsCount(arr) {
     icount = 0;
@@ -925,8 +847,8 @@ function getUnsingedSigsCount(arr) {
     return icount;
 }
 
-function fnAssignSigImagetoCtrl(ctrl) {
 
+function fnAssignSigImagetoCtrl(ctrl) {
     var e;
 
     document.getElementById(ctrl).setAttribute('style', 'display:none');
@@ -958,12 +880,10 @@ function fnAssignSigImagetoCtrl(ctrl) {
     var intUnSignedSigs = getUnsingedSigsCount(CurrentSigBlock);
 
     $("#id_location1").text(intUnSignedSigs + " locations");
-
 }
 
 
 function fnApplyTextFileds(myDocumentArray) {
-
     if (myDocumentArray.TextFieldBlock != null) {
         $.each(myDocumentArray.TextFieldBlock, function (key, value) {
             var divElement = document.createElement("div");
@@ -976,8 +896,6 @@ function fnApplyTextFileds(myDocumentArray) {
             element.id = value.TextFieldName;
             divElement.appendChild(element);
             document.getElementById('cont1').appendChild(divElement);
-            // document.getElementById('DocsView').appendChild(divElement);
-
         });
     }
 
@@ -985,7 +903,6 @@ function fnApplyTextFileds(myDocumentArray) {
 
 
 function fnApplyDateFiledsOnClick(elem) {
-
     var divElement = document.createElement("div");
     divElement.setAttribute("style", value.DateStyle);
 
@@ -1024,7 +941,6 @@ function fnApplyDateFileds(myDocumentArray, elem) {
  *
  */
 function fnSignStatus(signStatus, currSignor, currentDocId) {
-
     $("#id_sign_status_docs").empty();
 
     // html for checkmark
@@ -1068,8 +984,8 @@ function fnSignStatus(signStatus, currSignor, currentDocId) {
     theScroll = new IScroll('#id_document_wrapper');
 }
 
-function fnLoadUserSelectedDoc(docIndexId) {
 
+function fnLoadUserSelectedDoc(docIndexId) {
     if (CurrentSigBlock == null) {
         fnLoadNewSelectionWithSaveDoc(docIndexId, 'New Selection');
         return;
@@ -1105,22 +1021,24 @@ function fnLoadNewSelectionDoc(docIndexId) {
     SaveSignatures();
 }
 
+
 function SaveAndExit() {
     var result = CheckFullySigned(CurrentSigBlock);
     if (result == 200) {
         isSaveExitPending = true;
         SaveSignatures();
     } else {
-        //$("#id_saveexit_model").css('display', 'block');
         $("#id_saveexit_model").modal('show');
         return false;
     }
 }
 
+
 function WithdrawConsent() {
     $("#id_withdraw_model").css('display', 'block');
     return false;
 }
+
 
 function SaveAndExitOK() {
     fnClearSigAndInitials();
@@ -1129,17 +1047,16 @@ function SaveAndExitOK() {
 
 }
 
+
 function fnClearSigAndInitials() {
     if (CurrentSigBlock == null) return;
     $.each(CurrentSigBlock, function (n, block) {
         block.Collected = false;
     });
 
-    //  document.getElementById(CollectSigsJson.SigType + "_SIG").value = "";
-    //    document.getElementById(CollectSigsJson.SigType + "_INITIAL").value = "";
-
     fnClearAllSigsAndInitials();
 }
+
 
 function fnCls(e) {
     document.getElementById(e).style.visibility = "hidden";
@@ -1154,14 +1071,14 @@ function SignPopupClick() {
     return false;
 }
 
+
 function SignaturePopupClick() {
     $('#popupDialog').popup('open');
     return false;
 }
 
-function btnNextClicked(strSignorType) {
-    //debugger;
 
+function btnNextClicked(strSignorType) {
     if (apiSign.getSignature() == '') {
         alert('Please sign the document.');
         return false;
@@ -1176,15 +1093,12 @@ function btnNextClicked(strSignorType) {
 
     document.getElementById(strCurrentActiveSigBlock + "_INITIAL").value = apiIntial.getSignatureImage();
 
-    //$.nyroModalRemove();
     $("#id_signature_modal").dialog("close");
     return false;
-
-    //  document.getElementById("BUYER_ACK").focus();
 }
 
-function fnAssignCurrentSig(e) {
 
+function fnAssignCurrentSig(e) {
     $('#' + e).css({ 'background': 'transparent' });
     document.getElementById(e).height = document.getElementById(e).height;
     document.getElementById(e).width = document.getElementById(e).width;
@@ -1199,6 +1113,7 @@ function fnAssignCurrentSig(e) {
     return false;
 }
 
+
 function findItem(arr, value) {
     for (var i = 0; i < arr.length; i++) {
         if (arr[i].sig_name === value) {
@@ -1208,11 +1123,11 @@ function findItem(arr, value) {
     return (-1);
 }
 
+
 /**
  * Actually function name should be "findFirstUnsignedBlock"
  */
 function CheckFullySigned(arr) {
-
     txtFiledNotEntered = null;
     atLeastoneSignCollected = false;
     if (arr == null) return (200); //nothing to sign either because it was already signed or it's non-signable document
@@ -1242,8 +1157,9 @@ function CheckFullySigned(arr) {
     }
     return (200);
 }
-function checkSigFiledsUpdated(Signor, IntialRequied) {
 
+
+function checkSigFiledsUpdated(Signor, IntialRequied) {
     if ($("#" + Signor + "_SIG").val() == "") {
         return false;
     }
@@ -1255,6 +1171,8 @@ function checkSigFiledsUpdated(Signor, IntialRequied) {
     }
     return true;
 }
+
+
 $(function () {
     $(window).scroll(function () {
         var docElement = $(document)[0].documentElement;
@@ -1272,7 +1190,6 @@ $(function () {
 
 
 function CheckTextFields() {
-
     for (K = 0; K <= CollectSigsJson.TextFieldBlock.length - 1; K++) {
         CollectSigsJson.TextFieldBlock[K].TextFieldValue = $("#" + CollectSigsJson.TextFieldBlock[K].TextFieldName).val();
     }
@@ -1290,4 +1207,3 @@ function CheckTextFields() {
         }
     }
 }
-
