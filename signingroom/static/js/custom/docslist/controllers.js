@@ -664,7 +664,7 @@ myApp.directive('bottomBar', [ 'DocService', '$modal', function(docService, $mod
                         return {
                             name: scope.data.signers[signerKey],
                             type: signerTypeMapping[signerKey],
-                            required: _.some(scope.data.docs, function(doc) { return doc.requiredSigners[signerKey]; })
+                            required: _.some(scope.data.selectedDocs(), function(doc) { return doc.requiredSigners[signerKey]; })
                         };
                     });
 

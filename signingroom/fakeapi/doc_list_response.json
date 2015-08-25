@@ -16,6 +16,24 @@
             "requiredSigners": {
                 "buyer": true,
                 "cobuyer": true,
+                "dealer": true
+            },
+            "signStatus": {
+                "buyer": false,
+                "cobuyer": false,
+                "dealer": false
+            }
+        },
+
+        {
+            "id": 1235,
+            "title": "Acknowledgement",
+            "type": "funding",
+            "signable": true,
+            "status": "not-signed",
+            "requiredSigners": {
+                "buyer": true,
+                "cobuyer": true,
                 "dealer": false
             },
             "signStatus": {
