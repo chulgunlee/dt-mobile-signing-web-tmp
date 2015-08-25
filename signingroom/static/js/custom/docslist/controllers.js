@@ -62,7 +62,7 @@ myApp.factory('DocService', ['$http', function($http) {
             'partially-signed': 'Partially Signed',
             'submitted': 'Submitted'
         };
-        return pkg.docs.filter(function(doc) { return doc.type == docType }).map(function(doc) {
+        return pkg.docs.map(function(doc) {
             doc.statusText = docStatusMapping[doc.status] || '';
 
             // fill the `signers` field which will be used by the status badge popover
@@ -86,6 +86,13 @@ myApp.factory('DocService', ['$http', function($http) {
         otherDocs: [],
         signers: [],
 
+        docStatusMapping: {
+            'not-signed': 'Not Signed',
+            'signed': 'Signed',
+            'partially-signed': 'Partially Signed',
+            'submitted': 'Submitted'
+        },
+
         refresh: function(packageId) {
             
             $http.get(defaults.apiUri + 'packages/' + packageId).success(function(data, status) {
@@ -93,21 +100,46 @@ myApp.factory('DocService', ['$http', function($http) {
                     // TODO: session time out
                     return;
                 }
+                
+                // process docs data for easy use
+                service.docs = data.docs.map(function(doc) {
+                    // fill the `statusText` for the status badge
+                    doc.statusText = service.docStatusMapping[doc.status] || '';
 
-                service.docs = processDocs(data, 'funding');
-                service.otherDocs = processDocs(data, 'other');
+                    // fill the `signers` field which will be used by the status badge popover
+                    doc.signers = {};
+                    Object.keys(doc.requiredSigners).forEach(function(signer) {
+                        if (doc.requiredSigners[signer]) {
+                            doc.signers[signer] = {
+                                name: data.signers[signer],
+                                signed: doc.signStatus[signer]
+                            };
+                        }
+                    });
+
+                    return doc;
+                });
+
                 service.signers = data.signers;
             });
 
             // extract data from response and save it to DocService
         },
+        
+        fundingDocs: function() {
+            return this.docs.filter(function(doc) { return doc.type == 'funding' });
+        },
+
+        otherDocs: function() {
+            return this.docs.filter(function(doc) { return doc.type == 'other' });
+        },
 
         hasSelected: function() {        // TODO: not good name
-            return (this.selectedDocs().length > 0);
+            return _.some(this.docs, function(doc) { return doc.isSelected });
         },
 
         selectedDocs: function() {
-            return service.docs.filter(function(doc) { return doc.isSelected; })
+            return this.docs.filter(function(doc) { return doc.isSelected; })
         },
 
     };
@@ -600,6 +632,11 @@ myApp.directive('doc', function() {
 });
 
 myApp.directive('bottomBar', [ 'DocService', '$modal', function(docService, $modal) {
+    var signerTypeMapping = {
+        buyer: 'Buyer',
+        cobuyer: 'Cobuyer',
+        dealer: 'Dealer'
+    };
     return {
         templateUrl: '/static/ngtemplates/bottom_bar.html',
         restrict: 'E',
@@ -620,8 +657,19 @@ myApp.directive('bottomBar', [ 'DocService', '$modal', function(docService, $mod
 
             // open sign dialog
             scope.selectSigner = function() {
-                
-                console.log(scope.data.selectedDocs());
+
+                // aggregate required signers from each document
+                var signerKeys = ['buyer', 'cobuyer', 'dealer'],
+                    required = _.map(signerKeys, function(signerKey) {
+                        return {
+                            name: scope.data.signers[signerKey],
+                            type: signerTypeMapping[signerKey],
+                            required: _.some(scope.data.docs, function(doc) { return doc.requiredSigners[signerKey]; })
+                        };
+                    });
+
+                scope.requiredSigners = _.object(signerKeys, required);
+
                 signerDialog.show();
             };
         }

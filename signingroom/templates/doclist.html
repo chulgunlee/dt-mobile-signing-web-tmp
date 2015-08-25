@@ -31,14 +31,14 @@
         <div class="row doclist-container">
 
             <!-- Document List -->
-            <doc class="pull-left" doc="doc" master-index-id="masterIndexId" ng-repeat="doc in data.docs" docs-repeat-complete></doc>
+            <doc class="pull-left" doc="doc" master-index-id="masterIndexId" ng-repeat="doc in data.fundingDocs()" docs-repeat-complete></doc>
         </div>
 
         <!-- Doc List Title -->
         <div class="row doclist-header">Other Documents</div>
 
         <div class="row doclist-container">
-            <doc class="pull-left" doc="doc" master-index-id="masterIndexId" ng-repeat="doc in data.otherDocs"></doc>
+            <doc class="pull-left" doc="doc" master-index-id="masterIndexId" ng-repeat="doc in data.otherDocs()"></doc>
         </div>
 
         <!--
@@ -82,6 +82,7 @@
         var apiUri = '/api/';
     </script>
 
+    <script src="/static/js/underscore.js"></script>
     <script src="/static/js/angular/angular.min.js"></script>
     <script src="/static/js/angular/angular-resource.min.js"></script>
     <script src="/static/js/angular/angular-animate.min.js"></script>

@@ -16,7 +16,7 @@
             "requiredSigners": {
                 "buyer": true,
                 "cobuyer": true,
-                "dealer": true
+                "dealer": false
             },
             "signStatus": {
                 "buyer": false,
