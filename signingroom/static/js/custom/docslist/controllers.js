@@ -52,11 +52,39 @@ myApp.factory('DocList', ['$resource', function($resource) {
 
 myApp.factory('DocService', ['$http', function($http) {
 
+    /**
+     * Filter docs with docType and translate data structure
+     */
+    var processDocs = function(pkg, docType) {
+        var docStatusMapping = {
+            'not-signed': 'Not Signed',
+            'signed': 'Signed',
+            'partially-signed': 'Partially Signed',
+            'submitted': 'Submitted'
+        };
+        return pkg.docs.filter(function(doc) { return doc.type == docType }).map(function(doc) {
+            doc.statusText = docStatusMapping[doc.status] || '';
+
+            // fill the `signers` field which will be used by the status badge popover
+            doc.signers = {};
+            Object.keys(doc.requiredSigners).forEach(function(signer) {
+                if (doc.requiredSigners[signer]) {
+                    doc.signers[signer] = {
+                        name: pkg.signers[signer],
+                        signed: doc.signStatus[signer]
+                    };
+                }
+            });
+
+            return doc;
+        });
+    };
+
     var service = {
 
-        documents: [],
-        otherDocuments: [],
-        customers: [],
+        docs: [],
+        otherDocs: [],
+        signers: [],
 
         refresh: function(packageId) {
             
@@ -66,21 +94,20 @@ myApp.factory('DocService', ['$http', function($http) {
                     return;
                 }
 
-                service.documents = data.Documents;
-                service.otherDocuments = data.OtherDocuments;
-                service.customers = data.Customers;
+                service.docs = processDocs(data, 'funding');
+                service.otherDocs = processDocs(data, 'other');
+                service.signers = data.signers;
             });
 
             // extract data from response and save it to DocService
         },
 
-        isSelected: function() {        // TODO: not good name
-            return service.documents.map(function(doc) { return doc.IsSelected; })
-                            .reduce(function(p, c) { return p || c }, false);
+        hasSelected: function() {        // TODO: not good name
+            return (this.selectedDocs().length > 0);
         },
 
-        selectedDocuments: function() {
-            return service.documents.filter(function(doc) { return doc.IsSelected; })
+        selectedDocs: function() {
+            return service.docs.filter(function(doc) { return doc.isSelected; })
         },
 
     };
@@ -352,60 +379,6 @@ myApp.controller('DocListCtrl', ['$scope', 'DocService', function($scope, docSer
 
 
     /**
-     * onDocSelected
-     *
-     * @param docIndex
-     */
-    $scope.onDocSelected = function (docIndex) {
-
-        // changed selected status
-        $scope.documents[docIndex].IsSelected = !$scope.documents[docIndex].IsSelected;
-
-
-        if ($scope.documents[docIndex].IsSelected) {
-            if ($scope.documents[docIndex].SigningStatus === 'Signed')
-                $scope.$broadcast('SIGNED_DOC_ADDED_TO_SELECTION');
-            else {
-                $scope.selectedDocs.push($scope.documents[docIndex]);
-                if ($scope.documents[docIndex].IsSignable)
-                    headerService.addSignableDoc();
-            }
-        } else {
-            if ($scope.documents[docIndex].SigningStatus === 'Signed')
-                $scope.$broadcast('SIGNED_DOC_REMOVED_FROM_SELECTION');
-            else {
-                var elIndx = $scope.selectedDocs.indexOf($scope.documents[docIndex]);
-                $scope.selectedDocs.splice(elIndx, 1);
-                if ($scope.documents[docIndex].IsSignable)
-                    headerService.removeSignableDoc();
-            }
-        }
-        headerService.setSelectedDocIndxs($scope.selectedDocs);
-        $scope.updateHeader();
-    };
-
-
-    /**
-     * isSignedDocFoundInSelection
-     *
-     * @returns {boolean}
-     */
-    $scope.isSignedDocFoundInSelection = function () {
-        return $scope.signedDocsInSelectionCount > 0;
-    };
-
-
-    /**
-     * onRibbonClicked
-     *
-     * @param index
-     */
-    $scope.onRibbonClicked = function (index) {
-        DismissPopoverByIx(index);
-    };
-
-
-    /**
      * onDocBodyClicked
      *
      * @param docIndexId
@@ -614,7 +587,7 @@ myApp.directive('doc', function() {
                 console.log('onDocSelected(' + docIndex + ')');
 
                 // Toggle doc selected status
-                $scope.doc.IsSelected = !$scope.doc.IsSelected;
+                $scope.doc.isSelected = !$scope.doc.isSelected;
 
                 // update watch expressions
             };
@@ -645,17 +618,10 @@ myApp.directive('bottomBar', [ 'DocService', '$modal', function(docService, $mod
                 templateUrl: '/static/ngtemplates/select_signer_modal.html'
             });
 
-            // TODO: dummy data for signer dialog
-            scope.signers = [
-                { Type: 'dealer', FullName: 'Dealer J' },
-                { Type: 'buyer', FullName: 'Charlee Li' },
-                { Type: 'cobuyer', FullName: 'Evins' }
-            ];
-
             // open sign dialog
             scope.selectSigner = function() {
                 
-                console.log(scope.data.selectedDocuments());
+                console.log(scope.data.selectedDocs());
                 signerDialog.show();
             };
         }

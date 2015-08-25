@@ -98,7 +98,6 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 REST_FRAMEWORK = {
     'DEFAULT_RENDERER_CLASSES': (
         'rest_framework.renderers.JSONRenderer',
-        'dt_django_base.api.renderers.DealerTrackAPIRenderer',
     ),
     'DATETIME_FORMAT': ISO_8601,
     'PAGINATE_BY': 100,
