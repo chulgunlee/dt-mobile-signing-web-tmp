@@ -94,6 +94,18 @@ factory('SignerService', function(SIGNER_TYPE_MAPPING) {
             this.dealer = new Signer(signers.dealer, 'dealer');
         },
 
+        /**
+         * Get a list of selected signers
+         */
+        selectedSigners: function() {
+            var selected = [];
+            _.each(['buyer', 'cobuyer', 'dealer'], function(signerType) {
+                if (service[signerType].selected) {
+                    selected.push(signerType);
+                }
+            });
+            return selected;
+        },
 
     };
 

@@ -51,7 +51,7 @@ directive('doc', function() {
     }
 }).
 
-directive('bottomBar', [ 'DocService', 'SignerService', '$modal', function(docService, SignerService, $modal) {
+directive('bottomBar', [ 'DocService', 'SignerService', '$modal', function(docService, signerService, $modal) {
     return {
         templateUrl: '/static/ngtemplates/bottom_bar.html',
         restrict: 'E',
@@ -61,6 +61,7 @@ directive('bottomBar', [ 'DocService', 'SignerService', '$modal', function(docSe
         link: function(scope, element) {
             
             scope.docService = docService;
+            scope.signerService = signerService;
 
             // signer selecting modal dialog
             var signerDialog = $modal({ 
@@ -71,19 +72,31 @@ directive('bottomBar', [ 'DocService', 'SignerService', '$modal', function(docSe
                 templateUrl: '/static/ngtemplates/select_signer_modal.html'
             });
 
-            scope.signerService = SignerService;
-
-            // Toggle signer selected status when the checkbox on signers are clicked
+            /**
+             * Toggle signer selected status when the checkbox on signers are clicked
+             * @param {string} signerType Signer type string indicates which signer is checked 
+             */
             scope.onSignerSelected = function(signerType) {
-                SignerService[signerType].selected = !SignerService[signerType].selected;
+                signerService[signerType].selected = !signerService[signerType].selected;
             };
 
-            // open sign dialog
+            /**
+             * Continue button click handler
+             */
+            scope.onContinue = function() {
+                var selectedDocIds = _.pluck(this.docService.selectedDocs(), 'id'),
+                    selectedSigners = this.signerService.selectedSigners();
+                console.log('selected docs = ' + selectedDocIds + ', selected signers = ' + selectedSigners);
+            };
+
+            /**
+             * Open sign dialog
+             */
             scope.selectSigner = function() {
 
                 // update signer required status on select docs
                 _.each(['buyer', 'cobuyer', 'dealer'], function(signerType) {
-                    SignerService[signerType].required = _.some(docService.selectedDocs(), function(doc) {
+                    signerService[signerType].required = _.some(docService.selectedDocs(), function(doc) {
                         return doc.requiredSigners[signerType];
                     });
                 });
