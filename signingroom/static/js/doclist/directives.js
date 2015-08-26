@@ -39,7 +39,7 @@ directive('doc', function() {
                 console.log('onDocSelected(' + docIndex + ')');
 
                 // Toggle doc selected status
-                $scope.doc.isSelected = !$scope.doc.isSelected;
+                $scope.doc.selected = !$scope.doc.selected;
 
                 // update watch expressions
             };
@@ -51,7 +51,7 @@ directive('doc', function() {
     }
 }).
 
-directive('bottomBar', [ 'DocService', 'SIGNER_TYPE_MAPPING', '$modal', function(docService, SIGNER_TYPE_MAPPING, $modal) {
+directive('bottomBar', [ 'DocService', 'SignerService', '$modal', function(docService, SignerService, $modal) {
     return {
         templateUrl: '/static/ngtemplates/bottom_bar.html',
         restrict: 'E',
@@ -59,7 +59,8 @@ directive('bottomBar', [ 'DocService', 'SIGNER_TYPE_MAPPING', '$modal', function
         },
 
         link: function(scope, element) {
-            scope.data = docService;
+            
+            scope.docService = docService;
 
             // signer selecting modal dialog
             var signerDialog = $modal({ 
@@ -70,26 +71,22 @@ directive('bottomBar', [ 'DocService', 'SIGNER_TYPE_MAPPING', '$modal', function
                 templateUrl: '/static/ngtemplates/select_signer_modal.html'
             });
 
+            scope.signerService = SignerService;
+
+            // Toggle signer selected status when the checkbox on signers are clicked
+            scope.onSignerSelected = function(signerType) {
+                SignerService[signerType].selected = !SignerService[signerType].selected;
+            };
+
             // open sign dialog
             scope.selectSigner = function() {
 
-                // aggregate required signers from each document
-                var signerKeys = ['buyer', 'cobuyer', 'dealer'],
-                    required = _.map(signerKeys, function(signerKey) {
-                        return {
-                            name: scope.data.signers[signerKey],
-                            type: SIGNER_TYPE_MAPPING[signerKey],
-                            required: _.some(scope.data.selectedDocs(), function(doc) { return doc.requiredSigners[signerKey]; }),
-                            isSelected: false
-                        };
+                // update signer required status on select docs
+                _.each(['buyer', 'cobuyer', 'dealer'], function(signerType) {
+                    SignerService[signerType].required = _.some(docService.selectedDocs(), function(doc) {
+                        return doc.requiredSigners[signerType];
                     });
-
-                scope.requiredSigners = _.object(signerKeys, required);
-
-                scope.onSignerSelected = function(signerKey) {
-                    // Toggle signer selected status
-                    scope.requiredSigners[signerKey].isSelected = !scope.requiredSigners[signerKey].isSelected;
-                };
+                });
 
                 signerDialog.show();
             };

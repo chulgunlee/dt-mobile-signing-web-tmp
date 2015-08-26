@@ -2,12 +2,11 @@ myApp.
 
 
 /* Data Services */
-factory('DocService', ['$http', 'DOC_STATUS_MAPPING', 'SIGNER_TYPE_MAPPING', function($http, DOC_STATUS_MAPPING, SIGNER_TYPE_MAPPING) {
+factory('DocService', ['$http', 'SignerService', 'DOC_STATUS_MAPPING', 'SIGNER_TYPE_MAPPING', function($http, SignerService, DOC_STATUS_MAPPING, SIGNER_TYPE_MAPPING) {
 
     var service = {
 
         docs: [],
-        signers: [],
 
         refresh: function(packageId) {
             
@@ -33,10 +32,14 @@ factory('DocService', ['$http', 'DOC_STATUS_MAPPING', 'SIGNER_TYPE_MAPPING', fun
                         }
                     });
 
+                    // fill other fields
+                    doc.selected = false;
+
                     return doc;
                 });
 
-                service.signers = data.signers;
+                // store signer data in SignerService
+                SignerService.init(data.signers);
             });
 
             // extract data from response and save it to DocService
@@ -51,17 +54,50 @@ factory('DocService', ['$http', 'DOC_STATUS_MAPPING', 'SIGNER_TYPE_MAPPING', fun
         },
 
         hasSelected: function() {        // TODO: not good name
-            return _.some(this.docs, function(doc) { return doc.isSelected });
+            return _.some(this.docs, function(doc) { return doc.selected });
         },
 
         selectedDocs: function() {
-            return this.docs.filter(function(doc) { return doc.isSelected; })
+            return this.docs.filter(function(doc) { return doc.selected; })
         },
 
     };
 
     return service;
 
-}]);
+}]).
+
+
+factory('SignerService', function(SIGNER_TYPE_MAPPING) {
+    
+    var Signer = function(name, type) {
+        this.name = name;
+        this.type = type;
+        this.typeName = SIGNER_TYPE_MAPPING[type];
+        this.required = false;
+        this.selected = false;
+    },
+
+    service = {
+
+        buyer: null,
+        cobuyer: null,
+        dealer: null,
+
+        /**
+         * init `SignerService`.
+         * @param {Object} signers An object with k-v = type:name
+         */
+        init: function(signers) {
+            this.buyer = new Signer(signers.buyer, 'buyer');
+            this.cobuyer = new Signer(signers.cobuyer, 'cobuyer');
+            this.dealer = new Signer(signers.dealer, 'dealer');
+        },
+
+
+    };
+
+    return service;
+});
 
 

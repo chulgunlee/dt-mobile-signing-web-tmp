@@ -11,17 +11,17 @@
             </div>
             <div class="modal-body signer-modal-body">
                 <ul class="row signers-list" ng-class="'room-for-'+signers.length">
-                    <li ng-repeat="(signerKey, signer) in requiredSigners" class="modal-body-wrapper signers-list-item signer-{{signer.Type.toLowerCase()}}">
+                    <li ng-repeat="signerType in ['buyer', 'cobuyer', 'dealer']" class="modal-body-wrapper signers-list-item signer-{{signer.Type.toLowerCase()}}">
                         <div class="signer">
-                            <div class="signer-selected-wrapper" ng-show="signer.required" ng-click="onSignerSelected(signerKey)">
+                            <div class="signer-selected-wrapper" ng-show="signerService[signerType].required" ng-click="onSignerSelected(signerType)">
                                 <div class="roundedTwo docSelector">
-                                    <input type="checkbox" value="None" disabled="disabled" id="signer-{{$index}}-cbx" ng-checked="signer.isSelected">
+                                    <input type="checkbox" value="None" disabled="disabled" id="signer-{{$index}}-cbx" ng-checked="signerService[signerType].selected">
                                     <label for="signer-{{$index}}-cbx"></label>
                                 </div>
                             </div>
                             <div class="signer-caption">
-                                <div class="signer-name">{{signer.name}}</div>
-                                <div class="signer-type">({{signer.type}})</div>
+                                <div class="signer-name">{{signerService[signerType].name}}</div>
+                                <div class="signer-type">({{signerService[signerType].type}})</div>
                             </div>
                         </div>
                     </li>

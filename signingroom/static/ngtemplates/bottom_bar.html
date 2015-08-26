@@ -1,6 +1,6 @@
 <div class="doclist-bottom-bar">
     <button class="btn btn-primary"><span class="glyphicon glyphicon-plus"></span>Add Document</button>
-    <button class="btn btn-primary pull-right" ng-disabled="!data.hasSelected()">Print</button>
-    <button class="btn btn-primary pull-right" ng-disabled="!data.hasSelected()" ng-click="selectSigner()"><span class="glyphicon glyphicon-pencil"></span>Sign</button>
+    <button class="btn btn-primary pull-right" ng-disabled="!docService.hasSelected()">Print</button>
+    <button class="btn btn-primary pull-right" ng-disabled="!docService.hasSelected()" ng-click="selectSigner()"><span class="glyphicon glyphicon-pencil"></span>Sign</button>
     <button class="btn btn-success pull-right">Submit for Funding</button>
 </div>
