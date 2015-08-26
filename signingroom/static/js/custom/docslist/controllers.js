@@ -5,34 +5,6 @@ var myApp = angular.module('docListApp', ['ngResource', 'ngRoute', 'ngAnimate', 
 
 myApp.factory('DocService', ['$http', function($http) {
 
-    /**
-     * Filter docs with docType and translate data structure
-     */
-    var processDocs = function(pkg, docType) {
-        var docStatusMapping = {
-            'not-signed': 'Not Signed',
-            'signed': 'Signed',
-            'partially-signed': 'Partially Signed',
-            'submitted': 'Submitted'
-        };
-        return pkg.docs.map(function(doc) {
-            doc.statusText = docStatusMapping[doc.status] || '';
-
-            // fill the `signers` field which will be used by the status badge popover
-            doc.signers = {};
-            Object.keys(doc.requiredSigners).forEach(function(signer) {
-                if (doc.requiredSigners[signer]) {
-                    doc.signers[signer] = {
-                        name: pkg.signers[signer],
-                        signed: doc.signStatus[signer]
-                    };
-                }
-            });
-
-            return doc;
-        });
-    };
-
     var service = {
 
         docs: [],
