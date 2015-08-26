@@ -23,7 +23,6 @@ factory('DocService', ['$http', 'DOC_STATUS_MAPPING', 'SIGNER_TYPE_MAPPING', fun
     var service = {
 
         docs: [],
-        otherDocs: [],
         signers: [],
 
         refresh: function(packageId) {
@@ -171,11 +170,17 @@ directive('bottomBar', [ 'DocService', 'SIGNER_TYPE_MAPPING', '$modal', function
                         return {
                             name: scope.data.signers[signerKey],
                             type: SIGNER_TYPE_MAPPING[signerKey],
-                            required: _.some(scope.data.selectedDocs(), function(doc) { return doc.requiredSigners[signerKey]; })
+                            required: _.some(scope.data.selectedDocs(), function(doc) { return doc.requiredSigners[signerKey]; }),
+                            isSelected: false
                         };
                     });
 
                 scope.requiredSigners = _.object(signerKeys, required);
+
+                scope.onSignerSelected = function(signerKey) {
+                    // Toggle signer selected status
+                    scope.requiredSigners[signerKey].isSelected = !scope.requiredSigners[signerKey].isSelected;
+                };
 
                 signerDialog.show();
             };
