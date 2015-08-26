@@ -1,22 +1,30 @@
 ﻿
 /* Controllers declarations */
-var myApp = angular.module('docListApp', ['ngResource', 'ngRoute', 'ngAnimate', 'mgcrea.ngStrap']);
+var myApp = angular.module('docListApp', ['ngResource', 'ngRoute', 'ngAnimate', 'mgcrea.ngStrap']).
+
+/* Constant definitions */
+constant('docStatusMapping', {
+    'not-signed': 'Not Signed',
+    'signed': 'Signed',
+    'partially-signed': 'Partially Signed',
+    'submitted': 'Submitted'
+}).
+
+constant('signerTypeMapping', {
+    buyer: 'Buyer',
+    cobuyer: 'Co-Buyer',
+    dealer: 'Dealer'
+}).
 
 
-myApp.factory('DocService', ['$http', function($http) {
+/* Data Services */
+factory('DocService', ['$http', 'docStatusMapping', function($http, docStatusMapping) {
 
     var service = {
 
         docs: [],
         otherDocs: [],
         signers: [],
-
-        docStatusMapping: {
-            'not-signed': 'Not Signed',
-            'signed': 'Signed',
-            'partially-signed': 'Partially Signed',
-            'submitted': 'Submitted'
-        },
 
         refresh: function(packageId) {
             
@@ -29,7 +37,7 @@ myApp.factory('DocService', ['$http', function($http) {
                 // process docs data for easy use
                 service.docs = data.docs.map(function(doc) {
                     // fill the `statusText` for the status badge
-                    doc.statusText = service.docStatusMapping[doc.status] || '';
+                    doc.statusText = docStatusMapping[doc.status] || '';
 
                     // fill the `signers` field which will be used by the status badge popover
                     doc.signers = {};
@@ -71,18 +79,21 @@ myApp.factory('DocService', ['$http', function($http) {
 
     return service;
 
-}]);
+}]).
 
 
-myApp.controller('DocListCtrl', ['$scope', 'DocService', function($scope, docService) {
+/* Controllers */
+
+controller('DocListCtrl', ['$scope', 'DocService', function($scope, docService) {
 
     $scope.data = docService;
     docService.refresh(packageId);
 
-}]);
+}]).
 
 
-myApp.directive('doc', function() {
+/* Directives */
+directive('doc', function() {
     return {
         templateUrl: '/static/ngtemplates/doclist_doc.html',
         restrict: 'E',
@@ -130,14 +141,9 @@ myApp.directive('doc', function() {
  //           alert('ok');
         }
     }
-});
+}).
 
-myApp.directive('bottomBar', [ 'DocService', '$modal', function(docService, $modal) {
-    var signerTypeMapping = {
-        buyer: 'Buyer',
-        cobuyer: 'Cobuyer',
-        dealer: 'Dealer'
-    };
+directive('bottomBar', [ 'DocService', 'signerTypeMapping', '$modal', function(docService, signerTypeMapping, $modal) {
     return {
         templateUrl: '/static/ngtemplates/bottom_bar.html',
         restrict: 'E',
