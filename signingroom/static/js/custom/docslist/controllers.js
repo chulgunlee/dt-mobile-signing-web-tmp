@@ -3,14 +3,14 @@
 var myApp = angular.module('docListApp', ['ngResource', 'ngRoute', 'ngAnimate', 'mgcrea.ngStrap']).
 
 /* Constant definitions */
-constant('docStatusMapping', {
+constant('DOC_STATUS_MAPPING', {
     'not-signed': 'Not Signed',
     'signed': 'Signed',
     'partially-signed': 'Partially Signed',
     'submitted': 'Submitted'
 }).
 
-constant('signerTypeMapping', {
+constant('SIGNER_TYPE_MAPPING', {
     buyer: 'Buyer',
     cobuyer: 'Co-Buyer',
     dealer: 'Dealer'
@@ -18,7 +18,7 @@ constant('signerTypeMapping', {
 
 
 /* Data Services */
-factory('DocService', ['$http', 'docStatusMapping', function($http, docStatusMapping) {
+factory('DocService', ['$http', 'DOC_STATUS_MAPPING', 'SIGNER_TYPE_MAPPING', function($http, DOC_STATUS_MAPPING, SIGNER_TYPE_MAPPING) {
 
     var service = {
 
@@ -37,14 +37,14 @@ factory('DocService', ['$http', 'docStatusMapping', function($http, docStatusMap
                 // process docs data for easy use
                 service.docs = data.docs.map(function(doc) {
                     // fill the `statusText` for the status badge
-                    doc.statusText = docStatusMapping[doc.status] || '';
+                    doc.statusText = DOC_STATUS_MAPPING[doc.status] || '';
 
                     // fill the `signers` field which will be used by the status badge popover
                     doc.signers = {};
                     Object.keys(doc.requiredSigners).forEach(function(signer) {
                         if (doc.requiredSigners[signer]) {
                             doc.signers[signer] = {
-                                name: data.signers[signer],
+                                name: data.signers[signer] + ((signer == 'dealer') ? '' : ' (' + SIGNER_TYPE_MAPPING[signer] + ')'),
                                 signed: doc.signStatus[signer]
                             };
                         }
@@ -143,7 +143,7 @@ directive('doc', function() {
     }
 }).
 
-directive('bottomBar', [ 'DocService', 'signerTypeMapping', '$modal', function(docService, signerTypeMapping, $modal) {
+directive('bottomBar', [ 'DocService', 'SIGNER_TYPE_MAPPING', '$modal', function(docService, SIGNER_TYPE_MAPPING, $modal) {
     return {
         templateUrl: '/static/ngtemplates/bottom_bar.html',
         restrict: 'E',
@@ -170,7 +170,7 @@ directive('bottomBar', [ 'DocService', 'signerTypeMapping', '$modal', function(d
                     required = _.map(signerKeys, function(signerKey) {
                         return {
                             name: scope.data.signers[signerKey],
-                            type: signerTypeMapping[signerKey],
+                            type: SIGNER_TYPE_MAPPING[signerKey],
                             required: _.some(scope.data.selectedDocs(), function(doc) { return doc.requiredSigners[signerKey]; })
                         };
                     });

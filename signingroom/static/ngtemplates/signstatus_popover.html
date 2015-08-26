@@ -3,7 +3,10 @@
     <div class="popover-content">
         <div class="signstatus-row clearfix" ng-repeat="signer in doc.signers">
             <div class="signstatus-signer pull-left">{{signer.name}}</div>
-            <div class="signstatus-status pull-right">{{signer.signed ? 'Signed' : 'Not Signed'}}</div>
+            <div class="signstatus-status pull-right">
+                <span ng-if="signer.signed" class="signstatus-signed">Signed</span>
+                <span ng-if="!signer.signed" class="signstatus-notsigned">Not Signed</span>
+            </div>
         </div>
     </div>
 </div>
