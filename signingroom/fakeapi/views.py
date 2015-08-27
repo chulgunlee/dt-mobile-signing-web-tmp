@@ -17,44 +17,43 @@ class DocPackageView(APIView):
         Get document package detail, including the document list.
         """
 
-        mobile_manager = getManager(MobileManager, request.context_data)
-        doc_pkg = mobile_manager.get_doc_pkg(pkg_id)
-
         doc_pkg = json.load(open(os.path.dirname(__file__) + '/doc_list_response.json'))
 
         return Response(doc_pkg)
         
 
 
-class DocPreviewView(View):
+class DocPreviewView(APIView):
     
-    def get(self, doc_id):
-        pass
+    def get(self, request, doc_id):
+        
+        doc_pkg = json.load(open(os.path.dirname(__file__) + '/doc_preview_response.json'))
+        return Response(doc_pkg)
 
 
 
 class DocPrintView(View):
-    def get(self, doc_id):
+    def get(self, request, doc_id):
         pass
 
 
 class SigningRoomInitView(View):
 
-    def get(self, pkg_id, doc_id):
+    def get(self, request, pkg_id, doc_id):
 
         pass
 
 
 class SigningRoomSigView(View):
     
-    def put(self, pkg_id, doc_id, signer_type):
+    def put(self, request, pkg_id, doc_id, signer_type):
 
         pass
 
 
 class SigningRoomConsentView(View):
 
-    def put(self, pkg_id, signer_type):
+    def put(self, request, pkg_id, signer_type):
         pass
 
     def delete(self, pkg_id, signer_type):

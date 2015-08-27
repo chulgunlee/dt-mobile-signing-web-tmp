@@ -37,6 +37,7 @@ html, body {
     margin-bottom: 28px;
     margin-left: 34px;
     overflow: hidden;
+    cursor: pointer;
 }
 
 
@@ -234,4 +235,5 @@ html, body {
 
 .docpreview-content {
     padding: 14px 22px;
+    text-align: center;
 }

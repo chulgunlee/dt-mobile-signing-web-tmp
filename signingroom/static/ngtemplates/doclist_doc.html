@@ -1,4 +1,4 @@
-<div class="document">
+<div class="document" ng-click="showPreview(doc.id, doc.title);">
     <a class="status-badge {{doc.status}}" id="signing-status-for-{{doc.id}}"
         bs-popover data-template-url="/static/ngtemplates/signstatus_popover.html" data-container="body"
         data-placement="top" data-auto-close="true" data-viewport="{ 'selector': 'body', 'padding': 10 }"
@@ -14,7 +14,7 @@
         </div>
     </div>
 
-    <div class="doc-body" id="doc-body-{{doc.id}}" ng-click="showPreview(doc.id, doc.title);">
+    <div class="doc-body" id="doc-body-{{doc.id}}">
         <p class="text-center doc-title"><strong>{{doc.title}}</strong></p>
     </div>
 
