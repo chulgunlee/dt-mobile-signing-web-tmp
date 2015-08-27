@@ -11,7 +11,7 @@ directive('doc', function() {
             masterIndexId: '='
         },
 
-        controller: ['$scope', '$rootScope', function($scope, $rootScope) {
+        controller: ['$scope', '$location', function($scope, $location) {
             // used for caching a document preview
             $scope.preview = null;
 
@@ -27,7 +27,7 @@ directive('doc', function() {
              */
             $scope.showPreview = function(docIndexId, templateDescription) {
                 // Show loading modal
-                alert('show loading modal');
+                $location.path('/' + docIndexId + '/preview/');
             };
 
 

@@ -15,66 +15,8 @@
     <link href="/static/css/mystyle.css" rel="stylesheet" />
 </head>
 <body ng-app="docListApp">
-    {% verbatim %}
-
-    <style type="text/ng-template" id="signstatus-template">
-    </style>
-
-    <div id="doclist" class="container-fluid" ng-controller="DocListCtrl" ng-cloak>
-
-        <!-- Floating button bar -->
-        <bottom-bar></bottom-bar>
-
-        <!-- Doc List Title -->
-        <div class="row doclist-header">Required for Funding</div>
-
-        <div class="row doclist-container">
-
-            <!-- Document List -->
-            <doc class="pull-left" doc="doc" master-index-id="masterIndexId" ng-repeat="doc in data.fundingDocs()" docs-repeat-complete></doc>
-        </div>
-
-        <!-- Doc List Title -->
-        <div class="row doclist-header">Other Documents</div>
-
-        <div class="row doclist-container">
-            <doc class="pull-left" doc="doc" master-index-id="masterIndexId" ng-repeat="doc in data.otherDocs()"></doc>
-        </div>
-
-        <!--
-            <div id="doc-mix-warning" class="modal child-modal" role="dialog" data-backdrop="static">
-                <div class="modal-dialog modal-sm">
-                    <div class="modal-content">
-                        <div class="modal-header alert alert-warning">
-                            Attention
-                        </div>
-                        <div class="modal-body text-justify">Some of the documents selected have already been signed, and will not be sent for signing</div>
-                        <div class="modal-footer text-center">
-                            <button type="button" class="close" data-dismiss="modal">OK</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        -->
-
-        </div>
-    </div>
-
-
-    {% endverbatim %}
-
-
-    {% comment %}
-    <doc-list>
-        <loading-modal></loading-modal>
-        <doc-list-load-failed></doc-list-load-failed>
-        <ws-call-failed-modal></ws-call-failed-modal>
-        <select-signer-modal></select-signer-modal>
-        <doc-removal-notice-modal></doc-removal-notice-modal>
-        <doc-preview-modal></doc-preview-modal>
-    </doc-list>
-    {% endcomment %}
-
+    <div ng-controller="DocListDataCtrl"></div>
+    <div ng-view></div>
 
     <script>
         var packageId = {{ master_index_id }};

@@ -1,13 +1,10 @@
-<div id="doc-preview-overlay" class="modal" role="dialog">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                <h4></h4>
-            </div>
-            <div class="modal-body">
-                <img ng-repeat="pageUrl in pageUrls" ng-src="pageUrl">
-            </div>
-        </div>
+<div id="docpreview" class="container-fluid">
+
+  <div class="docpreview-container">
+    <div class="docpreview-titlebar">
+      <a href="#/docs/" class="pull-left"><span class="glyphicon glyphicon-menu-left" aira-hidden="true"></span> Back</a>
+      <span class="docpreview-title">eContract</span>
     </div>
+    <div class="docpreview-content"></div>
+  </div>
 </div>
