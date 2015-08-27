@@ -2,12 +2,13 @@
     <a class="status-badge {{doc.status}}" id="signing-status-for-{{doc.id}}"
         bs-popover data-template-url="/static/ngtemplates/signstatus_popover.html" data-container="body"
         data-placement="top" data-auto-close="true" data-viewport="{ 'selector': 'body', 'padding': 10 }"
+        ng-click="$event.stopPropagation()"
     >
         <div class="status">
             {{doc.statusText}}
         </div>
     </a>
-    <div class="doc-selected-wrapper" ng-click="onDocSelected(doc.id);">
+    <div class="doc-selected-wrapper" ng-click="onDocSelected(doc.id);$event.stopPropagation()">
         <div class="roundedTwo docSelector">
             <input type="checkbox" value="None" id="doc-{{$index}}-cbx" name="doc-{{$index}}-cbx" disabled="disabled" ng-checked="doc.selected" />
             <label for="doc-{{$index}}-cbx"></label>

@@ -40,8 +40,6 @@ directive('doc', function() {
 
                 // Toggle doc selected status
                 $scope.doc.selected = !$scope.doc.selected;
-
-                // update watch expressions
             };
         }],
 //        require: 'docPreviewModal',
