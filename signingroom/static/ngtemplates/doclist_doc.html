@@ -1,30 +1,21 @@
 <div class="document">
-    <a class="status-badge {{doc.StatusBadge}}" id="signing-status-for-{{doc.TemplateTypeID}}" ng-class="doc.RibbonColor"
+    <a class="status-badge {{doc.status}}" id="signing-status-for-{{doc.id}}"
         bs-popover data-template-url="/static/ngtemplates/signstatus_popover.html" data-container="body"
         data-placement="top" data-auto-close="true" data-viewport="{ 'selector': 'body', 'padding': 10 }"
     >
         <div class="status">
-            {{doc.SigningStatus}}
+            {{doc.statusText}}
         </div>
     </a>
-    <div class="doc-selected-wrapper" ng-click="onDocSelected(doc.DocIndexId);">
+    <div class="doc-selected-wrapper" ng-click="onDocSelected(doc.id);">
         <div class="roundedTwo docSelector">
-            <input type="checkbox" value="None" id="doc-{{$index}}-cbx" name="doc-{{$index}}-cbx" disabled="disabled" ng-checked="doc.IsSelected" />
+            <input type="checkbox" value="None" id="doc-{{$index}}-cbx" name="doc-{{$index}}-cbx" disabled="disabled" ng-checked="doc.selected" />
             <label for="doc-{{$index}}-cbx"></label>
         </div>
     </div>
 
-    <div class="doc-body" id="doc-body-{{doc.DocIndexId}}" ng-click="showPreview(doc.DocIndexId, doc.TemplateDescription);">
-        <p class="text-center doc-title"><strong>{{doc.TemplateDescription}}</strong></p>
+    <div class="doc-body" id="doc-body-{{doc.id}}" ng-click="showPreview(doc.id, doc.title);">
+        <p class="text-center doc-title"><strong>{{doc.title}}</strong></p>
     </div>
-    <div id="signeesFor{{doc.TemplateTypeID}}" style="display: none">
-        <ul>
-            <li ng-repeat="signee in doc.Signers" ng-class="{'last':$last}">
-                <div>
-                    <span class="ellipsis pull-left">{{signee.FullName}} ({{signee.Type}})</span>
-                    <span class="signed-status-style pull-right" ng-class="signee.SignStatus=='Signed' && 'signed-color' || 'not-signed-color'">{{signee.SignStatus}}</span>
-                </div>
-            </li>
-        </ul>
-    </div>
+
 </div>

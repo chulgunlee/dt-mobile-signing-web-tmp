@@ -119,6 +119,14 @@ html, body {
     padding: 0;
 }
 
+.signstatus-signed {
+    color: #3FB265;
+}
+
+.signstatus-notsigned {
+    color: #FFB200;
+}
+
 .signstatus-row {
     min-width: 328px;
     white-space: nowrap;

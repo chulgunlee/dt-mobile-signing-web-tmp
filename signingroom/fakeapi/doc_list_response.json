@@ -1,157 +1,65 @@
 {
-    "Customers": [
-        "Biz Individual Chrm"
-    ], 
-    "Documents": [
+    "id": 2,
+    "signers": {
+        "buyer": "James Green",
+        "cobuyer": "Linda Green",
+        "dealer": "Dealer"
+    },
+    "docs": [
+        
         {
-            "SigningStatus": "Partially Signed", 
-            "StatusBadge": "partially-signed",
-            "PDF": null, 
-            "TemplateDescription": "Spanish Version of Contract", 
-            "PrintedBy": null, 
-            "PrintedOn": "0001-01-01T00:00:00", 
-            "DocType": 0, 
-            "RibbonColor": "none", 
-            "IsSelected": false, 
-            "TemplateType": "SPANISH_CONTRACT", 
-            "TemplateTypeID": 36, 
-            "Signers": [
-                { "FullName": "Charlee Li", "Type": "Buyer" },
-                { "FullName": "George GG", "Type": "Cobuyer" },
-                { "FullName": "Dealer", "Type": "Dealer" }
-            ], 
-            "IsSignable": false, 
-            "DocStatus": 2, 
-            "ForcePrintRequired": false, 
-            "DocIndexId": 36304
-        }, 
-        {
-            "SigningStatus": "Signed", 
-            "StatusBadge": "signed",
-            "PDF": null, 
-            "TemplateDescription": "Notice to Co-Signer", 
-            "PrintedBy": null, 
-            "PrintedOn": "0001-01-01T00:00:00", 
-            "DocType": 0, 
-            "RibbonColor": "none", 
-            "IsSelected": false, 
-            "TemplateType": "SPANISH_CONTRACT", 
-            "TemplateTypeID": 36, 
-            "Signers": [], 
-            "IsSignable": false, 
-            "DocStatus": 2, 
-            "ForcePrintRequired": false, 
-            "DocIndexId": 36304
-        }, 
-        {
-            "SigningStatus": "Submitted", 
-            "StatusBadge": "submitted",
-            "PDF": null, 
-            "TemplateDescription": "eContract", 
-            "PrintedBy": null, 
-            "PrintedOn": "0001-01-01T00:00:00", 
-            "DocType": 0, 
-            "RibbonColor": "none", 
-            "IsSelected": false, 
-            "TemplateType": "SPANISH_CONTRACT", 
-            "TemplateTypeID": 36, 
-            "Signers": [], 
-            "IsSignable": false, 
-            "DocStatus": 2, 
-            "ForcePrintRequired": false, 
-            "DocIndexId": 36304
-        }, 
-        {
-            "SigningStatus": "", 
-            "StatusBadge": "",
-            "PDF": null, 
-            "TemplateDescription": "Sample non-signable Document", 
-            "PrintedBy": null, 
-            "PrintedOn": "0001-01-01T00:00:00", 
-            "DocType": 0, 
-            "RibbonColor": "none", 
-            "IsSelected": false, 
-            "TemplateType": "SPANISH_CONTRACT", 
-            "TemplateTypeID": 36, 
-            "Signers": [], 
-            "IsSignable": false, 
-            "DocStatus": 2, 
-            "ForcePrintRequired": false, 
-            "DocIndexId": 36304
-        }, 
-        {
-            "SigningStatus": "Not Signed", 
-            "StatusBadge": "not-signed",
-            "PDF": null, 
-            "TemplateDescription": "Spanish Version of Contract", 
-            "PrintedBy": null, 
-            "PrintedOn": "0001-01-01T00:00:00", 
-            "DocType": 0, 
-            "RibbonColor": "none", 
-            "IsSelected": false, 
-            "TemplateType": "SPANISH_CONTRACT", 
-            "TemplateTypeID": 36, 
-            "Signers": [], 
-            "IsSignable": false, 
-            "DocStatus": 2, 
-            "ForcePrintRequired": false, 
-            "DocIndexId": 36304
-        }, 
-        {
-            "SigningStatus": "Not Signed", 
-            "StatusBadge": "not-signed",
-            "PDF": null, 
-            "TemplateDescription": "Spanish Version of Contract", 
-            "PrintedBy": null, 
-            "PrintedOn": "0001-01-01T00:00:00", 
-            "DocType": 0, 
-            "RibbonColor": "none", 
-            "IsSelected": false, 
-            "TemplateType": "SPANISH_CONTRACT", 
-            "TemplateTypeID": 36, 
-            "Signers": [], 
-            "IsSignable": false, 
-            "DocStatus": 2, 
-            "ForcePrintRequired": false, 
-            "DocIndexId": 36304
-        }
-    ], 
+            "id": 1234,
+            "title": "eContract",
+            "type": "funding",
+            "signable": true,
+            "status": "not-signed",
+            "requiredSigners": {
+                "buyer": true,
+                "cobuyer": true,
+                "dealer": true
+            },
+            "signStatus": {
+                "buyer": false,
+                "cobuyer": false,
+                "dealer": false
+            }
+        },
 
-    "OtherDocuments": [
         {
-            "SigningStatus": "Not Signed", 
-            "StatusBadge": "not-signed",
-            "PDF": null, 
-            "TemplateDescription": "Notice to Cosigner", 
-            "PrintedBy": null, 
-            "PrintedOn": "0001-01-01T00:00:00", 
-            "DocType": 0, 
-            "RibbonColor": "none", 
-            "IsSelected": false, 
-            "TemplateType": "SPANISH_CONTRACT", 
-            "TemplateTypeID": 36, 
-            "Signers": [
-                { "FullName": "Charlee Li", "Type": "Buyer" },
-                { "FullName": "George GG", "Type": "Cobuyer" },
-                { "FullName": "Dealer", "Type": "Dealer" }
-            ], 
-            "IsSignable": false, 
-            "DocStatus": 2, 
-            "ForcePrintRequired": false, 
-            "DocIndexId": 36304
+            "id": 1235,
+            "title": "Acknowledgement",
+            "type": "funding",
+            "signable": true,
+            "status": "partially-signed",
+            "requiredSigners": {
+                "buyer": true,
+                "cobuyer": true,
+                "dealer": false
+            },
+            "signStatus": {
+                "buyer": true,
+                "cobuyer": false,
+                "dealer": false
+            }
+        },
+
+        {
+            "id": 1236,
+            "title": "Notice to Co-Signer",
+            "type": "other",
+            "signable": false,
+            "status": "not-signed",
+            "requiredSigners": {
+                "buyer": false,
+                "cobuyer": false,
+                "dealer": false
+            },
+            "signStatus": {
+                "buyer": false,
+                "cobuyer": false,
+                "dealer": false
+            }
         }
-    ],
-    "Id": 24789, 
-    "Signers": [
-        {
-            "FullName": "Biz Individual Chrm", 
-            "SignStatus": "Signed", 
-            "Type": "Buyer"
-        }, 
-        {
-            "FullName": "Nis Test1", 
-            "SignStatus": "Signed", 
-            "Type": "Dealer"
-        }
+
     ]
 }

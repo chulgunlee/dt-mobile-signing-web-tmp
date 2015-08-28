@@ -31,14 +31,14 @@
         <div class="row doclist-container">
 
             <!-- Document List -->
-            <doc class="pull-left" doc="doc" master-index-id="masterIndexId" ng-repeat="doc in data.documents" docs-repeat-complete></doc>
+            <doc class="pull-left" doc="doc" master-index-id="masterIndexId" ng-repeat="doc in data.fundingDocs()" docs-repeat-complete></doc>
         </div>
 
         <!-- Doc List Title -->
         <div class="row doclist-header">Other Documents</div>
 
         <div class="row doclist-container">
-            <doc class="pull-left" doc="doc" master-index-id="masterIndexId" ng-repeat="doc in data.otherDocuments"></doc>
+            <doc class="pull-left" doc="doc" master-index-id="masterIndexId" ng-repeat="doc in data.otherDocs()"></doc>
         </div>
 
         <!--
@@ -82,12 +82,17 @@
         var apiUri = '/api/';
     </script>
 
-    <script src="/static/js/angular/angular.min.js"></script>
-    <script src="/static/js/angular/angular-resource.min.js"></script>
-    <script src="/static/js/angular/angular-animate.min.js"></script>
-    <script src="/static/js/angular/angular-route.min.js"></script>
+    <script src="/static/js/underscore.js"></script>
+    <script src="/static/js/angular/angular.js"></script>
+    <script src="/static/js/angular/angular-resource.js"></script>
+    <script src="/static/js/angular/angular-animate.js"></script>
+    <script src="/static/js/angular/angular-route.js"></script>
     <script src="/static/js/angular/angular-strap.js"></script>
     <script src="/static/js/angular/angular-strap.tpl.js"></script>
-    <script src="/static/js/custom/docslist/controllers.js"></script>
+    <script src="/static/js/doclist/app.js"></script>
+    <script src="/static/js/doclist/constants.js"></script>
+    <script src="/static/js/doclist/services.js"></script>
+    <script src="/static/js/doclist/directives.js"></script>
+    <script src="/static/js/doclist/controllers.js"></script>
 </body>
 </html>
