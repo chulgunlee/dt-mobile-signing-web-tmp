@@ -116,6 +116,20 @@ html, body {
     margin-top: 150px !important;
 }
 
+.signstatus-popover-mask {
+    background: rgba(0, 0, 0, .5);
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.signstatus-popover .popover-title {
+    text-align: center;
+    background: #fff;
+}
+
 .signstatus-popover .popover-content {
     padding: 0;
 }
