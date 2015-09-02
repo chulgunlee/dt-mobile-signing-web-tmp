@@ -164,17 +164,22 @@ factory('DocService', function($http, Doc, SignerService, DOC_STATUS_MAPPING, SI
 
 }).
 
-
-factory('SignerService', function(SIGNER_TYPE_MAPPING) {
+factory('Signer', function(SIGNER_TYPE_MAPPING) {
     
-    var Signer = function(name, type) {
+    function Signer(name, type) {
         this.name = name;
         this.type = type;
         this.typeName = SIGNER_TYPE_MAPPING[type];
         this.required = false;
         this.selected = false;
-    },
+    }
 
+    return Signer;
+}).
+
+
+factory('SignerService', function(Signer) {
+    
     service = {
 
         buyer: null,
