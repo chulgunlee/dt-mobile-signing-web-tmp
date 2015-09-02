@@ -11,7 +11,7 @@ directive('doc', function() {
             masterIndexId: '='
         },
 
-        controller: ['$scope', '$rootScope', function($scope, $rootScope) {
+        controller: ['$scope', '$location', function($scope, $location) {
             // used for caching a document preview
             $scope.preview = null;
 
@@ -27,7 +27,7 @@ directive('doc', function() {
              */
             $scope.showPreview = function(docIndexId, templateDescription) {
                 // Show loading modal
-                alert('show loading modal');
+                $location.path('/' + docIndexId + '/preview/');
             };
 
 
@@ -40,8 +40,6 @@ directive('doc', function() {
 
                 // Toggle doc selected status
                 $scope.doc.selected = !$scope.doc.selected;
-
-                // update watch expressions
             };
         }],
 //        require: 'docPreviewModal',
@@ -105,7 +103,58 @@ directive('bottomBar', [ 'DocService', 'SignerService', '$modal', function(docSe
             };
         }
     };
+}]).
+
+/**
+ * signerPopover
+ * This is a patch to popover directive to add a black mask to the background.
+ */
+directive('signerPopover', ['$popover', '$document', '$animate', function($popover, $document, $animate) {
+
+    return {
+        restrict: 'EA',
+        scope: true,
+        link: function(scope, element, attr) {
+
+            // popover options
+            var options = {
+                scope: scope,
+                templateUrl: '/static/ngtemplates/signstatus_popover.html',
+                container: 'body',
+                placement: 'top',
+                autoClose: true,
+                viewport: { selector: 'body', padding: 10 }
+            };
+
+            // init mask
+            var  mask = angular.element('<div>').addClass('am-fade').addClass('signstatus-popover-mask'),
+                 body = $document.find('body'),
+                 after = angular.element(body[0].lastChild);
+
+            // initialize popover
+            var popover = $popover(element, options);
+
+            // show/hide mask when popover shows/hides
+            scope.$on('tooltip.show.before', function() {
+                $animate.enter(mask, body, after);
+            });
+            scope.$on('tooltip.hide.before', function() {
+                $animate.leave(mask);
+            });
+
+
+            // clean up after destroy
+            scope.$on('$destroy', function() {
+                if (popover) popover.destroy();
+                options = null;
+                popover = null;
+            });
+        }
+    };
+
 }]);
+
+;
 
 
 

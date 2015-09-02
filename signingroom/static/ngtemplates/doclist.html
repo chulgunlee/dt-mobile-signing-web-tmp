@@ -1,0 +1,24 @@
+<div id="doclist" class="container-fluid" ng-cloak>
+
+    <!-- Floating button bar -->
+    <bottom-bar></bottom-bar>
+
+    <!-- Doc List Title -->
+    <div class="row doclist-header">Required for Funding</div>
+
+    <div class="row doclist-container">
+
+        <!-- Document List -->
+        <doc class="pull-left" doc="doc" master-index-id="masterIndexId" ng-repeat="doc in data.fundingDocs()" docs-repeat-complete></doc>
+    </div>
+
+    <!-- Doc List Title -->
+    <div class="row doclist-header">Other Documents</div>
+
+    <div class="row doclist-container">
+        <doc class="pull-left" doc="doc" master-index-id="masterIndexId" ng-repeat="doc in data.otherDocs()"></doc>
+    </div>
+
+    </div>
+</div>
+
