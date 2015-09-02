@@ -22,6 +22,11 @@ class DocPackageView(APIView):
         return Response(doc_pkg)
         
 
+class DocPackageSubmitView(APIView):
+    def put(self, request, pkg_id):
+        return Response(status=206)
+
+
 
 class DocPreviewView(APIView):
     
@@ -35,6 +40,7 @@ class DocPreviewView(APIView):
 class DocPrintView(View):
     def get(self, request, doc_id):
         pass
+
 
 
 class SigningRoomInitView(View):

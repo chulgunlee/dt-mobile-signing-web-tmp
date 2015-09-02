@@ -12,17 +12,20 @@
             "title": "eContract",
             "type": "funding",
             "signable": true,
-            "status": "not-signed",
+            "status": "signed",
             "requiredSigners": {
                 "buyer": true,
                 "cobuyer": true,
                 "dealer": true
             },
             "signStatus": {
-                "buyer": false,
-                "cobuyer": false,
-                "dealer": false
-            }
+                "buyer": true,
+                "cobuyer": true,
+                "dealer": true 
+            },
+            "isContract": true,
+            "scannable": false,
+            "moveable": false
         },
 
         {
@@ -40,7 +43,10 @@
                 "buyer": true,
                 "cobuyer": false,
                 "dealer": false
-            }
+            },
+            "isContract": false,
+            "scannable": false,
+            "moveable": false
         },
 
         {
@@ -58,7 +64,10 @@
                 "buyer": false,
                 "cobuyer": false,
                 "dealer": false
-            }
+            },
+            "isContract": false,
+            "scannable": false,
+            "moveable": true
         }
 
     ]
