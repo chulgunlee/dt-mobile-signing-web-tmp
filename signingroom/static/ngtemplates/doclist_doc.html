@@ -1,10 +1,10 @@
-<div class="document" ng-click="showPreview(doc.id, doc.title);">
-    <signer-popover class="status-badge {{doc.status}}" id="signing-status-for-{{doc.id}}" ng-click="$event.stopPropagation()">
+<div class="document" ng-click="showPreview(doc);">
+    <signer-popover ng-if="doc.signable" class="status-badge {{doc.status}}" id="signing-status-for-{{doc.id}}" ng-click="$event.stopPropagation()">
         <div class="status">
             {{doc.statusText}}
         </div>
     </signer-popover>
-    <div class="doc-selected-wrapper" ng-click="onDocSelected(doc.id);$event.stopPropagation()">
+    <div ng-if="!(doc.scannable && !doc.scanned)" class="doc-selected-wrapper" ng-click="onDocSelected(doc.id);$event.stopPropagation()">
         <div class="roundedTwo docSelector">
             <input type="checkbox" value="None" id="doc-{{$index}}-cbx" name="doc-{{$index}}-cbx" disabled="disabled" ng-checked="doc.selected" />
             <label for="doc-{{$index}}-cbx"></label>

@@ -1,8 +1,53 @@
+
 myApp.
+
+/**
+ * Define Doc class
+ */
+factory('Doc', function(DOC_STATUS_MAPPING, SIGNER_TYPE_MAPPING, SignerService) {
+
+    function Doc(data) {
+
+        // copy properties
+        _.extend(this, data);
+
+        this.selected = false;
+    }
+
+    Doc.prototype = {
+
+        get statusText() {
+            return DOC_STATUS_MAPPING[this.status];
+        },
+
+        get signed() {
+            return this.signable && (this.status == 'signed' || this.status == 'submitted');
+        },
+
+        get submitted() {
+            return this.signable && this.status == 'submitted';
+        },
+
+        /**
+         * Get the name of specified signer
+         * @param {String} signerId 'buyer'|'cobuyer'|'dealer'
+         */
+        signerName: function(signerId) {
+            return SignerService[signerId].name + ((signerId == 'dealer') ? '' : ' (' + SignerService[signerId].typeName + ')');
+        },
+
+        signerSigned: function(signerId) {
+            return this.signStatus[signerId];
+        },
+
+    };
+
+    return Doc;
+}).
 
 
 /* Data Services */
-factory('DocService', ['$http', 'SignerService', 'DOC_STATUS_MAPPING', 'SIGNER_TYPE_MAPPING', function($http, SignerService, DOC_STATUS_MAPPING, SIGNER_TYPE_MAPPING) {
+factory('DocService', function($http, Doc, SignerService, DOC_STATUS_MAPPING, SIGNER_TYPE_MAPPING) {
 
     var service = {
 
@@ -18,29 +63,11 @@ factory('DocService', ['$http', 'SignerService', 'DOC_STATUS_MAPPING', 'SIGNER_T
                 }
 
                 service.id = data.id;
-                
-                // process docs data for easy use
-                service.docs = data.docs.map(function(doc) {
-                    // fill the `statusText` for the status badge
-                    doc.statusText = DOC_STATUS_MAPPING[doc.status] || '';
 
-                    // fill the `signers` field which will be used by the status badge popover
-                    doc.signers = {};
-                    Object.keys(doc.requiredSigners).forEach(function(signer) {
-                        if (doc.requiredSigners[signer]) {
-                            doc.signers[signer] = {
-                                name: data.signers[signer] + ((signer == 'dealer') ? '' : ' (' + SIGNER_TYPE_MAPPING[signer] + ')'),
-                                signed: doc.signStatus[signer]
-                            };
-                        }
-                    });
-
-                    // fill other fields
-                    doc.selected = false;
-
-                    return doc;
+                service.docs = data.docs.map(function(docData) {
+                    return new Doc(docData);
                 });
-
+                
                 // store signer data in SignerService
                 SignerService.init(data.signers);
             });
@@ -52,7 +79,7 @@ factory('DocService', ['$http', 'SignerService', 'DOC_STATUS_MAPPING', 'SIGNER_T
          * Submit all the signed documents
          */
         submitSignedDocs: function() {
-            var signedDocIds = _.pluck(this.signedDocs(), 'id');
+            var signedDocIds = _.pluck(this.signedDocs, 'id');
             console.log('submitting' + JSON.stringify(signedDocIds));
 
             $http.put(apiUri + 'packages/' + this.id + '/submit/', { docIds: signedDocIds }).success(function(data, status) {
@@ -68,19 +95,11 @@ factory('DocService', ['$http', 'SignerService', 'DOC_STATUS_MAPPING', 'SIGNER_T
             
         },
 
-        _isDocSigned: function(doc) {
-            return doc.status === 'signed' || doc.status === 'submitted';
-        },
-
-        _isDocSubmitted: function(doc) {
-            return doc.status === 'submitted';
-        },
-
         /**
          * Get the eContract document
          * @return {Object} eContract document, or null if not exists
          */
-        contractDoc: function() {
+        get contractDoc() {
             var contracts = this.docs.filter(function(doc) { return doc.isContract });
             return (contracts.length >= 1) ? contracts[0] : null;
         },
@@ -88,22 +107,22 @@ factory('DocService', ['$http', 'SignerService', 'DOC_STATUS_MAPPING', 'SIGNER_T
         /**
          * Check if contract is signed
          */
-        contractSigned: function() {
-            return this._isDocSigned(this.contractDoc());
+        get contractSigned() {
+            return this.contractDoc.signed;
         },
 
         /**
          * Check if contract is submitted
          */
-        contractSubmitted: function() {
-            return this._isDocSubmitted(this.contractDoc());
+        get contractSubmitted() {
+            return this.contractDoc.submitted;
         },
         
         /**
          * Get the "Required for Funding" document list
          * @return {Array} required for funding document list
          */
-        fundingDocs: function() {
+        get fundingDocs() {
             return this.docs.filter(function(doc) { return doc.type == 'funding' });
         },
 
@@ -111,7 +130,7 @@ factory('DocService', ['$http', 'SignerService', 'DOC_STATUS_MAPPING', 'SIGNER_T
          * Get the "Others" document list
          * @return {Array} others document list
          */
-        otherDocs: function() {
+        get otherDocs() {
             return this.docs.filter(function(doc) { return doc.type == 'other' });
         },
 
@@ -119,7 +138,7 @@ factory('DocService', ['$http', 'SignerService', 'DOC_STATUS_MAPPING', 'SIGNER_T
          * Check if any documents are selected
          * @return {bool} true if any documents are selected, false if none is selected
          */
-        hasSelected: function() {        // TODO: not good name
+        get hasSelected() {        // TODO: not good name
             return _.some(this.docs, function(doc) { return doc.selected });
         },
 
@@ -127,7 +146,7 @@ factory('DocService', ['$http', 'SignerService', 'DOC_STATUS_MAPPING', 'SIGNER_T
          * Get selected documents
          * @return {Array} documents that are selected
          */
-        selectedDocs: function() {
+        get selectedDocs() {
             return this.docs.filter(function(doc) { return doc.selected; })
         },
 
@@ -135,15 +154,15 @@ factory('DocService', ['$http', 'SignerService', 'DOC_STATUS_MAPPING', 'SIGNER_T
          * Get signed documents
          * @return {Array} documents that are signed
          */
-        signedDocs: function() {
-            return this.docs.filter(function(doc) { return service._isDocSigned(doc) });
+        get signedDocs() {
+            return this.docs.filter(function(doc) { return doc.signed });
         }
 
     };
 
     return service;
 
-}]).
+}).
 
 
 factory('SignerService', function(SIGNER_TYPE_MAPPING) {

@@ -25,9 +25,14 @@ directive('doc', function() {
              * @param docIndexId
              * @param templateDescription
              */
-            $scope.showPreview = function(docIndexId, templateDescription) {
-                // Show loading modal
-                $location.path('/' + docIndexId + '/preview/');
+            $scope.showPreview = function(doc) {
+                
+                // check if this document is previewable. scannable but not scanned documents cannot be previewed.
+                if (!doc.scannable || doc.scanned) {
+
+                    // Show loading modal
+                    $location.path('/' + doc.id + '/preview/');
+                }
             };
 
 
@@ -36,7 +41,6 @@ directive('doc', function() {
              * @param docIndex
              */
             $scope.onDocSelected = function(docIndex) {
-                console.log('onDocSelected(' + docIndex + ')');
 
                 // Toggle doc selected status
                 $scope.doc.selected = !$scope.doc.selected;
@@ -82,8 +86,8 @@ directive('bottomBar', [ 'DocService', 'SignerService', '$modal', function(docSe
              * Continue button click handler
              */
             scope.onContinue = function() {
-                var selectedDocIds = _.pluck(this.docService.selectedDocs(), 'id'),
-                    selectedSigners = this.signerService.selectedSigners();
+                var selectedDocIds = _.pluck(this.docService.selectedDocs, 'id'),
+                    selectedSigners = this.signerService.selectedSigners;
                 console.log('selected docs = ' + selectedDocIds + ', selected signers = ' + selectedSigners);
             };
 
@@ -94,8 +98,8 @@ directive('bottomBar', [ 'DocService', 'SignerService', '$modal', function(docSe
 
                 // update signer required status on select docs
                 _.each(['buyer', 'cobuyer', 'dealer'], function(signerType) {
-                    signerService[signerType].required = _.some(docService.selectedDocs(), function(doc) {
-                        return doc.requiredSigners[signerType];
+                    signerService[signerType].required = _.some(docService.selectedDocs, function(doc) {
+                        return _.contains(doc.requiredSigners, signerType) && !doc.signStatus[signerType];
                     });
                 });
 
