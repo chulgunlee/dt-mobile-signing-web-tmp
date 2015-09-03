@@ -117,7 +117,7 @@ directive('bottomBar', [ 'DocService', 'SignerService', '$modal', function(docSe
             scope.onContinueSubmit = function() {
                 submitDialog.hide();
                 docService.submitSignedDocs().then(function(reslut) {
-                    console.log('submitted');
+                    window.alert('Document(s) have been successfully submitted to lender.');
                 });
             };
 
