@@ -21,7 +21,7 @@ factory('Doc', function(DOC_STATUS_MAPPING, SIGNER_TYPE_MAPPING, SignerService) 
         },
 
         get signed() {
-            return this.signable && (this.status == 'signed' || this.status == 'submitted');
+            return this.signable && this.status == 'signed';
         },
 
         get submitted() {
@@ -108,7 +108,8 @@ factory('DocService', function($http, Doc, SignerService, DOC_STATUS_MAPPING, SI
          * Check if contract is signed
          */
         get contractSigned() {
-            return this.contractDoc.signed;
+            var contract = this.contractDoc;
+            return contract.signed || contract.submitted;
         },
 
         /**

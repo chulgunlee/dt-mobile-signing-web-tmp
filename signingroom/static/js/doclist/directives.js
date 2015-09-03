@@ -74,6 +74,15 @@ directive('bottomBar', [ 'DocService', 'SignerService', '$modal', function(docSe
                 templateUrl: '/static/ngtemplates/select_signer_modal.html'
             });
 
+            // submit dialog
+            var submitDialog = $modal({
+                title: 'Submit Document(s)',
+                show: false,
+                placement: 'center',
+                scope: scope,
+                templateUrl: '/static/ngtemplates/submit_docs_modal.html',
+            });
+
             /**
              * Toggle signer selected status when the checkbox on signers are clicked
              * @param {string} signerType Signer type string indicates which signer is checked 
@@ -85,7 +94,7 @@ directive('bottomBar', [ 'DocService', 'SignerService', '$modal', function(docSe
             /**
              * Continue button click handler
              */
-            scope.onContinue = function() {
+            scope.onContinueSign = function() {
                 var selectedDocIds = _.pluck(this.docService.selectedDocs, 'id'),
                     selectedSigners = this.signerService.selectedSigners;
                 console.log('selected docs = ' + selectedDocIds + ', selected signers = ' + selectedSigners);
@@ -104,6 +113,24 @@ directive('bottomBar', [ 'DocService', 'SignerService', '$modal', function(docSe
                 });
 
                 signerDialog.show();
+            };
+
+            /**
+             * Open submit docs dialog
+             */
+            scope.submitDocs = function() {
+                submitDialog.show();
+            };
+
+            scope.onContinueSubmit = function() {
+                docService.submitSignedDocs();
+                submitDialog.hide();
+            };
+
+            /**
+             * Submit document
+             */
+            scope.onSubmit = function() {
             };
         }
     };
