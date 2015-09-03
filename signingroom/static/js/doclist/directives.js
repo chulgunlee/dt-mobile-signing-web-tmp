@@ -104,14 +104,6 @@ directive('bottomBar', [ 'DocService', 'SignerService', '$modal', function(docSe
              * Open sign dialog
              */
             scope.selectSigner = function() {
-
-                // update signer required status on select docs
-                _.each(['buyer', 'cobuyer', 'dealer'], function(signerType) {
-                    signerService[signerType].required = _.some(docService.selectedDocs, function(doc) {
-                        return _.contains(doc.requiredSigners, signerType) && !doc.signStatus[signerType];
-                    });
-                });
-
                 signerDialog.show();
             };
 

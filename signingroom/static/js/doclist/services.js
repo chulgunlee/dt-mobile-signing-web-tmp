@@ -30,14 +30,14 @@ factory('Doc', function(DOC_STATUS_MAPPING, SIGNER_TYPE_MAPPING, SignerService) 
 
         /**
          * Get the name of specified signer
-         * @param {String} signerId 'buyer'|'cobuyer'|'dealer'
+         * @param {String} signerType 'buyer'|'cobuyer'|'dealer'
          */
-        signerName: function(signerId) {
-            return SignerService[signerId].name + ((signerId == 'dealer') ? '' : ' (' + SignerService[signerId].typeName + ')');
+        signerName: function(signerType) {
+            return SignerService[signerType].name + ((signerType == 'dealer') ? '' : ' (' + SignerService[signerType].typeName + ')');
         },
 
-        signerSigned: function(signerId) {
-            return this.signStatus[signerId];
+        signerSigned: function(signerType) {
+            return this.signStatus[signerType];
         },
 
     };
@@ -157,7 +157,28 @@ factory('DocService', function($http, Doc, SignerService, DOC_STATUS_MAPPING, SI
          */
         get signedDocs() {
             return this.docs.filter(function(doc) { return doc.signed });
-        }
+        },
+
+        /**
+         * Aggregate required signers in all selected docs
+         * @return {Array} a list of the signers that are required by the selected docs. NOTE: correct order is NOT promised.
+         */
+        get requiredSignersInSelectedDocs() {
+            return _.union.apply(_, _.map(this.selectedDocs, function(doc) {
+                return _.filter(doc.requiredSigners, function(signerType) { return !doc.signStatus[signerType] });
+            }));
+        },
+
+        /**
+         * Test for specified signer to see if he is required by selected docs.
+         * @param {String} signerType signer id (buyer|cobuyer|dealer).
+         * @return {bool} whether this signer is required.
+         */
+        isSignerRequiredBySelectedDocs: function(signerType) {
+            return _.some(this.selectedDocs, function(doc) {
+                return _.contains(doc.requiredSigners, signerType) && !doc.signStatus[signerType];
+            });
+        },
 
     };
 
@@ -171,7 +192,6 @@ factory('Signer', function(SIGNER_TYPE_MAPPING) {
         this.name = name;
         this.type = type;
         this.typeName = SIGNER_TYPE_MAPPING[type];
-        this.required = false;
         this.selected = false;
     }
 
@@ -200,7 +220,7 @@ factory('SignerService', function(Signer) {
         /**
          * Get a list of selected signers
          */
-        selectedSigners: function() {
+        get selectedSigners() {
             var selected = [];
             _.each(['buyer', 'cobuyer', 'dealer'], function(signerType) {
                 if (service[signerType].selected) {
