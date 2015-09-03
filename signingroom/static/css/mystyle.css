@@ -251,3 +251,53 @@ html, body {
     padding: 14px 22px;
     text-align: center;
 }
+
+
+/* submit to lender dialog */
+.submit-modal-dialog {
+    width: 320px;
+}
+
+.submit-modal-dialog .modal-header {
+    border-bottom: 0;
+}
+
+.submit-modal-dialog .modal-body {
+    padding: 15px 45px;
+}
+
+.submit-modal-dialog .modal-body ul {
+    list-style-type: disc;
+}
+
+.submit-modal-dialog .modal-body li {
+    margin-left: 30px;
+}
+
+
+/**
+ * iOS7 style alert dialog
+ */
+
+.btn-alert-buttons {
+    display: flex;
+    border-top: solid 1px #e5e5e5;
+}
+
+.btn-alert {
+    border: 0;
+    background: transparent;
+    height: 44px;
+    width: 100%;
+    border-right: solid 1px #e5e5e5;
+    color: #007aff;
+    font-size: 17px;
+}
+
+.btn-alert-buttons:last-child {
+    border-right: 0;
+}
+
+.btn-alert.btn-alert-ok {
+    font-weight: bold;
+}

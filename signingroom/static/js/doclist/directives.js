@@ -115,8 +115,10 @@ directive('bottomBar', [ 'DocService', 'SignerService', '$modal', function(docSe
             };
 
             scope.onContinueSubmit = function() {
-                docService.submitSignedDocs();
                 submitDialog.hide();
+                docService.submitSignedDocs().then(function(reslut) {
+                    console.log('submitted');
+                });
             };
 
             /**

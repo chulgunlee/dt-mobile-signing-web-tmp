@@ -47,7 +47,7 @@ factory('Doc', function(DOC_STATUS_MAPPING, SIGNER_TYPE_MAPPING, SignerService) 
 
 
 /* Data Services */
-factory('DocService', function($http, Doc, SignerService, DOC_STATUS_MAPPING, SIGNER_TYPE_MAPPING) {
+factory('DocService', function($q, $http, Doc, SignerService, DOC_STATUS_MAPPING, SIGNER_TYPE_MAPPING) {
 
     var service = {
 
@@ -82,6 +82,8 @@ factory('DocService', function($http, Doc, SignerService, DOC_STATUS_MAPPING, SI
             var signedDocIds = _.pluck(this.signedDocs, 'id');
             console.log('submitting' + JSON.stringify(signedDocIds));
 
+            var deferred = $q.defer();
+
             $http.put(apiUri + 'packages/' + this.id + '/submit/', { docIds: signedDocIds }).success(function(data, status) {
                 if (status == 302) {
                     // TODO: session timeout
@@ -89,10 +91,12 @@ factory('DocService', function($http, Doc, SignerService, DOC_STATUS_MAPPING, SI
                 }
 
                 if (status == 206) {
-                    console.log('submitted');
+                    deferred.resolve();
                 }
+
             });
-            
+
+            return deferred.promise;
         },
 
         /**
