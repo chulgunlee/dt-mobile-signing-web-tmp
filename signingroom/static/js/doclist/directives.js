@@ -121,6 +121,14 @@ directive('bottomBar', [ 'docService', 'signerService', '$modal', function(docSe
                 });
             };
 
+            scope.printDocs = function() {
+                var url = location.protocol + '//' + location.host + apiUri + 'packages/' + this.docService.id + '/print/',
+                    docIds = _.pluck(this.docService.selectedDocs, 'id'),
+                    data = JSON.stringify({ docIds: docIds });
+                
+                WebViewBridge.call('print', { method: 'POST', url: url, data: data });
+            };
+
             /**
              * Submit document
              */
