@@ -1,6 +1,6 @@
 
 /* module */
-var myApp = angular.module('docListApp', ['ngResource', 'ngRoute', 'ngAnimate', 'mgcrea.ngStrap']);
+var myApp = angular.module('docListApp', ['ngResource', 'ngRoute', 'ngTouch', 'ngAnimate', 'mgcrea.ngStrap']);
 
 /* route config */
 myApp.config(['$routeProvider', function($routeProvider) {
@@ -20,4 +20,9 @@ myApp.config(['$routeProvider', function($routeProvider) {
             redirectTo: '/docs/'
         });
 
-}]);
+}]).
+
+run(function() {
+    // remove 300ms click delay on iPad
+    FastClick.attach(document.body);
+});
