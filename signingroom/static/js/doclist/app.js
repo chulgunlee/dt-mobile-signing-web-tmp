@@ -22,7 +22,9 @@ myApp.config(['$routeProvider', function($routeProvider) {
 
 }]).
 
-run(function() {
+run(function(docService) {
     // remove 300ms click delay on iPad
     FastClick.attach(document.body);
+
+    docService.refresh(packageId);
 });

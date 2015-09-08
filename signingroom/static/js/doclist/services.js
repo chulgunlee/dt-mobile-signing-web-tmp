@@ -4,7 +4,7 @@ myApp.
 /**
  * Define Doc class
  */
-factory('Doc', function(DOC_STATUS_MAPPING, SIGNER_TYPE_MAPPING, SignerService) {
+factory('Doc', function(DOC_STATUS_MAPPING, SIGNER_TYPE_MAPPING, signerService) {
 
     function Doc(data) {
 
@@ -33,7 +33,7 @@ factory('Doc', function(DOC_STATUS_MAPPING, SIGNER_TYPE_MAPPING, SignerService) 
          * @param {String} signerType 'buyer'|'cobuyer'|'dealer'
          */
         signerName: function(signerType) {
-            return SignerService[signerType].name + ((signerType == 'dealer') ? '' : ' (' + SignerService[signerType].typeName + ')');
+            return signerService[signerType].name + ((signerType == 'dealer') ? '' : ' (' + signerService[signerType].typeName + ')');
         },
 
         signerSigned: function(signerType) {
@@ -47,7 +47,7 @@ factory('Doc', function(DOC_STATUS_MAPPING, SIGNER_TYPE_MAPPING, SignerService) 
 
 
 /* Data Services */
-factory('DocService', function($q, $http, Doc, SignerService, DOC_STATUS_MAPPING, SIGNER_TYPE_MAPPING) {
+factory('docService', function($q, $http, Doc, signerService, DOC_STATUS_MAPPING, SIGNER_TYPE_MAPPING) {
 
     var service = {
 
@@ -68,11 +68,11 @@ factory('DocService', function($q, $http, Doc, SignerService, DOC_STATUS_MAPPING
                     return new Doc(docData);
                 });
                 
-                // store signer data in SignerService
-                SignerService.init(data.signers);
+                // store signer data in signerService
+                signerService.init(data.signers);
             });
 
-            // extract data from response and save it to DocService
+            // extract data from response and save it to docService
         },
 
         /**
@@ -203,7 +203,7 @@ factory('Signer', function(SIGNER_TYPE_MAPPING) {
 }).
 
 
-factory('SignerService', function(Signer) {
+factory('signerService', function(Signer) {
     
     service = {
 
@@ -212,7 +212,7 @@ factory('SignerService', function(Signer) {
         dealer: null,
 
         /**
-         * init `SignerService`.
+         * init `signerService`.
          * @param {Object} signers An object with k-v = type:name
          */
         init: function(signers) {

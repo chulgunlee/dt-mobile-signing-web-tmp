@@ -53,7 +53,7 @@ directive('doc', function() {
     }
 }).
 
-directive('bottomBar', [ 'DocService', 'SignerService', '$modal', function(docService, signerService, $modal) {
+directive('bottomBar', [ 'docService', 'signerService', '$modal', function(docService, signerService, $modal) {
     return {
         templateUrl: '/static/ngtemplates/bottom_bar.html',
         restrict: 'E',
