@@ -53,24 +53,23 @@ directive('doc', function() {
     }
 }).
 
-directive('bottomBar', [ 'docService', 'signerService', '$modal', function(docService, signerService, $modal) {
+directive('bottomBar', function() {
     return {
         templateUrl: '/static/ngtemplates/bottom_bar.html',
         restrict: 'E',
-        scope: {
-        },
+        scope: true,
 
-        link: function(scope, element) {
-            
-            scope.docService = docService;
-            scope.signerService = signerService;
+        controller: function($scope, docService, signerService, $modal) {
+
+            $scope.docService = docService;
+            $scope.signerService = signerService;
 
             // signer selecting modal dialog
             var signerDialog = $modal({ 
                 title: 'Select Signer(s)',
                 show: false,
                 placement: 'center',
-                scope: scope,
+                scope: $scope,
                 templateUrl: '/static/ngtemplates/select_signer_modal.html'
             });
 
@@ -79,7 +78,7 @@ directive('bottomBar', [ 'docService', 'signerService', '$modal', function(docSe
                 title: 'Submit Document(s)',
                 show: false,
                 placement: 'center',
-                scope: scope,
+                scope: $scope,
                 templateUrl: '/static/ngtemplates/submit_docs_modal.html',
             });
 
@@ -87,43 +86,43 @@ directive('bottomBar', [ 'docService', 'signerService', '$modal', function(docSe
              * Toggle signer selected status when the checkbox on signers are clicked
              * @param {string} signerType Signer type string indicates which signer is checked 
              */
-            scope.onSignerSelected = function(signerType) {
+            $scope.onSignerSelected = function(signerType) {
                 signerService[signerType].selected = !signerService[signerType].selected;
             };
 
             /**
              * Continue button click handler
              */
-            scope.onContinueSign = function() {
-                var selectedDocIds = _.pluck(this.docService.selectedDocs, 'id'),
-                    selectedSigners = this.signerService.selectedSigners;
+            $scope.onContinueSign = function() {
+                var selectedDocIds = _.pluck(docService.selectedDocs, 'id'),
+                    selectedSigners = signerService.selectedSigners;
                 console.log('selected docs = ' + selectedDocIds + ', selected signers = ' + selectedSigners);
             };
 
             /**
              * Open sign dialog
              */
-            scope.selectSigner = function() {
+            $scope.selectSigner = function() {
                 signerDialog.show();
             };
 
             /**
              * Open submit docs dialog
              */
-            scope.submitDocs = function() {
+            $scope.submitDocs = function() {
                 submitDialog.show();
             };
 
-            scope.onContinueSubmit = function() {
+            $scope.onContinueSubmit = function() {
                 submitDialog.hide();
                 docService.submitSignedDocs().then(function(reslut) {
                     window.alert('Document(s) have been successfully submitted to lender.');
                 });
             };
 
-            scope.printDocs = function() {
-                var url = location.protocol + '//' + location.host + apiUri + 'packages/' + this.docService.id + '/print/',
-                    docIds = _.pluck(this.docService.selectedDocs, 'id'),
+            $scope.printDocs = function() {
+                var url = location.protocol + '//' + location.host + apiUri + 'packages/' + docService.id + '/print/',
+                    docIds = _.pluck(docService.selectedDocs, 'id'),
                     data = JSON.stringify({ docIds: docIds });
                 
                 WebViewBridge.call('print', { method: 'POST', url: url, data: data });
@@ -132,11 +131,13 @@ directive('bottomBar', [ 'docService', 'signerService', '$modal', function(docSe
             /**
              * Submit document
              */
-            scope.onSubmit = function() {
+            $scope.onSubmit = function() {
             };
-        }
+
+        },
+
     };
-}]).
+}).
 
 /**
  * signerPopover
