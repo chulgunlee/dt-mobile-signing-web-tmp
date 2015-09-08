@@ -281,6 +281,9 @@ html, body {
 
 .btn-alert-buttons {
     display: flex;
+    display: -webkit-flex;
+    display: -moz-flex;
+    display: -ms-flexbox;
     border-top: solid 1px #e5e5e5;
 }
 
@@ -292,6 +295,7 @@ html, body {
     border-right: solid 1px #e5e5e5;
     color: #007aff;
     font-size: 17px;
+    border-radius: 0 !important;
 }
 
 .btn-alert-buttons:last-child {
