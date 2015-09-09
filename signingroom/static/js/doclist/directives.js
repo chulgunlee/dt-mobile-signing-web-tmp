@@ -25,9 +25,14 @@ directive('doc', function() {
              * @param docIndexId
              * @param templateDescription
              */
-            $scope.showPreview = function(docIndexId, templateDescription) {
-                // Show loading modal
-                $location.path('/' + docIndexId + '/preview/');
+            $scope.showPreview = function(doc) {
+                
+                // check if this document is previewable. scannable but not scanned documents cannot be previewed.
+                if (!doc.scannable || doc.scanned) {
+
+                    // Show loading modal
+                    $location.path('/' + doc.id + '/preview/');
+                }
             };
 
 
@@ -36,7 +41,6 @@ directive('doc', function() {
              * @param docIndex
              */
             $scope.onDocSelected = function(docIndex) {
-                console.log('onDocSelected(' + docIndex + ')');
 
                 // Toggle doc selected status
                 $scope.doc.selected = !$scope.doc.selected;
@@ -70,6 +74,15 @@ directive('bottomBar', [ 'DocService', 'SignerService', '$modal', function(docSe
                 templateUrl: '/static/ngtemplates/select_signer_modal.html'
             });
 
+            // submit dialog
+            var submitDialog = $modal({
+                title: 'Submit Document(s)',
+                show: false,
+                placement: 'center',
+                scope: scope,
+                templateUrl: '/static/ngtemplates/submit_docs_modal.html',
+            });
+
             /**
              * Toggle signer selected status when the checkbox on signers are clicked
              * @param {string} signerType Signer type string indicates which signer is checked 
@@ -81,9 +94,9 @@ directive('bottomBar', [ 'DocService', 'SignerService', '$modal', function(docSe
             /**
              * Continue button click handler
              */
-            scope.onContinue = function() {
-                var selectedDocIds = _.pluck(this.docService.selectedDocs(), 'id'),
-                    selectedSigners = this.signerService.selectedSigners();
+            scope.onContinueSign = function() {
+                var selectedDocIds = _.pluck(this.docService.selectedDocs, 'id'),
+                    selectedSigners = this.signerService.selectedSigners;
                 console.log('selected docs = ' + selectedDocIds + ', selected signers = ' + selectedSigners);
             };
 
@@ -91,15 +104,27 @@ directive('bottomBar', [ 'DocService', 'SignerService', '$modal', function(docSe
              * Open sign dialog
              */
             scope.selectSigner = function() {
-
-                // update signer required status on select docs
-                _.each(['buyer', 'cobuyer', 'dealer'], function(signerType) {
-                    signerService[signerType].required = _.some(docService.selectedDocs(), function(doc) {
-                        return doc.requiredSigners[signerType];
-                    });
-                });
-
                 signerDialog.show();
+            };
+
+            /**
+             * Open submit docs dialog
+             */
+            scope.submitDocs = function() {
+                submitDialog.show();
+            };
+
+            scope.onContinueSubmit = function() {
+                submitDialog.hide();
+                docService.submitSignedDocs().then(function(reslut) {
+                    window.alert('Document(s) have been successfully submitted to lender.');
+                });
+            };
+
+            /**
+             * Submit document
+             */
+            scope.onSubmit = function() {
             };
         }
     };

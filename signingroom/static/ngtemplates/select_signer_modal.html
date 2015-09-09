@@ -13,7 +13,7 @@
                 <ul class="row signers-list" ng-class="'room-for-'+signers.length">
                     <li ng-repeat="signerType in ['buyer', 'cobuyer', 'dealer']" class="modal-body-wrapper signers-list-item signer-{{signer.Type.toLowerCase()}}">
                         <div class="signer">
-                            <div class="signer-selected-wrapper" ng-show="signerService[signerType].required" ng-click="onSignerSelected(signerType)">
+                            <div class="signer-selected-wrapper" ng-show="docService.isSignerRequiredBySelectedDocs(signerType)" ng-click="onSignerSelected(signerType)">
                                 <div class="roundedTwo docSelector">
                                     <input type="checkbox" value="None" disabled="disabled" id="signer-{{$index}}-cbx" ng-checked="signerService[signerType].selected">
                                     <label for="signer-{{$index}}-cbx"></label>
@@ -29,7 +29,7 @@
                 
 
                 <div class="row text-center">
-                    <button class="sign-button btn btn-lg btn-primary" ng-click="onContinue()">Continue</button>
+                    <button class="sign-button btn btn-lg btn-primary" ng-click="onContinueSign()">Continue</button>
                 </div>
 
             </div>

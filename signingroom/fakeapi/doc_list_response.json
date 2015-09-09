@@ -12,17 +12,16 @@
             "title": "eContract",
             "type": "funding",
             "signable": true,
-            "status": "not-signed",
-            "requiredSigners": {
+            "status": "signed",
+            "requiredSigners": [ "buyer", "cobuyer", "dealer" ],
+            "signStatus": {
                 "buyer": true,
                 "cobuyer": true,
-                "dealer": true
+                "dealer": true 
             },
-            "signStatus": {
-                "buyer": false,
-                "cobuyer": false,
-                "dealer": false
-            }
+            "isContract": true,
+            "scannable": false,
+            "moveable": false
         },
 
         {
@@ -31,16 +30,28 @@
             "type": "funding",
             "signable": true,
             "status": "partially-signed",
-            "requiredSigners": {
-                "buyer": true,
-                "cobuyer": true,
-                "dealer": false
-            },
+            "requiredSigners": [ "buyer", "cobuyer" ],
             "signStatus": {
                 "buyer": true,
                 "cobuyer": false,
                 "dealer": false
-            }
+            },
+            "isContract": false,
+            "scannable": false,
+            "moveable": false
+        },
+
+        {
+            "id": 0,
+            "title": "Driver License",
+            "type": "funding",
+            "signable": false,
+            "isContract": false,
+            "scannable": true,
+            "scanned": false,
+            "scanDocType": "driver-license",
+            "scanApplicants": ["buyer", "cobuyer"],
+            "moveable": true
         },
 
         {
@@ -48,17 +59,9 @@
             "title": "Notice to Co-Signer",
             "type": "other",
             "signable": false,
-            "status": "not-signed",
-            "requiredSigners": {
-                "buyer": false,
-                "cobuyer": false,
-                "dealer": false
-            },
-            "signStatus": {
-                "buyer": false,
-                "cobuyer": false,
-                "dealer": false
-            }
+            "isContract": false,
+            "scannable": false,
+            "moveable": true
         }
 
     ]

@@ -7,6 +7,7 @@ urlpatterns = patterns('',
     url(r'^packages/(?P<pkg_id>\d+)/?$', DocPackageView.as_view()),
     url(r'docs/(?P<doc_id>\d+)/preview/?$', DocPreviewView.as_view()),
     url(r'docs/(?P<doc_id>\d+)/print/?$', DocPrintView.as_view()),
+    url(r'packages/(?P<pkg_id>\d+)/submit/?$', DocPackageSubmitView.as_view()),
 
     url(r'signingroom/(?P<pkg_id>\d+)/docs/(?P<doc_id>\d+)/?$', SigningRoomInitView.as_view()),
     url(r'signingroom/(?P<pkg_id>\d+)/docs/(?P<doc_id>\d+)/signatures/(?P<signer_type>\w+)/$', SigningRoomSigView.as_view()),

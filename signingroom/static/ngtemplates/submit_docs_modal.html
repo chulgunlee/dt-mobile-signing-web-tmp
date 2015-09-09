@@ -1,0 +1,28 @@
+<div class="modal" data-keyboard="false" data-backdrop="static" id="submit-container" tabindex="-1" role="dialog">
+  <div class="modal-dialog submit-modal-dialog">
+    <div class="modal-content submit-modal-content">
+      <div class="modal-header">
+        <div class="row">
+          <div class="col-md-12 modal-header-wrapper">
+            <p class="modal-title modal-text">Submit Documents</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-body submit-modal-body">
+        <div class="row">
+          <p>The following document(s) will be sent to lender:</p>
+          <ul>
+            <li ng-repeat="doc in docService.signedDocs">{{doc.title}}</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="btn-alert-buttons">
+        <button class="btn btn-alert btn-alert-cancel" ng-click='$hide()'>Cancel</button>
+        <button class="btn btn-alert btn-alert-ok" ng-click='onContinueSubmit()'>Submit</button>
+      </div>
+    </div>
+  </div>
+</div>
+
