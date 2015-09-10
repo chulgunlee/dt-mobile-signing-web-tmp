@@ -8,7 +8,6 @@ directive('doc', function() {
 
         scope: {
             doc: '=',
-            masterIndexId: '='
         },
 
         controller: ['$scope', '$location', function($scope, $location) {
@@ -186,9 +185,43 @@ directive('signerPopover', ['$popover', '$document', '$animate', function($popov
         }
     };
 
-}]);
+}]).
 
-;
 
+/**
+ * icon-button directive
+ *
+ * Usage:
+ *
+ *   <button icon-button="ib_sign.png">Sign</button>
+ *
+ * NOTE:
+ *   The icon button is 44px wide, 44px high. 
+ *   The icon-button attribute should specify a sprite image located under /static/images/,
+ *   having the following order (each part is 44px wide):
+ *
+ *     +--------+-------+--------+
+ *     | Normal | Hover | Active |
+ *     +--------+-------+--------+
+ */
+directive('iconButton', function() {
+
+    return {
+        restrict: 'EA',
+        scope: {
+            iconButton: '@'
+        },
+
+        template: '<button class="icon-button"><ng-transclude></ng-transclude></button>',
+        transclude: true,
+        replace: true,
+
+        link: function(scope, element, attr) {
+            element.css({ 'background-image': 'url(/static/images/' + scope.iconButton + ')' });
+        },
+
+    };
+
+});
 
 
