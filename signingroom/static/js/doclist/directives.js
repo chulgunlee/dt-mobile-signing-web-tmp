@@ -58,7 +58,7 @@ directive('bottomBar', function() {
         restrict: 'E',
         scope: true,
 
-        controller: function($scope, docService, signerService, $modal) {
+        controller: function($scope, docService, signerService, $modal, $msgbox) {
 
             $scope.docService = docService;
             $scope.signerService = signerService;
@@ -70,15 +70,6 @@ directive('bottomBar', function() {
                 placement: 'center',
                 scope: $scope,
                 templateUrl: '/static/ngtemplates/select_signer_modal.html'
-            });
-
-            // submit dialog
-            var submitDialog = $modal({
-                title: 'Submit Document(s)',
-                show: false,
-                placement: 'center',
-                scope: $scope,
-                templateUrl: '/static/ngtemplates/submit_docs_modal.html',
             });
 
             /**
@@ -109,13 +100,15 @@ directive('bottomBar', function() {
              * Open submit docs dialog
              */
             $scope.submitDocs = function() {
-                submitDialog.show();
-            };
-
-            $scope.onContinueSubmit = function() {
-                submitDialog.hide();
-                docService.submitSignedDocs().then(function(reslut) {
-                    window.alert('Document(s) have been successfully submitted to lender.');
+                $msgbox.confirm({
+                    templateUrl: '/static/ngtemplates/submit_docs_confirm.html',
+                    scope: $scope,
+                    title: 'Submit Documents',
+                    ok: 'Submit'
+                }).then(function() {
+                    docService.submitSignedDocs().then(function(reslut) {
+                        $msgbox.alert('Document(s) have been successfully submitted to lender.');
+                    });
                 });
             };
 
@@ -126,13 +119,6 @@ directive('bottomBar', function() {
                 
                 WebViewBridge.call('print', { method: 'POST', url: url, data: data });
             };
-
-            /**
-             * Submit document
-             */
-            $scope.onSubmit = function() {
-            };
-
         },
 
     };
