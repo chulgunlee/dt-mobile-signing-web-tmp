@@ -28,6 +28,10 @@ factory('Doc', function(DOC_STATUS_MAPPING, SIGNER_TYPE_MAPPING, signerService) 
             return this.signable && this.status == 'submitted';
         },
 
+        get isPlaceholder() {
+            return this.isExternal && this.status == 'initial';
+        },
+
         /**
          * Get the name of specified signer
          * @param {String} signerType 'buyer'|'cobuyer'|'dealer'
@@ -104,7 +108,7 @@ factory('docService', function($q, $http, Doc, signerService, DOC_STATUS_MAPPING
          * @return {Object} eContract document, or null if not exists
          */
         get contractDoc() {
-            var contracts = this.docs.filter(function(doc) { return doc.isContract });
+            var contracts = this.docs.filter(function(doc) { return doc.docType == 'contract' });
             return (contracts.length >= 1) ? contracts[0] : null;
         },
 
@@ -128,7 +132,7 @@ factory('docService', function($q, $http, Doc, signerService, DOC_STATUS_MAPPING
          * @return {Array} required for funding document list
          */
         get fundingDocs() {
-            return this.docs.filter(function(doc) { return doc.type == 'funding' });
+            return this.docs.filter(function(doc) { return doc.requiredForFunding });
         },
 
         /**
@@ -136,7 +140,7 @@ factory('docService', function($q, $http, Doc, signerService, DOC_STATUS_MAPPING
          * @return {Array} others document list
          */
         get otherDocs() {
-            return this.docs.filter(function(doc) { return doc.type == 'other' });
+            return this.docs.filter(function(doc) { return !doc.requiredForFunding });
         },
 
         /**
@@ -218,7 +222,7 @@ factory('signerService', function(Signer) {
         init: function(signers) {
             this.buyer = new Signer(signers.buyer, 'buyer');
             this.cobuyer = new Signer(signers.cobuyer, 'cobuyer');
-            this.dealer = new Signer(signers.dealer, 'dealer');
+            this.dealer = new Signer('Dealer', 'dealer');
         },
 
         /**

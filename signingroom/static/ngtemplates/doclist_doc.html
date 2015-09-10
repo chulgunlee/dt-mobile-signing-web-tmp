@@ -4,7 +4,7 @@
             {{doc.statusText}}
         </div>
     </signer-popover>
-    <div ng-if="!(doc.scannable && !doc.scanned)" class="doc-selected-wrapper" ng-click="onDocSelected(doc.id);$event.stopPropagation()">
+    <div ng-if="!doc.isPlaceholder" class="doc-selected-wrapper" ng-click="onDocSelected(doc.id);$event.stopPropagation()">
         <div class="roundedTwo docSelector">
             <input type="checkbox" value="None" id="doc-{{$index}}-cbx" name="doc-{{$index}}-cbx" disabled="disabled" ng-checked="doc.selected" />
             <label for="doc-{{$index}}-cbx"></label>
@@ -12,7 +12,7 @@
     </div>
 
     <div class="doc-body" id="doc-body-{{doc.id}}">
-        <p class="text-center doc-title"><strong>{{doc.title}}</strong></p>
+        <p class="text-center doc-title"><strong>{{doc.templateName}}</strong></p>
     </div>
 
 </div>
