@@ -58,19 +58,10 @@ directive('bottomBar', function() {
         restrict: 'E',
         scope: true,
 
-        controller: function($scope, docService, signerService, $modal, $msgbox) {
+        controller: function($scope, docService, signerService, $modal, $msgbox, $commonDialog) {
 
             $scope.docService = docService;
             $scope.signerService = signerService;
-
-            // signer selecting modal dialog
-            var signerDialog = $modal({ 
-                title: 'Select Signer(s)',
-                show: false,
-                placement: 'center',
-                scope: $scope,
-                templateUrl: '/static/ngtemplates/select_signer_modal.html'
-            });
 
             /**
              * Toggle signer selected status when the checkbox on signers are clicked
@@ -81,19 +72,21 @@ directive('bottomBar', function() {
             };
 
             /**
-             * Continue button click handler
-             */
-            $scope.onContinueSign = function() {
-                var selectedDocIds = _.pluck(docService.selectedDocs, 'id'),
-                    selectedSigners = signerService.selectedSigners;
-                console.log('selected docs = ' + selectedDocIds + ', selected signers = ' + selectedSigners);
-            };
-
-            /**
              * Open sign dialog
              */
             $scope.selectSigner = function() {
-                signerDialog.show();
+                $commonDialog({
+                    title: 'Select Signer(s)',
+                    ok: 'Continue',
+                    cancel: 'Cancel',
+                    width: 526,
+                    templateUrl: '/static/ngtemplates/select_signer_modal.html',
+                    scope: $scope,
+                }).then(function() {
+                    var selectedDocIds = _.pluck(docService.selectedDocs, 'id'),
+                        selectedSigners = signerService.selectedSigners;
+                    console.log('selected docs = ' + selectedDocIds + ', selected signers = ' + selectedSigners);
+                });
             };
 
             /**
