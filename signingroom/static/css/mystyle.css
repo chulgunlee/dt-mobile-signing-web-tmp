@@ -256,33 +256,32 @@ html, body {
 }
 
 
-/* submit to lender dialog */
-.submit-modal-dialog {
+/**
+ * $msgbox styles
+ */
+
+.msgbox-modal-dialog {
     width: 320px;
 }
 
-.submit-modal-dialog .modal-header {
+.msgbox-modal-dialog .modal-header {
     border-bottom: 0;
 }
 
-.submit-modal-dialog .modal-body {
+.msgbox-modal-dialog .modal-body {
     padding: 15px 45px;
 }
 
-.submit-modal-dialog .modal-body ul {
+.msgbox-modal-dialog .modal-body ul {
     list-style-type: disc;
 }
 
-.submit-modal-dialog .modal-body li {
+.msgbox-modal-dialog .modal-body li {
     margin-left: 30px;
 }
 
 
-/**
- * iOS7 style alert dialog
- */
-
-.btn-alert-buttons {
+.btn-msgbox-buttons {
     display: flex;
     display: -webkit-flex;
     display: -moz-flex;
@@ -290,7 +289,7 @@ html, body {
     border-top: solid 1px #e5e5e5;
 }
 
-.btn-alert {
+.btn-msgbox {
     border: 0;
     background: transparent;
     height: 44px;
@@ -301,11 +300,11 @@ html, body {
     border-radius: 0 !important;
 }
 
-.btn-alert-buttons:last-child {
+.btn-msgbox-buttons:last-child {
     border-right: 0;
 }
 
-.btn-alert.btn-alert-ok {
+.btn-msgbox.btn-msgbox-ok {
     font-weight: bold;
 }
 

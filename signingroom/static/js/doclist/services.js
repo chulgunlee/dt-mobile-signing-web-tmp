@@ -241,6 +241,86 @@ factory('signerService', function(Signer) {
     };
 
     return service;
+}).
+
+
+/**
+ * common services
+ */
+
+/**
+ * $msgbox
+ *
+ * Usage:
+ *
+ *   $msgbox.alert("message", "title"(optional), "ok title").then(...);
+ *   $msgbox.alert({ templateUrl, title, ok, scope }).then(...);
+ *   $msgbox.confirm("message", "title", "ok title", "cancel title").then(...);
+ *   $msgbox.alert({ templateUrl, title, ok, cancel, scope }).then(...);
+ * 
+ * If templateUrl requires scope, use an options object to specify the scope object.
+ *   TODO: $msgbox.prompt
+ */
+provider('$msgbox', function() {
+
+    var defaults = {
+        type: 'alert',
+        msg: '',
+        title: null,
+        ok: 'OK',
+        cancel: 'Cancel',
+        templateUrl: null,
+        scope: null
+    };
+
+    this.$get = function($rootScope, $q, $modal, $sce) {
+
+        var msgbox = function(options) {
+
+            var scope = options.scope && options.scope.$new() || $rootScope.$new(),
+                deferred = $q.defer();
+
+            _.defaults(options, defaults);
+
+            scope.msgboxType = options.type;
+            scope.okLabel = options.ok;
+            scope.cancelLabel = options.cancel;
+            scope.callback = function(result) {
+                if (result) deferred.resolve();
+                else deferred.reject();
+            };
+            if (options.templateUrl) {
+                scope.templateUrl = options.templateUrl;
+            } else {
+                scope.msg = options.msg;
+            }
+
+            var dialog = $modal({
+                title: options.title,
+                placement: 'center',
+                scope: scope,
+                templateUrl: '/static/ngtemplates/msgbox.html'
+            });
+
+            return deferred.promise;
+        };
+
+        return {
+            alert: function(options) {
+                if (typeof options == "string") {
+                    options = { msg: options, title: arguments[1], ok: arguments[2] };
+                }
+                options.type = 'alert';
+                return msgbox(options);
+            },
+
+            confirm: function(options) {
+                if (typeof options == "string") {
+                    options = { msg: options, title: arguments[1], ok: arguments[2], cancel: arguments[3] };
+                }
+                options.type = 'confirm';
+                return msgbox(options);
+            },
+        };
+    };
 });
-
-
