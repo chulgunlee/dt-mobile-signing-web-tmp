@@ -1,0 +1,18 @@
+<div class="modal common-dialog" data-keyboard="false" data-backdrop="static" tabindex="-1" role="dialog">
+    <div class="modal-dialog" ng-style="{ 'width': width + 'px' }">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="row">
+                    <div class="col-md-12 modal-header-wrapper">
+                        <button class="btn btn-link pull-left" ng-click="callback(false);$hide()">Cancel</button>
+                        <button class="btn btn-link pull-right" ng-click="callback(true);$hide()">Continue</button>
+                        <p class="modal-title modal-text">Select Signer(s)</p>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-body" ng-include="templateUrl">
+            </div>
+        </div>
+    </div>
+</div>
+

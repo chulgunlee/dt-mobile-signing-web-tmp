@@ -273,7 +273,7 @@ provider('$msgbox', function() {
         scope: null
     };
 
-    this.$get = function($rootScope, $q, $modal, $sce) {
+    this.$get = function($rootScope, $q, $modal) {
 
         var msgbox = function(options) {
 
@@ -323,4 +323,59 @@ provider('$msgbox', function() {
             },
         };
     };
+}).
+
+
+/**
+ * $commonDialog
+ *
+ * Usage:
+ *
+ * $commonDialog(options)
+ * 
+ * TODO:
+ * - cancen dialog by pressing Esc or clicking outside won't invoke deferred.reject()
+ */
+provider('$commonDialog', function() {
+
+    var defaults = {
+        title: null,
+        ok: 'Continue',
+        cancel: 'Cancel',
+        templateUrl: null,
+        width: 600,
+        scope: null
+    };
+
+    this.$get = function($rootScope, $q, $modal) {
+        
+        var CommonDialogFactory = function(options) {
+
+            var scope = options.scope && options.scope.$new() || $rootScope.$new(),
+                deferred = $q.defer();
+
+            // deal with default values
+            _.defaults(options, defaults);
+
+            // copy properties to scope
+            _.extend(scope, _.pick(options, 'ok', 'cancel', 'templateUrl', 'width'));
+            scope.callback = function(result) {
+                if (result) deferred.resolve();
+                else deferred.reject();
+            };
+
+            var dialog = $modal({
+                title: options.title,
+                placement: 'center',
+                scope: scope,
+                templateUrl: '/static/ngtemplates/common_dialog.html'
+            });
+
+            return deferred.promise;
+        };
+
+        return CommonDialogFactory;
+        
+    };
+
 });

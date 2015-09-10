@@ -166,14 +166,6 @@ html, body {
     top: 20%;
 }
 
-.modal-header button.btn-link {
-    margin: 0;
-    padding: 0;
-    position: absolute;
-    left: 20px;
-    top: 0;
-}
-
 .modal-header .modal-title {
     text-align: center;
     font-weight: bold;
@@ -181,17 +173,8 @@ html, body {
 
 /* signer selection modal */
 
-#signers-container .modal-dialog {
-    width: 526px !important;
-}
-
-#signers-container .modal-content {
-    border-radius: 3px !important;
-}
-
 .signer-modal-body {
     padding: 35px 35px 35px 28px;
-    background: #F2F6F9;
 }
 
 .signers-list {
@@ -253,6 +236,27 @@ html, body {
 .docpreview-content {
     padding: 14px 22px;
     text-align: center;
+}
+
+/**
+ * Common dialog
+ */
+.common-dialog .modal-content {
+    background: #F2F6F9;            /* make the modal body grey */
+    border-radius: 3px;             /* reduce border radius to fit the design */
+}
+
+.common-dialog .modal-header {
+    background: #fff;               /* overlay the dialog title back to white */
+    border-radius: 3px 3px 0 0;     /* cut round corners (otherwise white header will show sharp right angle over grey body */
+}
+.common-dialog .modal-body {
+    padding: 0;                     /* clear the padding; leave the margin/padding to content template of $commonDialog */
+}
+
+.common-dialog .modal-header .btn-link {
+    margin: 0 !important;
+    padding: 0 10px !important;     /* adjust position of the butons */
 }
 
 
