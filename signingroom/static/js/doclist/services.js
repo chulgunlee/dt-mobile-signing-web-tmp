@@ -48,7 +48,7 @@ factory('Doc', function(DOC_STATUS_MAPPING, SIGNER_TYPE_MAPPING, signerService) 
 
 
 /* Data Services */
-factory('docService', function($q, $http, Doc, signerService, DOC_STATUS_MAPPING, SIGNER_TYPE_MAPPING) {
+factory('docService', function($q, $http, Doc, signerService, docTypeService, DOC_STATUS_MAPPING, SIGNER_TYPE_MAPPING) {
 
     var service = {
 
@@ -71,6 +71,8 @@ factory('docService', function($q, $http, Doc, signerService, DOC_STATUS_MAPPING
                 
                 // store signer data in signerService
                 signerService.init(data.signers);
+
+                docTypeService.init();
             });
 
             // extract data from response and save it to docService
@@ -205,7 +207,7 @@ factory('Signer', function(SIGNER_TYPE_MAPPING) {
 
 factory('signerService', function(Signer) {
     
-    service = {
+    var service = {
 
         buyer: null,
         cobuyer: null,
@@ -237,6 +239,34 @@ factory('signerService', function(Signer) {
     };
 
     return service;
+}).
+
+
+factory('docTypeService', function($http) {
+    var service = {
+        
+        init: function() {
+            
+            $http.get(apiUri + '/doctypes/').success(function(result) {
+                service.docTypes = result.docTypes;
+            });
+        },
+
+        /**
+         * Returns the applicants of specified docType
+         */
+        getApplicantsByDocTypeId: function(id) {
+            var docType = _.find(service.docTypes, function(docType) {
+                return docType.id == id;
+            });
+
+            if (docType && docType.applicants) return docType.applicants;
+            else return null;
+        },
+    }; 
+
+    return service;
+    
 }).
 
 

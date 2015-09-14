@@ -42,6 +42,11 @@ class DocPrintView(View):
         pass
 
 
+class DocTypeListView(APIView):
+    def get(self, request):
+
+        doc_pkg = json.load(open(os.path.dirname(__file__) + '/doc_type_list_response.json'))
+        return Response(doc_pkg)
 
 class SigningRoomInitView(View):
 

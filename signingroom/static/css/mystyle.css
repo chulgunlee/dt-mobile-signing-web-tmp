@@ -233,6 +233,24 @@ html, body {
 .signer-badge {
 }
 
+/* add document modal */
+.add-document-body {
+    padding: 35px 35px 20px;
+}
+
+.doc-type-selector {
+    height: 45px;
+    width: 100%;
+    text-align: left;
+    padding: 6px 20px;
+    margin-bottom: 15px;
+}
+
+.doc-type-selector .caret {
+    margin-top: 10px;
+    float: right;
+}
+
 /* document preview */
 
 #docpreview {
