@@ -12,7 +12,8 @@
     </div>
 
     <div class="doc-body" id="doc-body-{{doc.id}}">
-        <p class="text-center doc-title"><strong>{{doc.templateName}}</strong></p>
+        <p class="text-center doc-title" ng-if="!doc.isPlaceholder"><strong>{{doc.templateName}}</strong></p>
+        <p class="text-center doc-placeholder-title" ng-if="doc.isPlaceholder"><strong>{{doc.templateName}}</strong></p>
     </div>
 
 </div>

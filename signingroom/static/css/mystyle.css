@@ -1,23 +1,25 @@
 html, body {
-    background: #f2f6f9;
+    background: #f3f6f8;
     -webkit-user-select: none;          /* disable text seleting */
     -webkit-tap-highlight-color: rgba(0,0,0,0);
 
 }
 
 #doclist {
+    padding-top: 5px;
     padding-bottom: 84px;           /* to display margin at the bottom which partially covered by the bottom bar */
 }
 
 .doclist-header {
-    margin: 30px 19px 19px;
+    margin: 30px 15px 0 15px;
     min-height: 34px;
-    border-bottom: solid 1px #dfe4e8;
+    border-bottom: solid 1px #dee6ea;
     box-shadow: 0 1px 0 #f2f6f7;
     font-weight: bold;
 }
 
 .doclist-container {
+    margin-left: -5px;
 }
 
 .doclist-bottom-bar {
@@ -25,20 +27,19 @@ html, body {
     bottom: 0;
     width: 100%;
     height: 64px;
-    background: #3a3a3a;
+    background: #3f3f40;
     left: 0;
 }
 
 .document {
     position: relative;
     background: #fff;
-    border: solid 1px #e5ebed;
-    border-radius: 2px;
-    box-shadow: 0 1px 1px rgba(221, 222, 225, .8);
-    width: 169px;
-    height: 197px;
-    margin-bottom: 28px;
-    margin-left: 34px;
+    border: solid 1px #dee6ea;
+    border-radius: 3px;
+    width: 180px;
+    height: 185px;
+    margin-top: 15px;
+    margin-left: 20px;
     overflow: hidden;
     cursor: pointer;
 }
@@ -48,18 +49,18 @@ html, body {
 .status-badge {
     position: absolute;
     display: block;
-    width: 128px;
-    height: 128px;
+    width: 106px;
+    height: 106px;
     text-align: center;
     transform: rotate(-45deg);
     -webkit-transform: rotate(-45deg);
     transform-origin: 0 0;
     -webkit-transform-origin: 0 0;
-    left: -90px;
+    left: -75px;
 }
 
 .status-badge.signed {
-    background: #20AC52;
+    background: #2cab56;
 }
 
 .status-badge.not-signed {
@@ -67,19 +68,19 @@ html, body {
 }
 
 .status-badge.partially-signed {
-    background: #FED100;
+    background: #fccf12;
 }
 
 .status-badge.submitted {
-    background: #484848;
+    background: #3f3f40;
 }
 
 .status-badge .status {
     position: absolute;
     width: 100%;
-    padding: 0 20px 8px;
+    padding: 0 20px 4px;
     line-height: 14px;
-    font-size: 14px;
+    font-size: 12px;
     left: 0;
     bottom: 0;
     color: #fff;
@@ -88,7 +89,21 @@ html, body {
 
 /* document body */
 .doc-body {
-    padding: 80px 10px 10px;
+    padding: 30px 15px;
+}
+
+.doc-body .doc-title {
+    margin-top: 30px;
+    font-size: 13px;
+    line-height: 15px;
+    color: #2e95d2;
+}
+
+.doc-body .doc-placeholder-title {
+    margin-top: 12px;
+    font-size: 13px;
+    color: #231f20;
+    line-height: 15px;
 }
 
 /* bottom bar */
