@@ -368,6 +368,7 @@ provider('$commonDialog', function() {
         title: null,
         ok: 'Continue',
         cancel: 'Cancel',
+        okEnabled: null,        // function, a predicate indicates whether ok button should be enabled
         templateUrl: null,
         width: 600,
         scope: null
@@ -384,7 +385,7 @@ provider('$commonDialog', function() {
             _.defaults(options, defaults);
 
             // copy properties to scope
-            _.extend(scope, _.pick(options, 'ok', 'cancel', 'templateUrl', 'width'));
+            _.extend(scope, _.pick(options, 'ok', 'cancel', 'templateUrl', 'width', 'okEnabled'));
             scope.callback = function(result) {
                 if (result) deferred.resolve();
                 else deferred.reject();

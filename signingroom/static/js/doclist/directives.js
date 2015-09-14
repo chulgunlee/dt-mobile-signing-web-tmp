@@ -119,6 +119,7 @@ directive('bottomBar', function() {
 
             $scope.onDocTypeSelect = function(id) {
                 $scope.selectedDocTypeId = id;
+                $scope.selectedApplicantType = null;
             };
 
             $scope.onApplicantTypeSelect = function(type) {
@@ -136,6 +137,11 @@ directive('bottomBar', function() {
                     width: 500,
                     templateUrl: '/static/ngtemplates/add_document_modal.html',
                     scope: $scope,
+
+                    // only enable "Continue" button when proper values are selected
+                    okEnabled: function() {
+                        return !!$scope.selectedDocTypeId && (docTypeService.getApplicantsByDocTypeId($scope.selectedDocTypeId) == null || $scope.selectedApplicantType);
+                    },
                 }).then(function() {
                     console.log($scope.selectedDocTypeId + ',' + $scope.selectedApplicantType);
                 });

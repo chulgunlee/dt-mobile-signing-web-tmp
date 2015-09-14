@@ -4,8 +4,8 @@
             <div class="modal-header">
                 <div class="row">
                     <div class="col-md-12 modal-header-wrapper">
-                        <button class="btn btn-link pull-left" ng-click="callback(false);$hide()">Cancel</button>
-                        <button class="btn btn-link pull-right" ng-click="callback(true);$hide()">Continue</button>
+                        <button class="btn btn-link pull-left" ng-click="callback(false);$hide()">{{cancel}}</button>
+                        <button class="btn btn-link pull-right" ng-click="callback(true);$hide()" ng-disabled="!okEnabled()">{{ok}}</button>
                         <p class="modal-title modal-text">{{title}}</p>
                     </div>
                 </div>
