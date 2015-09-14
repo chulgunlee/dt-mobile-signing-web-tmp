@@ -16,10 +16,6 @@ factory('Doc', function(DOC_STATUS_MAPPING, SIGNER_TYPE_MAPPING, signerService) 
 
     Doc.prototype = {
 
-        get statusText() {
-            return DOC_STATUS_MAPPING[this.status];
-        },
-
         get signed() {
             return this.signable && this.status == 'signed';
         },
@@ -32,16 +28,12 @@ factory('Doc', function(DOC_STATUS_MAPPING, SIGNER_TYPE_MAPPING, signerService) 
             return this.isExternal && this.status == 'initial';
         },
 
-        get applicantName() {
-            return this.scanApplicant ? SIGNER_TYPE_MAPPING[this.scanApplicant] : null;
-        },
-
         /**
          * Get the name of specified signer
          * @param {String} signerType 'buyer'|'cobuyer'|'dealer'
          */
         signerName: function(signerType) {
-            return signerService[signerType].name + ((signerType == 'dealer') ? '' : ' (' + signerService[signerType].typeName + ')');
+            return signerService[signerType].name + ((signerType == 'dealer') ? '' : ' (' + signerService[signerType].type + ')');
         },
 
         signerSigned: function(signerType) {
@@ -204,7 +196,6 @@ factory('Signer', function(SIGNER_TYPE_MAPPING) {
     function Signer(name, type) {
         this.name = name;
         this.type = type;
-        this.typeName = SIGNER_TYPE_MAPPING[type];
         this.selected = false;
     }
 

@@ -1,11 +1,14 @@
 <div class="popover signstatus-popover">
     <h3 class="popover-title">Status</h3>
     <div class="popover-content">
-        <div class="signstatus-row clearfix" ng-repeat="signerId in doc.requiredSigners">
-            <div class="signstatus-signer pull-left">{{doc.signerName(signerId)}}</div>
+        <div class="signstatus-row clearfix" ng-repeat="signerType in doc.requiredSigners">
+            <div class="signstatus-signer pull-left">
+                {{signerName(signerType)}}
+                <span class="signstatus-signer-type" ng-if="signerType != 'dealer'">({{signerType | signerTypeName }})</span>
+            </div>
             <div class="signstatus-status pull-right">
-                <span ng-if="doc.signerSigned(signerId)" class="signstatus-signed">Signed</span>
-                <span ng-if="!doc.signerSigned(signerId)" class="signstatus-notsigned">Not Signed</span>
+                <span ng-if="doc.signerSigned(signerType)" class="signstatus-signed">Signed</span>
+                <span ng-if="!doc.signerSigned(signerType)" class="signstatus-notsigned">Not Signed</span>
             </div>
         </div>
     </div>

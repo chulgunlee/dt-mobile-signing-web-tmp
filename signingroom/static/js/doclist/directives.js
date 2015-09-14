@@ -126,6 +126,12 @@ directive('signerPopover', ['$popover', '$document', '$animate', function($popov
     return {
         restrict: 'EA',
         scope: true,
+        controller: function($scope, signerService) {
+            $scope.signerName = function(signerType) {
+                return signerService[signerType].name;
+            };
+        },
+
         link: function(scope, element, attr) {
 
             // popover options
