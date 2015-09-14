@@ -9,8 +9,8 @@ constant('DOC_STATUS_MAPPING', {
 }).
 
 constant('SIGNER_TYPE_MAPPING', {
-    buyer: 'Buyer',
-    cobuyer: 'Co-Buyer',
+    buyer: 'Applicant',
+    cobuyer: 'Co-applicant',
     dealer: 'Dealer'
 });
 

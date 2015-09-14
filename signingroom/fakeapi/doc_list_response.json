@@ -62,7 +62,7 @@
             "signable": false,
             "status": "initial",
             "isExternal": true,
-            "scanApplicants": ["buyer", "cobuyer"]
+            "scanApplicant": "buyer"
         },
 
         {

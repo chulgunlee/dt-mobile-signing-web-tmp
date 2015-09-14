@@ -32,6 +32,10 @@ factory('Doc', function(DOC_STATUS_MAPPING, SIGNER_TYPE_MAPPING, signerService) 
             return this.isExternal && this.status == 'initial';
         },
 
+        get applicantName() {
+            return this.scanApplicant ? SIGNER_TYPE_MAPPING[this.scanApplicant] : null;
+        },
+
         /**
          * Get the name of specified signer
          * @param {String} signerType 'buyer'|'cobuyer'|'dealer'
@@ -43,6 +47,7 @@ factory('Doc', function(DOC_STATUS_MAPPING, SIGNER_TYPE_MAPPING, signerService) 
         signerSigned: function(signerType) {
             return this.signStatus[signerType];
         },
+
 
     };
 

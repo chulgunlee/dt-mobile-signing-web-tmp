@@ -94,6 +94,7 @@ html, body {
 
 .doc-body .doc-title {
     margin-top: 30px;
+    margin-bottom: 2px;
     font-size: 13px;
     line-height: 15px;
     color: #2e95d2;
@@ -101,9 +102,15 @@ html, body {
 
 .doc-body .doc-placeholder-title {
     margin-top: 12px;
+    margin-bottom: 2px;
     font-size: 13px;
     color: #231f20;
     line-height: 15px;
+}
+
+.doc-body .doc-applicant-name {
+    font-size :13px;
+    color: #a1a1a1;
 }
 
 /* bottom bar */
