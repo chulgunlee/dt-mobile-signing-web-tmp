@@ -320,15 +320,35 @@ html, body {
 
 .common-dialog .modal-header {
     background: #fff;               /* overlay the dialog title back to white */
+    height: 45px;
+    padding: 12px;
     border-radius: 3px 3px 0 0;     /* cut round corners (otherwise white header will show sharp right angle over grey body */
 }
+
+.common-dialog .modal-header .modal-title {
+    color: #231f20;
+    font-size: 14px;
+    font-weight: 500;
+}
+
 .common-dialog .modal-body {
     padding: 0;                     /* clear the padding; leave the margin/padding to content template of $commonDialog */
 }
 
+/* buttons */
 .common-dialog .modal-header .btn-link {
     margin: 0 !important;
     padding: 0 10px !important;     /* adjust position of the butons */
+    color: #2e95d2;
+    font-size: 14px;
+}
+
+.common-dialog .modal-header .btn-link:hover {
+    text-decoration: none;
+}
+
+.common-dialog .modal-header .btn-link[disabled] {
+    color: #c7cfd3 !important;
 }
 
 
