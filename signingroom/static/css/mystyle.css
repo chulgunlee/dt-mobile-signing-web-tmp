@@ -409,15 +409,20 @@ html, body {
     height: 44px;
     border: 0;
     background-color: transparent;
-    background-position: 0 0;
+    background-position-x: 0;
     background-repeat: no-repeat;
     text-indent: -1000px;
 }
 
-.icon-button:hover {
-    background-position: -44px 0;
+.icon-button[disabled] {
+    background-position-x: -44px;
 }
 
 .icon-button:active {
-    background-position: -88px 0;
+    background-position-x: -88px;
 }
+
+.icon-button:hover {
+    background-position-x: -132px;
+}
+

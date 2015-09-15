@@ -1,5 +1,5 @@
 <div class="doclist-bottom-bar">
-    <button class="btn btn-primary" ng-click="addDocument()"><span class="glyphicon glyphicon-plus"></span>Add Document</button>
+    <button class="btn btn-primary pull-left" ng-click="addDocument()"><span class="glyphicon glyphicon-plus"></span>Add Document</button>
     <button class="btn btn-primary pull-right" ng-disabled="!docService.hasSelected" ng-click="printDocs()">Print</button>
     <button class="btn btn-primary pull-right" ng-disabled="docService.requiredSignersInSelectedDocs.length == 0" ng-click="selectSigner()"><span class="glyphicon glyphicon-pencil"></span>Sign</button>
     <button class="btn btn-success pull-right" ng-disabled="!docService.contractSigned" ng-click="submitDocs()">

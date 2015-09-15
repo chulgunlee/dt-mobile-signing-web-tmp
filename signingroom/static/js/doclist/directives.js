@@ -212,23 +212,36 @@ directive('signerPopover', ['$popover', '$document', '$animate', function($popov
  *
  * Usage:
  *
- *   <button icon-button="ib_sign.png">Sign</button>
+ *   <button icon-button="ib_sign.png" width="44" height="44">Sign</button>
+ *   <button icon-button="ib_sign.png:44">Sign</button>
  *
  * NOTE:
- *   The icon button is 44px wide, 44px high. 
+ *   The icon button is 44px wide, 44px high by default.  `width` and `height` parameters are optional.
  *   The icon-button attribute should specify a sprite image located under /static/images/,
- *   having the following order (each part is 44px wide):
+ *   having the following order (each part is 44px wide, no matter what actual dimension is):
  *
- *     +--------+-------+--------+
- *     | Normal | Hover | Active |
- *     +--------+-------+--------+
+ *     +--------+----------+--------+-------+
+ *     | Normal | Disabled | Active | Hover |
+ *     +--------+----------+--------+-------+
+ *
+ *   The top-left corner of the sprites are aligned with the top-left corner of the button,
+ *   despite the actual size of the button may vary.
+ *   The sprite designer should place the icon properly to make sure it is centered in the button.
+ *
+ *   If multiple icons are merged into one sprite, they must be arranged from x=0, one icon per line.
+ *   Specify y coordinate (in px) after the filename, e.g. "ib_sign.png:44"
  */
 directive('iconButton', function() {
+
+    var standardWidth = 44,
+        standardHeight = 44;
 
     return {
         restrict: 'EA',
         scope: {
-            iconButton: '@'
+            iconButton: '@',
+            width: '@',
+            height: '@',
         },
 
         template: '<button class="icon-button"><ng-transclude></ng-transclude></button>',
@@ -236,7 +249,24 @@ directive('iconButton', function() {
         replace: true,
 
         link: function(scope, element, attr) {
-            element.css({ 'background-image': 'url(/static/images/' + scope.iconButton + ')' });
+            var parts = scope.iconButton.split(':');
+            scope.iconPath = parts[0];
+            scope.iconYPos = parts[1];
+
+            var css = { 'background-image': 'url(/static/images/' + scope.iconPath + ')' };
+            if (scope.iconYPos) {
+                css['background-position-y'] = '-' + scope.iconYPos + 'px';
+            }
+
+            if (scope.width) {
+                css['width'] = scope.width + 'px';
+            }
+            
+            if (scope.height) {
+                css['height'] = scope.height + 'px';
+            }
+
+            element.css(css);
         },
 
     };
