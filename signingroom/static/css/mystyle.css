@@ -22,15 +22,6 @@ html, body {
     margin-left: -5px;
 }
 
-.doclist-bottom-bar {
-    position: fixed;
-    bottom: 0;
-    width: 100%;
-    height: 64px;
-    background: #3f3f40;
-    left: 0;
-}
-
 .document {
     position: relative;
     background: #fff;
@@ -115,7 +106,13 @@ html, body {
 
 /* bottom bar */
 .doclist-bottom-bar {
-    padding: 10px;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    height: 60px;
+    background: #3f3f40;
+    left: 0;
+    padding: 7px 14px;
     z-index: 1000;
 }
 
