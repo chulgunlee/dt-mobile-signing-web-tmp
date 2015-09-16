@@ -104,6 +104,12 @@ html, body {
     color: #a1a1a1;
 }
 
+.doc-btn-more {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+}
+
 /* bottom bar */
 .doclist-bottom-bar {
     position: fixed;
@@ -135,7 +141,7 @@ html, body {
 
 .signstatus-popover {           /* position hack for popover */
     margin-left: 170px;
-    margin-top: 150px !important;
+    margin-top: 140px !important;
 }
 
 .signstatus-popover-mask {
@@ -175,8 +181,56 @@ html, body {
     border-bottom: none;
 }
 
+/* "more" popover */
+
+.more-popover {
+    width: 180px !important;
+    padding: 0 !important;
+    border-radius: 3px !important;
+    border: 1px solid #dee6ea;          /* menu border */
+    box-shadow: none;
+    -webkit-box-shadow: none;
+    margin-left: 50px !important;       /* move the arrow to left side; use with (".more-popover .arrow").margin-left */
+}
+
+.more-popover .popover-content {
+    padding: 0;
+}
+
+.more-popover .arrow {
+    border-top-color: #dee6ea !important;       /* hack the border color of the arrow */
+    margin-left: -60px !important;              /* move the arrow to left side of the menu; use with (".more-popover").margin-left */
+}
+
+.more-popover .more-menu {
+    margin-bottom: 0 !important;        /* remove extra space after the last menu item */
+}
+
+.more-popover .more-menu>li.more-menu-item {
+    height: 45px;
+    padding: 15px 20px;
+    border-bottom: solid 1px #dee6ea;       /* menu item separater */
+    cursor: pointer;
+    font-size: 13px;
+    color: #2e95d2;
+}
+
+.more-popover .more-menu>li.more-menu-item:last-child {
+    border-bottom: 0;
+}
+
+.more-popover .more-menu>li.more-menu-item>a {
+    color: #2e95d2;
+}
+
+.more-popover .more-menu>li.more-menu-item>a:hover {
+    color: #2e95d2;
+    text-decoration: none;
+}
+
+
 /* overwrite bootstrap popover setup */
-.popover {
+.signstatus-popover.popover {
     max-width: 400px !important;
 }
 

@@ -28,6 +28,10 @@ factory('Doc', function(DOC_STATUS_MAPPING, SIGNER_TYPE_MAPPING, signerService) 
             return this.isExternal && this.status == 'initial';
         },
 
+        get isContract() {
+            return this.docType == 'contract';
+        },
+
         /**
          * Get the name of specified signer
          * @param {String} signerType 'buyer'|'cobuyer'|'dealer'
@@ -107,7 +111,7 @@ factory('docService', function($q, $http, Doc, signerService, docTypeService, DO
          * @return {Object} eContract document, or null if not exists
          */
         get contractDoc() {
-            var contracts = this.docs.filter(function(doc) { return doc.docType == 'contract' });
+            var contracts = this.docs.filter(function(doc) { return doc.isContract });
             return (contracts.length >= 1) ? contracts[0] : null;
         },
 

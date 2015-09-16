@@ -17,5 +17,9 @@
         <p class="text-center doc-applicant-name" ng-if="doc.scanApplicant">{{doc.scanApplicant | signerTypeName }}</p>
     </div>
 
+    <more-popover class="doc-btn-more" ng-click="$event.stopPropagation()" ng-hide="doc.isContract || doc.isPlaceholder">
+        <button icon-button="icn-more" height="30">More</button>
+    </more-popover>
+
 </div>
 

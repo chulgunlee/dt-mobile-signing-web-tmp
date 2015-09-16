@@ -34,6 +34,9 @@ directive('doc', function() {
                 }
             };
 
+            $scope.showMoreMenu = function(doc) {
+                console.log(doc.id);
+            };
 
             /**
              *
@@ -205,6 +208,28 @@ directive('signerPopover', ['$popover', '$document', '$animate', function($popov
     };
 
 }]).
+
+
+directive('morePopover', function($popover) {
+    return {
+        restrict: 'EA',
+        scope: true,
+
+        link: function(scope, element, attr) {
+            var options = {
+                scope: scope,
+                templateUrl: '/static/ngtemplates/more_popover.html',
+                container: 'body',
+                placement: 'top',
+                autoClose: true,
+            };
+
+            var popover = $popover(element, options);
+
+            element.children().eq(0).css({ left: '75%' });
+        }
+    };
+}).
 
 
 /**
