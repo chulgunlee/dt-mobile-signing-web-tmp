@@ -16,3 +16,20 @@ Project structure
 
 `-i http://10.134.8.12:8000/simple/`
 
+
+
+How To Build Static Files
+--------------------------
+
+Install grunt:
+
+$ sudo npm install -g grunt grunt-cli node-gyp
+
+Install GraphicsMagick for merging images:
+
+Install other tools:
+
+$ npm install
+
+> NOTE: The default image engine for sprity is lwip, which has a reason-unknown build error on my laptop.
+> So chose gm instead.
