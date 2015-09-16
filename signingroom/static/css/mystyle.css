@@ -408,21 +408,11 @@ html, body {
     width: 44px;
     height: 44px;
     border: 0;
+    padding: 0;
     background-color: transparent;
-    background-position-x: 0;
     background-repeat: no-repeat;
-    text-indent: -1000px;
-}
-
-.icon-button[disabled] {
-    background-position-x: -44px;
-}
-
-.icon-button:active {
-    background-position-x: -88px;
-}
-
-.icon-button:hover {
-    background-position-x: -132px;
+    color: transparent;
+    display: inline-block;
+    cursor: pointer;
 }
 
