@@ -34,10 +34,6 @@ directive('doc', function() {
                 }
             };
 
-            $scope.showMoreMenu = function(doc) {
-                console.log(doc.id);
-            };
-
             /**
              *
              * @param docIndex
@@ -214,6 +210,35 @@ directive('morePopover', function($popover) {
     return {
         restrict: 'EA',
         scope: true,
+
+        controller: function($scope, $http, docService) {
+
+            /**
+             * Move doc to Others or to Funding Package
+             */
+            $scope.moveDoc = function() {
+                var data = { requiredForFunding: !$scope.doc.requiredForFunding };
+
+                $http.put(apiUri + 'docs/' + $scope.doc.id).success(function(result) {
+                    docService.refresh(docService.id);
+                });
+            };
+
+            /**
+             * Update doc type
+             */
+            $scope.editDoc = function() {
+                console.log('edit doc:' + $scope.doc.id);
+            };
+
+            /**
+             * Delete doc (delete scanned pdf, not delete doc from package)
+             */
+            $scope.deleteDoc = function() {
+                console.log('delete doc:' + $scope.doc.id);
+            };
+
+        },
 
         link: function(scope, element, attr) {
             var options = {
