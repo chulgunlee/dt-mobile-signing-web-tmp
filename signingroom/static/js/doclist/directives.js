@@ -34,6 +34,15 @@ directive('doc', function() {
                 }
             };
 
+            $scope.addDoc = function(doc) {
+                if (doc.isPlaceholder) {
+                    
+                    console.log('start pos capture for doc ' + doc.id);
+
+
+                }
+            };
+
             /**
              *
              * @param docIndex

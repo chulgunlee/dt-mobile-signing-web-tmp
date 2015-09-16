@@ -104,6 +104,13 @@ html, body {
     color: #a1a1a1;
 }
 
+.doc-btn-add {
+    position: absolute;
+    bottom: 40px;
+    left: 50%;                  /* center horizontal */
+    margin-left: -22px;         /* center horizontal */
+}
+
 .doc-btn-more {
     position: absolute;
     left: 0;
