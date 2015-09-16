@@ -129,20 +129,33 @@ html, body {
     z-index: 1000;
 }
 
-.doclist-bottom-bar .btn {
+.doclist-bottom-bar button {
     height: 44px;
     padding: 10px 22px;
+    margin-right: 30px;
+    margin-left: 10px;
+}
+
+.doclist-bottom-bar button:last-child {
     margin-right: 10px;
 }
 
-.doclist-bottom-bar .btn:disabled {
-    background: #737373;
-    border-color: #737373;
+.doclist-bottom-bar button.btn {
+    background: transparent;
+    border: 0;
+    color: #fff;
 }
 
-.doclist-bottom-bar .btn span.glyphicon {
-    margin-right: 10px;
+.doclist-bottom-bar button.btn[disabled] {
+    background: transparent;
+    color: #6D6D6E;
 }
+
+.doclist-bottom-bar button.btn:active {
+    background: transparent;
+    color: #A5ABAF;
+}
+
 
 /* signstatus popover */
 
