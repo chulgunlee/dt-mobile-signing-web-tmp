@@ -1,0 +1,6 @@
+{
+    "docTypes": [
+        { "id": 1, "name": "Driver License", "applicants": ["buyer", "cobuyer"] },
+        { "id": 2, "name": "Insurance" }
+    ]
+}

@@ -1,41 +1,36 @@
 html, body {
-    background: #f2f6f9;
+    background: #f3f6f8;
+    -webkit-user-select: none;          /* disable text seleting */
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+
 }
 
 #doclist {
+    padding-top: 5px;
     padding-bottom: 84px;           /* to display margin at the bottom which partially covered by the bottom bar */
 }
 
 .doclist-header {
-    margin: 30px 19px 19px;
+    margin: 30px 15px 0 15px;
     min-height: 34px;
-    border-bottom: solid 1px #dfe4e8;
+    border-bottom: solid 1px #dee6ea;
     box-shadow: 0 1px 0 #f2f6f7;
     font-weight: bold;
 }
 
 .doclist-container {
-}
-
-.doclist-bottom-bar {
-    position: fixed;
-    bottom: 0;
-    width: 100%;
-    height: 64px;
-    background: #3a3a3a;
-    left: 0;
+    margin-left: -5px;
 }
 
 .document {
     position: relative;
     background: #fff;
-    border: solid 1px #e5ebed;
-    border-radius: 2px;
-    box-shadow: 0 1px 1px rgba(221, 222, 225, .8);
-    width: 169px;
-    height: 197px;
-    margin-bottom: 28px;
-    margin-left: 34px;
+    border: solid 1px #dee6ea;
+    border-radius: 3px;
+    width: 180px;
+    height: 185px;
+    margin-top: 15px;
+    margin-left: 20px;
     overflow: hidden;
     cursor: pointer;
 }
@@ -45,18 +40,18 @@ html, body {
 .status-badge {
     position: absolute;
     display: block;
-    width: 128px;
-    height: 128px;
+    width: 106px;
+    height: 106px;
     text-align: center;
     transform: rotate(-45deg);
     -webkit-transform: rotate(-45deg);
     transform-origin: 0 0;
     -webkit-transform-origin: 0 0;
-    left: -90px;
+    left: -75px;
 }
 
 .status-badge.signed {
-    background: #20AC52;
+    background: #2cab56;
 }
 
 .status-badge.not-signed {
@@ -64,19 +59,19 @@ html, body {
 }
 
 .status-badge.partially-signed {
-    background: #FED100;
+    background: #fccf12;
 }
 
 .status-badge.submitted {
-    background: #484848;
+    background: #3f3f40;
 }
 
 .status-badge .status {
     position: absolute;
     width: 100%;
-    padding: 0 20px 8px;
+    padding: 0 20px 4px;
     line-height: 14px;
-    font-size: 14px;
+    font-size: 12px;
     left: 0;
     bottom: 0;
     color: #fff;
@@ -85,12 +80,39 @@ html, body {
 
 /* document body */
 .doc-body {
-    padding: 80px 10px 10px;
+    padding: 30px 15px;
+}
+
+.doc-body .doc-title {
+    margin-top: 30px;
+    margin-bottom: 2px;
+    font-size: 13px;
+    line-height: 15px;
+    color: #2e95d2;
+}
+
+.doc-body .doc-placeholder-title {
+    margin-top: 12px;
+    margin-bottom: 2px;
+    font-size: 13px;
+    color: #231f20;
+    line-height: 15px;
+}
+
+.doc-body .doc-applicant-name {
+    font-size :13px;
+    color: #a1a1a1;
 }
 
 /* bottom bar */
 .doclist-bottom-bar {
-    padding: 10px;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    height: 60px;
+    background: #3f3f40;
+    left: 0;
+    padding: 7px 14px;
     z-index: 1000;
 }
 
@@ -163,14 +185,6 @@ html, body {
     top: 20%;
 }
 
-.modal-header button.btn-link {
-    margin: 0;
-    padding: 0;
-    position: absolute;
-    left: 20px;
-    top: 0;
-}
-
 .modal-header .modal-title {
     text-align: center;
     font-weight: bold;
@@ -178,17 +192,8 @@ html, body {
 
 /* signer selection modal */
 
-#signers-container .modal-dialog {
-    width: 526px !important;
-}
-
-#signers-container .modal-content {
-    border-radius: 3px !important;
-}
-
 .signer-modal-body {
     padding: 35px 35px 35px 28px;
-    background: #F2F6F9;
 }
 
 .signers-list {
@@ -225,6 +230,56 @@ html, body {
 .signer-badge {
 }
 
+/* add document modal */
+.add-document-body {
+    padding: 35px 35px 20px;
+}
+
+.add-document-body .doc-type-selector {
+    height: 45px;
+    width: 430px;       /* enlarge selector */
+    background: #fff;
+    text-align: left;
+    color: #231f20;
+    padding: 6px 20px;
+    margin-bottom: 15px;
+    border: solid 1px #dee6ea;
+    border-radius: 3px;
+}
+
+.add-document-body .doc-type-selector:active {
+    background: #fff;
+}
+
+.add-document-body .doc-type-selector[disabled] {
+    color: #c7cfd3;
+}
+
+.add-document-body .doc-type-selector .caret {
+    margin-top: 10px;
+    float: right;
+}
+
+.add-document-body .dropdown-menu {     /* options menu */
+    width: 430px;
+    border-radius: 0 0 3px 3px;
+    padding: 0;
+    margin-top: -1px;
+}
+
+.add-document-body .dropdown-menu>li>a {
+    height: 45px;
+    color: #231f20;
+    padding-top: 12px;
+    padding-left: 40px;                 /* leave space for checkmark */
+    border-bottom: solid 1px #dee6ea;
+}
+
+.add-document-body .dropdown-menu>li.active>a {
+    color: #231f20;                     /* remove default active color */
+    background: #fff;
+}
+
 /* document preview */
 
 #docpreview {
@@ -252,34 +307,74 @@ html, body {
     text-align: center;
 }
 
-
-/* submit to lender dialog */
-.submit-modal-dialog {
-    width: 320px;
+/**
+ * Common dialog
+ */
+.common-dialog .modal-content {
+    background: #F2F6F9;            /* make the modal body grey */
+    border-radius: 3px;             /* reduce border radius to fit the design */
 }
 
-.submit-modal-dialog .modal-header {
-    border-bottom: 0;
+.common-dialog .modal-header {
+    background: #fff;               /* overlay the dialog title back to white */
+    height: 45px;
+    padding: 12px;
+    border-radius: 3px 3px 0 0;     /* cut round corners (otherwise white header will show sharp right angle over grey body */
 }
 
-.submit-modal-dialog .modal-body {
-    padding: 15px 45px;
+.common-dialog .modal-header .modal-title {
+    color: #231f20;
+    font-size: 14px;
+    font-weight: 500;
 }
 
-.submit-modal-dialog .modal-body ul {
-    list-style-type: disc;
+.common-dialog .modal-body {
+    padding: 0;                     /* clear the padding; leave the margin/padding to content template of $commonDialog */
 }
 
-.submit-modal-dialog .modal-body li {
-    margin-left: 30px;
+/* buttons */
+.common-dialog .modal-header .btn-link {
+    margin: 0 !important;
+    padding: 0 10px !important;     /* adjust position of the butons */
+    color: #2e95d2;
+    font-size: 14px;
+}
+
+.common-dialog .modal-header .btn-link:hover {
+    text-decoration: none;
+}
+
+.common-dialog .modal-header .btn-link[disabled] {
+    color: #c7cfd3 !important;
 }
 
 
 /**
- * iOS7 style alert dialog
+ * $msgbox styles
  */
 
-.btn-alert-buttons {
+.msgbox-modal-dialog {
+    width: 320px;
+}
+
+.msgbox-modal-dialog .modal-header {
+    border-bottom: 0;
+}
+
+.msgbox-modal-dialog .modal-body {
+    padding: 15px 45px;
+}
+
+.msgbox-modal-dialog .modal-body ul {
+    list-style-type: disc;
+}
+
+.msgbox-modal-dialog .modal-body li {
+    margin-left: 30px;
+}
+
+
+.btn-msgbox-buttons {
     display: flex;
     display: -webkit-flex;
     display: -moz-flex;
@@ -287,7 +382,7 @@ html, body {
     border-top: solid 1px #e5e5e5;
 }
 
-.btn-alert {
+.btn-msgbox {
     border: 0;
     background: transparent;
     height: 44px;
@@ -298,10 +393,36 @@ html, body {
     border-radius: 0 !important;
 }
 
-.btn-alert-buttons:last-child {
+.btn-msgbox-buttons:last-child {
     border-right: 0;
 }
 
-.btn-alert.btn-alert-ok {
+.btn-msgbox.btn-msgbox-ok {
     font-weight: bold;
 }
+
+/**
+ * icon button
+ */
+.icon-button {
+    width: 44px;
+    height: 44px;
+    border: 0;
+    background-color: transparent;
+    background-position-x: 0;
+    background-repeat: no-repeat;
+    text-indent: -1000px;
+}
+
+.icon-button[disabled] {
+    background-position-x: -44px;
+}
+
+.icon-button:active {
+    background-position-x: -88px;
+}
+
+.icon-button:hover {
+    background-position-x: -132px;
+}
+

@@ -2,15 +2,15 @@
     "id": 2,
     "signers": {
         "buyer": "James Green",
-        "cobuyer": "Linda Green",
-        "dealer": "Dealer"
+        "cobuyer": "Linda Green"
     },
     "docs": [
         
         {
             "id": 1234,
-            "title": "eContract",
-            "type": "funding",
+            "docType": "contract",
+            "templateName": "eContract",
+            "requiredForFunding": true,
             "signable": true,
             "status": "signed",
             "requiredSigners": [ "buyer", "cobuyer", "dealer" ],
@@ -19,15 +19,14 @@
                 "cobuyer": true,
                 "dealer": true 
             },
-            "isContract": true,
-            "scannable": false,
-            "moveable": false
+            "isExternal": false
         },
 
         {
             "id": 1235,
-            "title": "Acknowledgement",
-            "type": "funding",
+            "docType": "",
+            "templateName": "Acknowledgement",
+            "requiredForFunding": true,
             "signable": true,
             "status": "partially-signed",
             "requiredSigners": [ "buyer", "cobuyer" ],
@@ -36,32 +35,43 @@
                 "cobuyer": false,
                 "dealer": false
             },
-            "isContract": false,
-            "scannable": false,
-            "moveable": false
-        },
-
-        {
-            "id": 0,
-            "title": "Driver License",
-            "type": "funding",
-            "signable": false,
-            "isContract": false,
-            "scannable": true,
-            "scanned": false,
-            "scanDocType": "driver-license",
-            "scanApplicants": ["buyer", "cobuyer"],
-            "moveable": true
+            "isExternal": false
         },
 
         {
             "id": 1236,
-            "title": "Notice to Co-Signer",
-            "type": "other",
+            "docType": "",
+            "templateName": "Notice to Co-buyer",
+            "requiredForFunding": true,
+            "signable": true,
+            "status": "not-signed",
+            "requiredSigners": [ "cobuyer" ],
+            "signStatus": {
+                "buyer": false,
+                "cobuyer": false,
+                "dealer": false
+            },
+            "isExternal": false
+        },
+
+        {
+            "id": 0,
+            "docType": "driver-license",
+            "templateName": "Driver License",
+            "requiredForFunding": true,
             "signable": false,
-            "isContract": false,
-            "scannable": false,
-            "moveable": true
+            "status": "initial",
+            "isExternal": true,
+            "scanApplicant": "buyer"
+        },
+
+        {
+            "id": 1236,
+            "docType": "",
+            "templateName": "Notice to Co-Signer",
+            "requiredForFunding": false,
+            "signable": false,
+            "isExternal": false
         }
 
     ]

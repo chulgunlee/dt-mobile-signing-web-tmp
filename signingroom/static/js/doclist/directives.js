@@ -8,7 +8,6 @@ directive('doc', function() {
 
         scope: {
             doc: '=',
-            masterIndexId: '='
         },
 
         controller: ['$scope', '$location', function($scope, $location) {
@@ -53,82 +52,104 @@ directive('doc', function() {
     }
 }).
 
-directive('bottomBar', [ 'DocService', 'SignerService', '$modal', function(docService, signerService, $modal) {
+directive('bottomBar', function() {
     return {
         templateUrl: '/static/ngtemplates/bottom_bar.html',
         restrict: 'E',
-        scope: {
-        },
+        scope: true,
 
-        link: function(scope, element) {
-            
-            scope.docService = docService;
-            scope.signerService = signerService;
+        controller: function($scope, docService, docTypeService, signerService, $modal, $msgbox, $commonDialog) {
 
-            // signer selecting modal dialog
-            var signerDialog = $modal({ 
-                title: 'Select Signer(s)',
-                show: false,
-                placement: 'center',
-                scope: scope,
-                templateUrl: '/static/ngtemplates/select_signer_modal.html'
-            });
-
-            // submit dialog
-            var submitDialog = $modal({
-                title: 'Submit Document(s)',
-                show: false,
-                placement: 'center',
-                scope: scope,
-                templateUrl: '/static/ngtemplates/submit_docs_modal.html',
-            });
+            $scope.docService = docService;
+            $scope.signerService = signerService;
+            $scope.docTypeService = docTypeService;
 
             /**
              * Toggle signer selected status when the checkbox on signers are clicked
              * @param {string} signerType Signer type string indicates which signer is checked 
              */
-            scope.onSignerSelected = function(signerType) {
+            $scope.onSignerSelected = function(signerType) {
                 signerService[signerType].selected = !signerService[signerType].selected;
-            };
-
-            /**
-             * Continue button click handler
-             */
-            scope.onContinueSign = function() {
-                var selectedDocIds = _.pluck(this.docService.selectedDocs, 'id'),
-                    selectedSigners = this.signerService.selectedSigners;
-                console.log('selected docs = ' + selectedDocIds + ', selected signers = ' + selectedSigners);
             };
 
             /**
              * Open sign dialog
              */
-            scope.selectSigner = function() {
-                signerDialog.show();
+            $scope.selectSigner = function() {
+                $commonDialog({
+                    title: 'Select Signer(s)',
+                    ok: 'Continue',
+                    cancel: 'Cancel',
+                    width: 526,
+                    templateUrl: '/static/ngtemplates/select_signer_modal.html',
+                    scope: $scope,
+                }).then(function() {
+                    var selectedDocIds = _.pluck(docService.selectedDocs, 'id'),
+                        selectedSigners = signerService.selectedSigners;
+                    console.log('selected docs = ' + selectedDocIds + ', selected signers = ' + selectedSigners);
+                });
             };
 
             /**
              * Open submit docs dialog
              */
-            scope.submitDocs = function() {
-                submitDialog.show();
-            };
-
-            scope.onContinueSubmit = function() {
-                submitDialog.hide();
-                docService.submitSignedDocs().then(function(reslut) {
-                    window.alert('Document(s) have been successfully submitted to lender.');
+            $scope.submitDocs = function() {
+                $msgbox.confirm({
+                    templateUrl: '/static/ngtemplates/submit_docs_confirm.html',
+                    scope: $scope,
+                    title: 'Submit Documents',
+                    ok: 'Submit'
+                }).then(function() {
+                    docService.submitSignedDocs().then(function(reslut) {
+                        $msgbox.alert('Document(s) have been successfully submitted to lender.');
+                    });
                 });
             };
 
-            /**
-             * Submit document
-             */
-            scope.onSubmit = function() {
+            $scope.printDocs = function() {
+                var url = location.protocol + '//' + location.host + apiUri + 'packages/' + docService.id + '/print/',
+                    docIds = _.pluck(docService.selectedDocs, 'id'),
+                    data = JSON.stringify({ docIds: docIds });
+                
+                WebViewBridge.call('print', { method: 'POST', url: url, data: data });
             };
-        }
+
+
+            /* for "Add Document" button */
+
+            $scope.onDocTypeSelect = function(id) {
+                $scope.selectedDocTypeId = id;
+                $scope.selectedApplicantType = null;
+            };
+
+            $scope.onApplicantTypeSelect = function(type) {
+                $scope.selectedApplicantType = type;
+            };
+
+            $scope.addDocument = function() {
+                // data init
+                $scope.selectedDocTypeId = null;
+                $scope.selectedApplicantType = null;
+
+                // show doc type selection dialog
+                $commonDialog({
+                    title: 'Add Document',
+                    width: 500,
+                    templateUrl: '/static/ngtemplates/add_document_modal.html',
+                    scope: $scope,
+
+                    // only enable "Continue" button when proper values are selected
+                    okEnabled: function() {
+                        return !!$scope.selectedDocTypeId && (docTypeService.getApplicantsByDocTypeId($scope.selectedDocTypeId) == null || $scope.selectedApplicantType);
+                    },
+                }).then(function() {
+                    console.log($scope.selectedDocTypeId + ',' + $scope.selectedApplicantType);
+                });
+            };
+        },
+
     };
-}]).
+}).
 
 /**
  * signerPopover
@@ -139,6 +160,12 @@ directive('signerPopover', ['$popover', '$document', '$animate', function($popov
     return {
         restrict: 'EA',
         scope: true,
+        controller: function($scope, signerService) {
+            $scope.signerName = function(signerType) {
+                return signerService[signerType].name;
+            };
+        },
+
         link: function(scope, element, attr) {
 
             // popover options
@@ -177,9 +204,73 @@ directive('signerPopover', ['$popover', '$document', '$animate', function($popov
         }
     };
 
-}]);
+}]).
 
-;
 
+/**
+ * icon-button directive
+ *
+ * Usage:
+ *
+ *   <button icon-button="ib_sign.png" width="44" height="44">Sign</button>
+ *   <button icon-button="ib_sign.png:44">Sign</button>
+ *
+ * NOTE:
+ *   The icon button is 44px wide, 44px high by default.  `width` and `height` parameters are optional.
+ *   The icon-button attribute should specify a sprite image located under /static/images/,
+ *   having the following order (each part is 44px wide, no matter what actual dimension is):
+ *
+ *     +--------+----------+--------+-------+
+ *     | Normal | Disabled | Active | Hover |
+ *     +--------+----------+--------+-------+
+ *
+ *   The top-left corner of the sprites are aligned with the top-left corner of the button,
+ *   despite the actual size of the button may vary.
+ *   The sprite designer should place the icon properly to make sure it is centered in the button.
+ *
+ *   If multiple icons are merged into one sprite, they must be arranged from x=0, one icon per line.
+ *   Specify y coordinate (in px) after the filename, e.g. "ib_sign.png:44"
+ */
+directive('iconButton', function() {
+
+    var standardWidth = 44,
+        standardHeight = 44;
+
+    return {
+        restrict: 'EA',
+        scope: {
+            iconButton: '@',
+            width: '@',
+            height: '@',
+        },
+
+        template: '<button class="icon-button"><ng-transclude></ng-transclude></button>',
+        transclude: true,
+        replace: true,
+
+        link: function(scope, element, attr) {
+            var parts = scope.iconButton.split(':');
+            scope.iconPath = parts[0];
+            scope.iconYPos = parts[1];
+
+            var css = { 'background-image': 'url(/static/images/' + scope.iconPath + ')' };
+            if (scope.iconYPos) {
+                css['background-position-y'] = '-' + scope.iconYPos + 'px';
+            }
+
+            if (scope.width) {
+                css['width'] = scope.width + 'px';
+            }
+            
+            if (scope.height) {
+                css['height'] = scope.height + 'px';
+            }
+
+            element.css(css);
+        },
+
+    };
+
+});
 
 

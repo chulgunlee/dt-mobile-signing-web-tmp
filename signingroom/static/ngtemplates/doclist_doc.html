@@ -1,10 +1,10 @@
 <div class="document" ng-click="showPreview(doc);">
     <signer-popover ng-if="doc.signable" class="status-badge {{doc.status}}" id="signing-status-for-{{doc.id}}" ng-click="$event.stopPropagation()">
         <div class="status">
-            {{doc.statusText}}
+            {{doc.status | docStatusName}}
         </div>
     </signer-popover>
-    <div ng-if="!(doc.scannable && !doc.scanned)" class="doc-selected-wrapper" ng-click="onDocSelected(doc.id);$event.stopPropagation()">
+    <div ng-if="!doc.isPlaceholder" class="doc-selected-wrapper" ng-click="onDocSelected(doc.id);$event.stopPropagation()">
         <div class="roundedTwo docSelector">
             <input type="checkbox" value="None" id="doc-{{$index}}-cbx" name="doc-{{$index}}-cbx" disabled="disabled" ng-checked="doc.selected" />
             <label for="doc-{{$index}}-cbx"></label>
@@ -12,7 +12,9 @@
     </div>
 
     <div class="doc-body" id="doc-body-{{doc.id}}">
-        <p class="text-center doc-title"><strong>{{doc.title}}</strong></p>
+        <p class="text-center doc-title" ng-if="!doc.isPlaceholder">{{doc.templateName}}</p>
+        <p class="text-center doc-placeholder-title" ng-if="doc.isPlaceholder">{{doc.templateName}}</p>
+        <p class="text-center doc-applicant-name" ng-if="doc.scanApplicant">{{doc.scanApplicant | signerTypeName }}</p>
     </div>
 
 </div>

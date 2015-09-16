@@ -14,8 +14,7 @@
     <link href="/static/css/mystyle.css" rel="stylesheet" />
 </head>
 <body ng-app="docListApp">
-    <div ng-controller="DocListDataCtrl"></div>
-    <div ng-view></div>
+    <div id="content" ng-view></div>
 
     <script>
         var packageId = {{ master_index_id }};
@@ -24,14 +23,18 @@
     </script>
 
     <script src="/static/js/underscore.js"></script>
+    <script src="/static/js/fastclick.js"></script>
+    <script src="/static/js/webviewbridge.js"></script>
     <script src="/static/js/angular/angular.js"></script>
     <script src="/static/js/angular/angular-resource.js"></script>
     <script src="/static/js/angular/angular-animate.js"></script>
     <script src="/static/js/angular/angular-route.js"></script>
+    <script src="/static/js/angular/angular-touch.js"></script>
     <script src="/static/js/angular/angular-strap.js"></script>
     <script src="/static/js/angular/angular-strap.tpl.js"></script>
     <script src="/static/js/doclist/app.js"></script>
     <script src="/static/js/doclist/constants.js"></script>
+    <script src="/static/js/doclist/filters.js"></script>
     <script src="/static/js/doclist/services.js"></script>
     <script src="/static/js/doclist/directives.js"></script>
     <script src="/static/js/doclist/controllers.js"></script>

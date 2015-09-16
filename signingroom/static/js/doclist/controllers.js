@@ -6,7 +6,7 @@
 /**
  * Controller for document list
  */
-controller('DocListCtrl', ['$scope', 'DocService', function($scope, docService) {
+controller('DocListCtrl', ['$scope', 'docService', function($scope, docService) {
 
     $scope.data = docService;
 
@@ -32,13 +32,6 @@ controller('DocPreviewCtrl', ['$scope', '$routeParams', '$http', function($scope
     });
 
 
-}]).
-
-
-
-/**
- * Global controller for loading document list data
- */
-controller('DocListDataCtrl', ['$scope', 'DocService', function($scope, docService) {
-    docService.refresh(packageId);
 }]);
+
+

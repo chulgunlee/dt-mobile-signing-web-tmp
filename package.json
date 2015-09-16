@@ -1,0 +1,12 @@
+{
+    "author": "Charlee Li",
+    "depencencies": {},
+    "description": "",
+    "devDependencies": {
+        "grunt": "~0.4.5"
+    },
+    "license": "Commercial",
+    "name": "dt-mobile-signing-web",
+    "repository": "",
+    "version": "0.1.0"
+}

@@ -1,0 +1,20 @@
+<div class="add-document-body">
+
+  <button type="button" class="btn btn-default doc-type-selector" bs-select
+      ng-model="selectedDocType"
+      bs-options="docType.id as docType.name for docType in docTypeService.docTypes"
+      data-placeholder="Select Document Type"
+      ng-change="onDocTypeSelect(selectedDocType)">
+    Action <span class="caret"></span>
+  </button>
+
+  <button type="button" class="btn btn-default doc-type-selector" bs-select
+      ng-model="selectedApplicantType"
+      bs-options="applicant as applicant | signerTypeName for applicant in docTypeService.getApplicantsByDocTypeId(selectedDocTypeId)" 
+      data-placeholder="Select Person"
+      ng-change="onApplicantTypeSelect(selectedApplicantType)"
+      ng-disabled="!docTypeService.getApplicantsByDocTypeId(selectedDocTypeId)">
+    Action <span class="caret"></span>
+  </button>
+
+</div>
