@@ -55,3 +55,6 @@ docs/_build/
 
 db.sqlite3
 *.swp
+
+node_modules/
+.DS_Store

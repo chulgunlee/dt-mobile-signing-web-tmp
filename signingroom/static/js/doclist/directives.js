@@ -34,6 +34,14 @@ directive('doc', function() {
                 }
             };
 
+            $scope.addDoc = function(doc) {
+                if (doc.isPlaceholder) {
+                    
+                    console.log('start pos capture for doc ' + doc.id);
+
+
+                }
+            };
 
             /**
              *
@@ -207,34 +215,72 @@ directive('signerPopover', ['$popover', '$document', '$animate', function($popov
 }]).
 
 
+directive('morePopover', function($popover) {
+    return {
+        restrict: 'EA',
+        scope: true,
+
+        controller: function($scope, $http, docService) {
+
+            /**
+             * Move doc to Others or to Funding Package
+             */
+            $scope.moveDoc = function() {
+                var data = { requiredForFunding: !$scope.doc.requiredForFunding };
+
+                $http.put(apiUri + 'docs/' + $scope.doc.id).success(function(result) {
+                    docService.refresh(docService.id);
+                });
+            };
+
+            /**
+             * Update doc type
+             */
+            $scope.editDoc = function() {
+                console.log('edit doc:' + $scope.doc.id);
+            };
+
+            /**
+             * Delete doc (delete scanned pdf, not delete doc from package)
+             */
+            $scope.deleteDoc = function() {
+                console.log('delete doc:' + $scope.doc.id);
+            };
+
+        },
+
+        link: function(scope, element, attr) {
+            var options = {
+                scope: scope,
+                templateUrl: '/static/ngtemplates/more_popover.html',
+                container: 'body',
+                placement: 'top',
+                autoClose: true,
+            };
+
+            var popover = $popover(element, options);
+
+            element.children().eq(0).css({ left: '75%' });
+        }
+    };
+}).
+
+
 /**
  * icon-button directive
  *
  * Usage:
  *
- *   <button icon-button="ib_sign.png" width="44" height="44">Sign</button>
- *   <button icon-button="ib_sign.png:44">Sign</button>
+ *   <butotn icon-button="icn_add" width="44" height="44">Add</button>
  *
  * NOTE:
  *   The icon button is 44px wide, 44px high by default.  `width` and `height` parameters are optional.
- *   The icon-button attribute should specify a sprite image located under /static/images/,
- *   having the following order (each part is 44px wide, no matter what actual dimension is):
- *
- *     +--------+----------+--------+-------+
- *     | Normal | Disabled | Active | Hover |
- *     +--------+----------+--------+-------+
- *
- *   The top-left corner of the sprites are aligned with the top-left corner of the button,
- *   despite the actual size of the button may vary.
- *   The sprite designer should place the icon properly to make sure it is centered in the button.
- *
- *   If multiple icons are merged into one sprite, they must be arranged from x=0, one icon per line.
- *   Specify y coordinate (in px) after the filename, e.g. "ib_sign.png:44"
+ *   The icon-button attribute should be one of the class name in icon-sprite.css.
  */
 directive('iconButton', function() {
 
-    var standardWidth = 44,
-        standardHeight = 44;
+    var defaultWidth = 44,
+        defaultHeight = 44;
 
     return {
         restrict: 'EA',
@@ -249,24 +295,16 @@ directive('iconButton', function() {
         replace: true,
 
         link: function(scope, element, attr) {
-            var parts = scope.iconButton.split(':');
-            scope.iconPath = parts[0];
-            scope.iconYPos = parts[1];
 
-            var css = { 'background-image': 'url(/static/images/' + scope.iconPath + ')' };
-            if (scope.iconYPos) {
-                css['background-position-y'] = '-' + scope.iconYPos + 'px';
-            }
+            var width = parseInt(scope.width) || defaultWidth,
+                height = parseInt(scope.height) || defaultHeight;
 
-            if (scope.width) {
-                css['width'] = scope.width + 'px';
-            }
-            
-            if (scope.height) {
-                css['height'] = scope.height + 'px';
-            }
+            element.addClass('icon-' + scope.iconButton);
 
-            element.css(css);
+            element.css({
+                'width': width + 'px',
+                'height': height + 'px',
+            });
         },
 
     };

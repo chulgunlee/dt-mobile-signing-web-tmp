@@ -24,7 +24,7 @@ class DocPackageView(APIView):
 
 class DocPackageSubmitView(APIView):
     def put(self, request, pkg_id):
-        return Response(status=206)
+        return Response(status=204)
 
 
 
@@ -35,6 +35,12 @@ class DocPreviewView(APIView):
         doc_pkg = json.load(open(os.path.dirname(__file__) + '/doc_preview_response.json'))
         return Response(doc_pkg)
 
+
+class DocUpdateView(APIView):
+    
+    def put(self, request, doc_id):
+
+        return Response(status=204)
 
 
 class DocPrintView(View):

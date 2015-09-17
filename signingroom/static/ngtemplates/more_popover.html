@@ -1,0 +1,12 @@
+<div class="popover more-popover">
+  <div class="arrow"></div>
+  <div class="popover-content">
+
+    <ul class="more-menu">
+      <li class="more-menu-item" ng-click="moveDoc();$hide()"><a>{{ doc.requiredForFunding ? "Move to Other" : "Move to Funding Package" }}</a></li>
+      <li class="more-menu-item" ng-click="editDoc()" ng-if="doc.isExternal && !doc.isPlaceholder"><a>Update Settings</a></li>
+      <li class="more-menu-item" ng-click="deleteDoc()" ng-if="doc.isExternal && !doc.isPlaceholder"><a>Delete</a></li>
+    </ul>
+
+  </div>
+</div>
