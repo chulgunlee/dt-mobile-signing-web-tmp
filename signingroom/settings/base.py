@@ -6,7 +6,7 @@ Django settings for signingroom project.
 import os
 import logging.config
 from rest_framework import ISO_8601
-from dtplatform.conf import settings as platform_settings
+#from dtplatform.conf import settings as platform_settings          # TODO: restore dtplatform settings
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -25,11 +25,11 @@ MAIN_DB_CONNECTION_KEY = 'Deal'
 SECRET_KEY = '!)8jshnj*q(+bq$#dv-3=w4^^hz4mup3gmdovl*ys!w9%@+$(+'
 
 MIDDLEWARE_CLASSES = (
-    'doorman_middleware.tenant_middleware.TenantMiddleware',
-    'django_tenant_templates.middleware.TenantMiddleware',
+    #'doorman_middleware.tenant_middleware.TenantMiddleware',                            # TODO: restore dtplatform settings
+    #'django_tenant_templates.middleware.TenantMiddleware',
     'django.middleware.common.CommonMiddleware',
-    'dt_django_base.core.middleware.context_middleware.ContextMiddleware',
-    'dt_django_base.core.middleware.sqlalchemy_middleware.SQLAlchemyMiddleware',
+    #'dt_django_base.core.middleware.context_middleware.ContextMiddleware',              # TODO: restore dtplatform settings
+    #'dt_django_base.core.middleware.sqlalchemy_middleware.SQLAlchemyMiddleware',        # TODO: restore dtplatform settings
 )
 
 
@@ -44,7 +44,7 @@ INSTALLED_APPS = (
     'signingroom.signingroom',
     'signingroom.fakeapi',
     'rest_framework',
-    'dt_django_base',
+    #'dt_django_base',               # TODO: restore dtplatform settings
 )
 
 TEMPLATE_DIRS = (
@@ -174,7 +174,7 @@ LOGGING = {
         },
     },
 }
-LOGGING_EXTRA_DATA = platform_settings.LOGGING_EXTRA_DATA.copy()
+#LOGGING_EXTRA_DATA = platform_settings.LOGGING_EXTRA_DATA.copy()           # TODO: restore dtplatform settings
 
 logging.config.dictConfig(LOGGING)
 
