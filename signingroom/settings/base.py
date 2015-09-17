@@ -123,7 +123,7 @@ LOGGING = {
             'format': '%(asctime)s [%(levelname)s]'
                       ' %(name)s: %(message)s'
         },
-        'dtapi': {'format': ('"%(asctime)s", "doc_center_api", "[%(levelname)s]", "%(corelation_id)s",'
+        'signingweb': {'format': ('"%(asctime)s", "dt_mobile_signing_web", "[%(levelname)s]", "%(corelation_id)s",'
                              ' "%(tenant_code)s", "%(fusion_prod_code)s",'
                              ' "%(branding_id)s", "%(branding_folder)s",'
                              ' "%(feature_code)s", "%(functional_area)s",'
@@ -143,36 +143,31 @@ LOGGING = {
         'default': {
             'level': 'NOTSET',
             'class': 'logging.handlers.RotatingFileHandler',
-            'filename': '/var/log/dt-api/doc_center_api.log',
+            'filename': '/var/log/dt-mobile-signing-web/dt-mobile-signing-web.log',
             'maxBytes': 1024 * 1024 * 5,  # 5 MB
             'backupCount': 5,
-            'formatter': 'dtapi',
+            'formatter': 'signingweb',
         },
-        'dtapi_console': {
+        'signingweb_console': {
             'level': 'DEBUG',
             'class': 'logging.StreamHandler',
-            'formatter': 'dtapi'
+            'formatter': 'signingweb'
         },
         'syslog': {
             'level': 'NOTSET',
             'class': 'logging.handlers.SysLogHandler',
-            'address': '/dev/dtapi-log',
+            'address': '/dev/dt-mobile-signing-web-log',
             'facility': 'local5',
-            'formatter': 'dtapi',
-        },
-        'console': {
-            'level': 'DEBUG',
-            'class': 'logging.StreamHandler',
-            'formatter': 'standard'
+            'formatter': 'signingweb',
         },
     },
     'loggers': {
         'django.request': {
-            'handlers': ['console'],
+            'handlers': ['signingweb_console'],
             'level': 'WARNING',
             'propagate': True,
         },
-        'doc_center_api': {
+        'dt_mobile_signing_web': {
             'handlers': ['syslog'],
             'level': 'INFO',
             'propagate': True,
