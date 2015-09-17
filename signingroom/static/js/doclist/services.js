@@ -409,4 +409,49 @@ provider('$commonDialog', function() {
         
     };
 
+}).
+
+/**
+ * Doc type selection dialog ("Add Document / Update Document")
+ * @param {object} options: title -> dialog title
+ */
+factory('docTypeDialog', function($commonDialog, $q, $rootScope, docTypeService) {
+
+    return function(options) {
+
+        var scope = options.scope && options.scope.$new() || $rootScope.$new(),
+            deferred = $q.defer();
+
+        scope.docTypeService = docTypeService;
+
+        /* for "Add Document" button */
+
+        scope.onDocTypeSelect = function(id) {
+            scope.selectedDocTypeId = id;
+            scope.selectedApplicantType = null;
+        };
+
+        scope.onApplicantTypeSelect = function(type) {
+            scope.selectedApplicantType = type;
+        };
+
+        
+        $commonDialog({
+            title: options.title,
+            width: 500,
+            templateUrl: '/static/ngtemplates/add_document_modal.html',
+            scope: scope,
+
+            okEnabled: function() {
+                return !!scope.selectedDocTypeId && (docTypeService.getApplicantsByDocTypeId(scope.selectedDocTypeId) == null || scope.selectedApplicantType);
+            },
+        }).then(function() {
+            deferred.resolve({
+                docTypeId: scope.selectedDocTypeId,
+                applicantType: scope.selectedApplicantType,
+            });
+        });
+
+        return deferred.promise;
+    };
 });

@@ -66,11 +66,10 @@ directive('bottomBar', function() {
         restrict: 'E',
         scope: true,
 
-        controller: function($scope, docService, docTypeService, signerService, $modal, $msgbox, $commonDialog) {
+        controller: function($scope, docService, signerService, $modal, $msgbox, $commonDialog, docTypeDialog) {
 
             $scope.docService = docService;
             $scope.signerService = signerService;
-            $scope.docTypeService = docTypeService;
 
             /**
              * Toggle signer selected status when the checkbox on signers are clicked
@@ -123,35 +122,11 @@ directive('bottomBar', function() {
             };
 
 
-            /* for "Add Document" button */
-
-            $scope.onDocTypeSelect = function(id) {
-                $scope.selectedDocTypeId = id;
-                $scope.selectedApplicantType = null;
-            };
-
-            $scope.onApplicantTypeSelect = function(type) {
-                $scope.selectedApplicantType = type;
-            };
-
             $scope.addDocument = function() {
-                // data init
-                $scope.selectedDocTypeId = null;
-                $scope.selectedApplicantType = null;
 
                 // show doc type selection dialog
-                $commonDialog({
-                    title: 'Add Document',
-                    width: 500,
-                    templateUrl: '/static/ngtemplates/add_document_modal.html',
-                    scope: $scope,
-
-                    // only enable "Continue" button when proper values are selected
-                    okEnabled: function() {
-                        return !!$scope.selectedDocTypeId && (docTypeService.getApplicantsByDocTypeId($scope.selectedDocTypeId) == null || $scope.selectedApplicantType);
-                    },
-                }).then(function() {
-                    console.log($scope.selectedDocTypeId + ',' + $scope.selectedApplicantType);
+                docTypeDialog({ title: 'Add Document' }).then(function(result) {
+                    console.log(result.docTypeId + ',' + result.applicantType);
                 });
             };
         },
