@@ -167,7 +167,7 @@ directive('signerPopover', ['$popover', '$document', '$animate', function($popov
             };
 
             // init mask
-            var  mask = angular.element('<div>').addClass('am-fade').addClass('signstatus-popover-mask'),
+            var  mask = angular.element('<div>').addClass('am-fade').addClass('modal-backdrop'),
                  body = $document.find('body'),
                  after = angular.element(body[0].lastChild);
 

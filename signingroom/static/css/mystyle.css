@@ -157,20 +157,17 @@ html, body {
 }
 
 
+.popover {
+    box-shadow: none;
+    -webkit-box-shadow: none;
+    border-radius: 3px !important;
+}
+
 /* signstatus popover */
 
 .signstatus-popover {           /* position hack for popover */
     margin-left: 170px;
     margin-top: 140px !important;
-}
-
-.signstatus-popover-mask {
-    background: rgba(0, 0, 0, .5);
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
 }
 
 .signstatus-popover .popover-title {
@@ -206,10 +203,7 @@ html, body {
 .more-popover {
     width: 200px !important;
     padding: 0 !important;
-    border-radius: 3px !important;
     border: 1px solid #dee6ea;          /* menu border */
-    box-shadow: none;
-    -webkit-box-shadow: none;
     margin-left: 60px !important;       /* move the arrow to left side; use with (".more-popover .arrow").margin-left */
 }
 
@@ -262,6 +256,15 @@ html, body {
 .modal-header .modal-title {
     text-align: center;
     font-weight: bold;
+}
+
+.modal-content {
+    box-shadow: none;
+    -webkit-box-shadow: none;
+}
+
+.modal-backdrop.am-fade {
+    background: rgba(0,0,0,.15);
 }
 
 /* signer selection modal */
@@ -385,7 +388,7 @@ html, body {
  * Common dialog
  */
 .common-dialog .modal-content {
-    background: #F2F6F9;            /* make the modal body grey */
+/*    background: #F2F6F9;  */          /* make the modal body grey */
     border-radius: 3px;             /* reduce border radius to fit the design */
 }
 
