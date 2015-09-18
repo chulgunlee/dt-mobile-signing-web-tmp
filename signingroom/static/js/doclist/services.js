@@ -457,4 +457,43 @@ factory('docTypeDialog', function($commonDialog, $q, $rootScope, docTypeService)
 
         return deferred.promise;
     };
+}).
+
+
+/**
+ * WebViewBridge wrapper.
+ */
+factory('webViewBridge', function() {
+
+    var service = {
+        
+        logs: [],
+
+        call: function(func, params, callback) {
+            this.log('Calling native: func="' + func + '", params=' + JSON.stringify(params));
+            window.WebViewBridge.call(func, params, callback);
+        },
+
+        registerFunction: function(key, func) {
+            window.WebViewBridge.registerFunction(key, func);
+        },
+
+        log: function(text) {
+            if (window.webViewBridgeDebugEnabled) {
+                this.logs.push(text);
+            }
+        },
+
+    };
+
+    // inject WebViewBridge
+    var makeMsg = window.WebViewBridge._makeMsg;
+    window.WebViewBridge._makeMsg = function(func, params, key) {
+        var msg = makeMsg(func, params, key);
+        service.log('Send msg to native: ' + msg);
+        return msg;
+    };
+
+
+    return service;
 });

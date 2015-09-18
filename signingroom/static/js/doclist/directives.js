@@ -66,7 +66,7 @@ directive('bottomBar', function() {
         restrict: 'E',
         scope: true,
 
-        controller: function($scope, docService, signerService, $modal, $msgbox, $commonDialog, docTypeDialog) {
+        controller: function($scope, docService, signerService, $modal, $msgbox, $commonDialog, docTypeDialog, webViewBridge) {
 
             $scope.docService = docService;
             $scope.signerService = signerService;
@@ -118,7 +118,7 @@ directive('bottomBar', function() {
                     docIds = _.pluck(docService.selectedDocs, 'id'),
                     data = JSON.stringify({ docIds: docIds });
                 
-                WebViewBridge.call('print', { method: 'POST', url: url, data: data });
+                webViewBridge.call('print', { method: 'POST', url: url, data: data });
             };
 
 
@@ -297,6 +297,23 @@ directive('iconButton', function() {
 
     };
 
+}).
+
+/**
+ * A directive used to debug WebViewBridge (integration with native).
+ * Put this directive right after the <body> tag.
+ */
+directive('webViewBridgeDebug', function() {
+    return {
+        restrict: 'EA',
+        templateUrl: '/static/ngtemplates/webviewbridge_debug.html',
+        replace: true,
+        scope: true,
+
+        controller: function($scope, webViewBridge) {
+            $scope.logs = webViewBridge.logs;
+        },
+    };
 });
 
 

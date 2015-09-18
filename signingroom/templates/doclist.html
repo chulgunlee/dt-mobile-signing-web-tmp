@@ -15,12 +15,14 @@
     <link href="/static/css/icon-sprite.css" rel="stylesheet" />
 </head>
 <body ng-app="docListApp">
+    <div web-view-bridge-debug></div>
     <div id="content" ng-view></div>
 
     <script>
         var packageId = {{ master_index_id }};
         var dealerId = 0;
         var apiUri = '/api/';
+        var webViewBridgeDebugEnabled = true;
     </script>
 
     <script src="/static/js/underscore.js"></script>
