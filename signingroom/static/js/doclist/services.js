@@ -518,7 +518,7 @@ factory('webViewBridge', function() {
             this.call('startSigningRoom', { pkgId: pkgId, docIds: docIds, url: url });
         },
 
-        startPOSCapture(docId, docType, applicantType) {
+        startPOSCapture: function(docId, docType, applicantType) {
             this.call('startPOSCapture', { docId: docId, docType: docType, applicantType: applicantType });
         },
 
