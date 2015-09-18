@@ -195,7 +195,7 @@ directive('signerPopover', ['$popover', '$document', '$animate', function($popov
 }]).
 
 
-directive('morePopover', function($popover) {
+directive('morePopover', function($popover, $document, $animate) {
     return {
         restrict: 'EA',
         scope: true,
@@ -251,7 +251,28 @@ directive('morePopover', function($popover) {
                 autoClose: true,
             };
 
+            // init mask
+            var  mask = angular.element('<div>').addClass('am-fade').addClass('modal-backdrop'),
+                 body = $document.find('body'),
+                 after = angular.element(body[0].lastChild);
+
+            // initialize popover
             var popover = $popover(element, options);
+
+            // show/hide mask when popover shows/hides
+            scope.$on('tooltip.show.before', function() {
+                $animate.enter(mask, body, after);
+            });
+            scope.$on('tooltip.hide.before', function() {
+                $animate.leave(mask);
+            });
+
+            // clean up after destroy
+            scope.$on('$destroy', function() {
+                if (popover) popover.destroy();
+                options = null;
+                popover = null;
+            });
 
             element.children().eq(0).css({ left: '75%' });
         }
