@@ -470,7 +470,7 @@ factory('webViewBridge', function() {
         logs: [],
 
         call: function(func, params, callback) {
-            this.log('Calling native: func="' + func + '", params=' + JSON.stringify(params));
+            //this.log('Calling native: func="' + func + '", params=' + JSON.stringify(params));
             window.WebViewBridge.call(func, params, callback);
         },
 
@@ -482,6 +482,44 @@ factory('webViewBridge', function() {
             if (window.webViewBridgeDebugEnabled) {
                 this.logs.push(text);
             }
+        },
+
+        _absUrl: function(url) {
+            return location.protocol + '//' + location.host+ apiUri + url;
+        },
+
+        /* Native API wrappers */
+
+        print: function(pkgId, docIds, url) {
+            this.call('print', {
+                method: 'POST',
+                url: this._absUrl('packages/' + pkgId),
+                data: JSON.stringify({ docIds: docIds }),
+                pkgId: pkgId,           // for native reference only
+                docIds: docIds,         // for native reference only
+            });
+        },
+
+        logEvent: function(pkgId, msg) {
+            this.call('logEvent', { pkgId: pkgId, msg: msg });
+        },
+
+        startPreview: function(pkgId, docId, docProps) {
+            this.call('startPreview', {
+                method: 'GET',
+                url: this._absUrl('doclist/' + pkgId + '#/' + docId + '/preview/'),
+                pkgId: pkgId,
+                docId: docId,
+                docProps: docProps
+            });
+        },
+        
+        startSigningRoom: function(pkgId, docIds, url) {
+            this.call('startSigningRoom', { pkgId: pkgId, docIds: docIds, url: url });
+        },
+
+        startPOSCapture(docId, docType, applicantType) {
+            this.call('startPOSCapture', { docId: docId, docType: docType, applicantType: applicantType });
         },
 
     };

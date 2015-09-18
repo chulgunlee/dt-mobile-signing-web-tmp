@@ -10,7 +10,7 @@ directive('doc', function() {
             doc: '=',
         },
 
-        controller: ['$scope', '$location', function($scope, $location) {
+        controller: function($scope, docService, webViewBridge, SIGNER_TYPE_MAPPING) {
             // used for caching a document preview
             $scope.preview = null;
 
@@ -27,18 +27,23 @@ directive('doc', function() {
             $scope.showPreview = function(doc) {
                 
                 // check if this document is previewable. scannable but not scanned documents cannot be previewed.
-                if (!doc.scannable || doc.scanned) {
+                if (!doc.isPlaceholder) {
 
                     // Show loading modal
-                    $location.path('/' + doc.id + '/preview/');
+                    var docProps = {
+                        docType: doc.docType,
+                        docTypeName: '',
+                        applicantType: doc.scanApplicant,
+                        applicantTypeName: doc.scanApplicant ? SIGNER_TYPE_MAPPING[doc.scanApplicant] : '',
+                    };
+                    webViewBridge.startPreview(docService.id, doc.id, docProps);
                 }
             };
 
             $scope.addDoc = function(doc) {
                 if (doc.isPlaceholder) {
                     
-                    console.log('start pos capture for doc ' + doc.id);
-
+                    webViewBridge.startPOSCapture(doc.id, doc.docType, doc.scanApplicant);
 
                 }
             };
@@ -52,7 +57,7 @@ directive('doc', function() {
                 // Toggle doc selected status
                 $scope.doc.selected = !$scope.doc.selected;
             };
-        }],
+        },
 //        require: 'docPreviewModal',
         link: function(scope, element, attrs, docPreviewModalCtrl) {
  //           alert('ok');
@@ -118,7 +123,7 @@ directive('bottomBar', function() {
                     docIds = _.pluck(docService.selectedDocs, 'id'),
                     data = JSON.stringify({ docIds: docIds });
                 
-                webViewBridge.call('print', { method: 'POST', url: url, data: data });
+                webViewBridge.print(docService.id, _.pluck(docService.selectedDocs, 'id'));
             };
 
 
