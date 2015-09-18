@@ -413,7 +413,7 @@ provider('$commonDialog', function() {
 
 /**
  * Doc type selection dialog ("Add Document / Update Document")
- * @param {object} options: title -> dialog title
+ * @param {object} options: title -> dialog title, docTypeId, applicantType
  */
 factory('docTypeDialog', function($commonDialog, $q, $rootScope, docTypeService) {
 
@@ -424,7 +424,9 @@ factory('docTypeDialog', function($commonDialog, $q, $rootScope, docTypeService)
 
         scope.docTypeService = docTypeService;
 
-        /* for "Add Document" button */
+        // initial values
+        scope.selectedDocTypeId = options.docTypeId;
+        scope.selectedApplicantType = options.applicantType;
 
         scope.onDocTypeSelect = function(id) {
             scope.selectedDocTypeId = id;
@@ -438,6 +440,7 @@ factory('docTypeDialog', function($commonDialog, $q, $rootScope, docTypeService)
         
         $commonDialog({
             title: options.title,
+            ok: options.ok,
             width: 500,
             templateUrl: '/static/ngtemplates/add_document_modal.html',
             scope: scope,

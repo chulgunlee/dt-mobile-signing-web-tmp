@@ -1,6 +1,6 @@
 {
     "docTypes": [
-        { "id": 1, "name": "Driver License", "applicants": ["buyer", "cobuyer"] },
-        { "id": 2, "name": "Insurance" }
+        { "id": 1, "docTypeName": "driver-license", "name": "Driver License", "applicants": ["buyer", "cobuyer"] },
+        { "id": 2, "docTypeName": "insurance", "name": "Insurance" }
     ]
 }

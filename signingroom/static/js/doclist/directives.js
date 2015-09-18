@@ -195,7 +195,7 @@ directive('morePopover', function($popover) {
         restrict: 'EA',
         scope: true,
 
-        controller: function($scope, $http, docService) {
+        controller: function($scope, $http, docService, docTypeDialog) {
 
             /**
              * Move doc to Others or to Funding Package
@@ -204,6 +204,7 @@ directive('morePopover', function($popover) {
                 var data = { requiredForFunding: !$scope.doc.requiredForFunding };
 
                 $http.put(apiUri + 'docs/' + $scope.doc.id).success(function(result) {
+                    // TODO: add update data
                     docService.refresh(docService.id);
                 });
             };
@@ -212,7 +213,19 @@ directive('morePopover', function($popover) {
              * Update doc type
              */
             $scope.editDoc = function() {
-                console.log('edit doc:' + $scope.doc.id);
+                docTypeDialog({
+                    title: 'Update Properties',
+                    ok: 'Save',
+                    docTypeId: $scope.doc.docTypeId,
+                    applicantType: $scope.doc.scanApplicant
+                }).then(function(result) {
+                    console.log(result);
+
+                    $http.put(apiUri + 'docs/' + $scope.doc.id).success(function(result) {
+                        // TODO: add update data
+                        docService.refresh(docService.id);
+                    });
+                });
             };
 
             /**

@@ -59,6 +59,7 @@
         {
             "id": 1240,
             "docType": "driver-license",
+            "docTypeId": 1,
             "templateName": "Driver License",
             "requiredForFunding": true,
             "signable": true,
