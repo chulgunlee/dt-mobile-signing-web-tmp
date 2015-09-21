@@ -112,7 +112,7 @@ directive('bottomBar', function() {
                     title: 'Submit Documents',
                     ok: 'Submit'
                 }).then(function() {
-                    docService.submitSignedDocs().then(function(reslut) {
+                    docService.submitSignedDocs().then(function(result) {
                         $msgbox.alert('Document(s) have been successfully submitted to lender.');
                     });
                 });
@@ -200,7 +200,7 @@ directive('morePopover', function($popover, $document, $animate) {
         restrict: 'EA',
         scope: true,
 
-        controller: function($scope, $http, docService, docTypeDialog) {
+        controller: function($scope, $api, docService, docTypeDialog) {
 
             /**
              * Move doc to Others or to Funding Package
@@ -208,7 +208,7 @@ directive('morePopover', function($popover, $document, $animate) {
             $scope.moveDoc = function() {
                 var data = { requiredForFunding: !$scope.doc.requiredForFunding };
 
-                $http.put(apiUri + 'docs/' + $scope.doc.id).success(function(result) {
+                $api.updateDoc($scope.doc.id, data).then(function(response) {
                     // TODO: add update data
                     docService.refresh(docService.id);
                 });
@@ -226,7 +226,9 @@ directive('morePopover', function($popover, $document, $animate) {
                 }).then(function(result) {
                     console.log(result);
 
-                    $http.put(apiUri + 'docs/' + $scope.doc.id).success(function(result) {
+                    // TODO: set update data
+                    $api.updateDoc($scope.doc.id, {}).then(function(response) {
+
                         // TODO: add update data
                         docService.refresh(docService.id);
                     });
@@ -340,6 +342,20 @@ directive('webViewBridgeDebug', function() {
             $scope.logs = webViewBridge.logs;
         },
     };
+}).
+
+
+directive('loadingIndicator', function() {
+
+    return {
+        restrict: 'E',
+        replace: true,
+        template: '<div class="loading" ng-show="srv.visible"><div class="loading-spinner" ng-bind="srv.msg"></div></div>',
+        controller: function($scope, loadingIndicatorService) {
+            $scope.srv = loadingIndicatorService;
+        }
+    };
+
 });
 
 

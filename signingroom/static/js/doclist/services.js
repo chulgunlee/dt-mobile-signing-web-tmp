@@ -52,7 +52,7 @@ factory('Doc', function(DOC_STATUS_MAPPING, SIGNER_TYPE_MAPPING, signerService) 
 
 
 /* Data Services */
-factory('docService', function($q, $http, Doc, signerService, docTypeService, DOC_STATUS_MAPPING, SIGNER_TYPE_MAPPING) {
+factory('docService', function($q, $api, Doc, signerService, docTypeService, DOC_STATUS_MAPPING, SIGNER_TYPE_MAPPING) {
 
     var service = {
 
@@ -61,11 +61,13 @@ factory('docService', function($q, $http, Doc, signerService, docTypeService, DO
 
         refresh: function(packageId) {
             
-            $http.get(apiUri + 'packages/' + packageId).success(function(data, status) {
-                if (status == 302) {
+            $api.getDocList(packageId).then(function(response) {
+                if (response.status == 302) {
                     // TODO: session time out
                     return;
                 }
+
+                var data = response.data;
 
                 service.id = data.id;
 
@@ -90,14 +92,14 @@ factory('docService', function($q, $http, Doc, signerService, docTypeService, DO
             console.log('submitting' + JSON.stringify(signedDocIds));
 
             var deferred = $q.defer();
-
-            $http.put(apiUri + 'packages/' + this.id + '/submit/', { docIds: signedDocIds }).success(function(data, status) {
-                if (status == 302) {
+            
+            $api.submitDocs(this.id, signedDocIds).then(function(response) {
+                if (response.status == 302) {
                     // TODO: session timeout
                     return;
                 }
 
-                if (status == 206) {
+                if (response.status == 204) {
                     deferred.resolve();
                 }
 
@@ -120,14 +122,14 @@ factory('docService', function($q, $http, Doc, signerService, docTypeService, DO
          */
         get contractSigned() {
             var contract = this.contractDoc;
-            return contract.signed || contract.submitted;
+            return contract ? (contract.signed || contract.submitted) : false;
         },
 
         /**
          * Check if contract is submitted
          */
         get contractSubmitted() {
-            return this.contractDoc.submitted;
+            return this.contractDoc ? this.contractDoc.submitted : false;
         },
         
         /**
@@ -246,13 +248,13 @@ factory('signerService', function(Signer) {
 }).
 
 
-factory('docTypeService', function($http) {
+factory('docTypeService', function($api) {
     var service = {
         
         init: function() {
             
-            $http.get(apiUri + '/doctypes/').success(function(result) {
-                service.docTypes = result.docTypes;
+            $api.getDocTypes().then(function(response) {
+                service.docTypes = response.data.docTypes;
             });
         },
 
@@ -532,6 +534,84 @@ factory('webViewBridge', function() {
         return msg;
     };
 
+
+    return service;
+}).
+
+
+
+factory('loadingIndicatorService', function() {
+
+    var service = {
+        visible: false,
+        msg: null,
+
+        show: function(msg) {
+            this.msg = msg;
+            this.visible = true;
+        },
+        
+        hide: function() {
+            this.visible = false;
+        },
+    };
+
+    return service;
+
+}).
+
+/**
+ * server API wrapper
+ */
+factory('$api', function($http, $q, loadingIndicatorService) {
+    
+    var request = function(method, uri, data) {
+        
+        loadingIndicatorService.show('Loading data...');
+
+        var deferred = $q.defer();
+
+        $http({
+            method: method.toUpperCase(),
+            url: apiUri + uri,
+            data: data,
+        }).then(function(response) {
+
+            loadingIndicatorService.hide();
+            deferred.resolve(response);
+
+        }, function(response) {
+
+            loadingIndicatorService.hide();
+            deferred.reject(response);
+        });
+
+        return deferred.promise;
+    };
+
+    var service = {
+
+        getDocList: function(packageId) {
+            return request('GET', 'packages/' + packageId);
+        },
+
+        submitDocs: function(packageId, docIds) {
+            return request('GET', 'packages/' + packageId + '/submit/', { docIds: docIds });
+        },
+
+        getDocTypes: function() {
+            return request('GET', 'doctypes/');
+        },
+
+        updateDoc: function(docId, data) {
+            return request('PUT', 'docs/' + docId, data);
+        },
+
+        getDocPreview: function(docId) {
+            return request('GET', 'docs/' + docId + '/preview');
+        },
+
+    };
 
     return service;
 });

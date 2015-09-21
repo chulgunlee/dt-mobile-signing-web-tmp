@@ -17,14 +17,16 @@ controller('DocListCtrl', ['$scope', 'docService', function($scope, docService) 
 /**
  * Controller for document preview
  */
-controller('DocPreviewCtrl', ['$scope', '$routeParams', '$http', function($scope, $routeParams, $http) {
+controller('DocPreviewCtrl', function($scope, $routeParams, $api) {
 
-    $http.get(apiUri + 'docs/' + $routeParams.docId + '/preview/').success(function(data, status) {
+    $api.getDocPreview($routeParams.docId).then(function(response) {
 
-        if (status == 302) {
+        if (response.status == 302) {
             // TODO: session timeout
             return;
         };
+
+        var data = response.data;
 
         $scope.title = data.title;
         $scope.id = data.id;
@@ -32,6 +34,6 @@ controller('DocPreviewCtrl', ['$scope', '$routeParams', '$http', function($scope
     });
 
 
-}]);
+});
 
 
