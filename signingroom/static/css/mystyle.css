@@ -251,7 +251,7 @@ html, body {
 
 /* modal dialog fix */
 
-.modal .modal-dialog .mrdal-content, .popover {
+.modal .modal-dialog .modal-content, .popover {
     border: 0 !important;           /* remove border from popove and dialog */
 }
 .modal.center {
