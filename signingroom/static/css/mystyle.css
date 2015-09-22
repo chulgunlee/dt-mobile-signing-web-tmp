@@ -15,7 +15,7 @@ html, body {
     min-height: 34px;
     border-bottom: solid 1px #dee6ea;
     box-shadow: 0 1px 0 #f2f6f7;
-    font-weight: bold;
+    font-weight: 500;
 }
 
 .doclist-container {
@@ -69,8 +69,9 @@ html, body {
 .status-badge .status {
     position: absolute;
     width: 100%;
-    padding: 0 20px 4px;
-    line-height: 14px;
+    padding: 0 20px 2px;
+    font-weight: 500;
+    line-height 13px;
     font-size: 12px;
     left: 0;
     bottom: 0;
@@ -249,6 +250,10 @@ html, body {
 }
 
 /* modal dialog fix */
+
+.modal .modal-dialog .mrdal-content, .popover {
+    border: 0 !important;           /* remove border from popove and dialog */
+}
 .modal.center {
     top: 20%;
 }
@@ -297,7 +302,15 @@ html, body {
 }
 
 .signer-name {
-    font-weight: bold;
+    font-weight: 500;
+    font-size: 13px;
+    color: #231f20;
+}
+
+.signer-type {
+    font-weight: 400;
+    font-size: 13px;
+    color: #a1a1a1;
 }
 
 .signer-selected-wrapper {
@@ -354,7 +367,12 @@ html, body {
 
 .add-document-body .dropdown-menu>li.active>a {
     color: #231f20;                     /* remove default active color */
-    background: #fff;
+    background: #fff url(/static/images/icn-check-sm.png) no-repeat 15px 15px ;
+}
+
+@media (-webkit-min-device-pixel-ratio: 2),
+       (min-resolution: 192dpi) {
+    background: #fff url(/static/images/icn-check-sm@2x.png) no-repeat 15px 15px ;
 }
 
 /* document preview */
