@@ -60,7 +60,7 @@
             "id": 1240,
             "docType": "driver-license",
             "docTypeId": 1,
-            "templateName": "Driver License",
+            "templateName": "Driver License Driver License Driver License Driver License Driver License Driver License Driver License Driver License Driver License Driver License ",
             "requiredForFunding": true,
             "signable": true,
             "status": "uploaded",
@@ -77,6 +77,18 @@
             "id": 0,
             "docType": "driver-license",
             "templateName": "Driver License",
+            "requiredForFunding": true,
+            "signable": false,
+            "status": "initial",
+            "isExternal": true,
+            "scanApplicant": "buyer"
+        },
+
+
+        {
+            "id": 0,
+            "docType": "driver-license",
+            "templateName": "Driver License Driver License Driver License Driver License Driver License Driver License Driver License Driver License Driver License Driver License ",
             "requiredForFunding": true,
             "signable": false,
             "status": "initial",

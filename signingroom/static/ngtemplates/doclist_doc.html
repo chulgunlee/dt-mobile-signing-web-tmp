@@ -12,9 +12,11 @@
     </div>
 
     <div class="doc-body" id="doc-body-{{doc.id}}">
-        <p class="text-center doc-title" ng-if="!doc.isPlaceholder">{{doc.templateName}}</p>
-        <p class="text-center doc-placeholder-title" ng-if="doc.isPlaceholder">{{doc.templateName}}</p>
-        <p class="text-center doc-applicant-name" ng-if="doc.scanApplicant">{{doc.scanApplicant | signerTypeName }}</p>
+        <div class="doc-title-block">
+            <p class="text-center doc-title" ng-if="!doc.isPlaceholder">{{doc.templateName}}</p>
+            <p class="text-center doc-placeholder-title" ng-if="doc.isPlaceholder">{{doc.templateName}}</p>
+            <p class="text-center doc-applicant-name" ng-if="doc.scanApplicant">{{doc.scanApplicant | signerTypeName }}</p>
+        </div>
         <button class="doc-btn-add" icon-button="icn-add-blue" ng-if="doc.isPlaceholder" ng-click="addDoc(doc);$event.stopPropagation()">Add</button>
     </div>
 

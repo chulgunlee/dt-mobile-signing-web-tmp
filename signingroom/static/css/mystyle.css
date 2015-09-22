@@ -1,8 +1,8 @@
 html, body {
     background: #f3f6f8;
+    font-family: "Helvetica Neue", Helvetica, Roboto, Arial, sans-serif;
     -webkit-user-select: none;          /* disable text seleting */
     -webkit-tap-highlight-color: rgba(0,0,0,0);
-
 }
 
 #doclist {
@@ -15,6 +15,7 @@ html, body {
     min-height: 34px;
     border-bottom: solid 1px #dee6ea;
     box-shadow: 0 1px 0 #f2f6f7;
+    font-size: 13px;
     font-weight: 500;
 }
 
@@ -84,12 +85,22 @@ html, body {
     padding: 30px 15px;
 }
 
+.doc-body .doc-title-block {            /* "document title + applicant name */
+    min-height: 60px;       /* apply this to push the "+" button in placeholder down */
+}
+
 .doc-body .doc-title {
     margin-top: 30px;
     margin-bottom: 2px;
     font-size: 13px;
     line-height: 15px;
     color: #2e95d2;
+    max-height: 72px;
+    overflow: hidden;
+    /* webkit only text-overflow */
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 5;
 }
 
 .doc-body .doc-placeholder-title {
@@ -98,16 +109,23 @@ html, body {
     font-size: 13px;
     color: #231f20;
     line-height: 15px;
+    max-height: 72px;
+    overflow: hidden;
+    /* webkit only text-overflow */
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 5;
 }
 
 .doc-body .doc-applicant-name {
     font-size :13px;
     color: #a1a1a1;
+    font-weight: 300;
+    margin-bottom: 0;
 }
 
 .doc-btn-add {
-    position: absolute;
-    bottom: 40px;
+    position: relative;
     left: 50%;                  /* center horizontal */
     margin-left: -22px;         /* center horizontal */
 }

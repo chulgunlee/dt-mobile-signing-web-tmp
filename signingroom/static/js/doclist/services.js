@@ -487,7 +487,7 @@ factory('webViewBridge', function() {
         },
 
         _absUrl: function(url) {
-            return location.protocol + '//' + location.host+ apiUri + url;
+            return location.protocol + '//' + location.host + '/' + url;
         },
 
         /* Native API wrappers */
