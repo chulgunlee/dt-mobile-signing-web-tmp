@@ -10,7 +10,7 @@ directive('doc', function() {
             doc: '=',
         },
 
-        controller: function($scope, docService, webViewBridge, SIGNER_TYPE_MAPPING) {
+        controller: function($scope, $api, docService, webViewBridge, SIGNER_TYPE_MAPPING, docTypeDialog, $msgbox) {
             // used for caching a document preview
             $scope.preview = null;
 
@@ -40,12 +40,53 @@ directive('doc', function() {
                 }
             };
 
+            /**
+             * Invoke the POS Capture when user clicked the placeholder
+             */
             $scope.addDoc = function(doc) {
                 if (doc.isPlaceholder) {
-                    
                     webViewBridge.startPOSCapture(doc.id, doc.docType, doc.scanApplicant);
-
                 }
+            };
+
+            /**
+             * Move doc to Others or to Funding Package
+             */
+            $scope.moveDoc = function() {
+                var data = { requiredForFunding: !$scope.doc.requiredForFunding };
+
+                $api.updateDoc($scope.doc.id, data).then(function(response) {
+                    // TODO: add update data
+                    docService.refresh(docService.id);
+                });
+            };
+
+            /**
+             * Update doc type
+             */
+            $scope.editDoc = function() {
+                docTypeDialog({
+                    title: 'Update Properties',
+                    ok: 'Save',
+                    docTypeId: $scope.doc.docTypeId,
+                    applicantType: $scope.doc.scanApplicant
+                }).then(function(result) {
+                    console.log(result);
+
+                    // TODO: set update data
+                    $api.updateDoc($scope.doc.id, {}).then(function(response) {
+
+                        // TODO: add update data
+                        docService.refresh(docService.id);
+                    });
+                });
+            };
+
+            /**
+             * Delete doc (delete scanned pdf, not delete doc from package)
+             */
+            $scope.deleteDoc = function() {
+                console.log('delete doc:' + $scope.doc.id);
             };
 
             /**
@@ -60,7 +101,15 @@ directive('doc', function() {
         },
 //        require: 'docPreviewModal',
         link: function(scope, element, attrs, docPreviewModalCtrl) {
- //           alert('ok');
+            scope.$on('morePopover.moveDoc', function(e) {
+                scope.moveDoc();
+            });
+            scope.$on('morePopover.editDoc', function(e) {
+                scope.editDoc();
+            });
+            scope.$on('morePopover.deleteDoc', function(e) {
+                scope.deleteDoc();
+            });
         }
     }
 }).
@@ -200,46 +249,18 @@ directive('morePopover', function($popover, $document, $animate) {
         restrict: 'EA',
         scope: true,
 
-        controller: function($scope, $api, docService, docTypeDialog) {
+        controller: function($scope) {
 
-            /**
-             * Move doc to Others or to Funding Package
-             */
             $scope.moveDoc = function() {
-                var data = { requiredForFunding: !$scope.doc.requiredForFunding };
-
-                $api.updateDoc($scope.doc.id, data).then(function(response) {
-                    // TODO: add update data
-                    docService.refresh(docService.id);
-                });
+                $scope.$emit('morePopover.moveDoc');
             };
 
-            /**
-             * Update doc type
-             */
             $scope.editDoc = function() {
-                docTypeDialog({
-                    title: 'Update Properties',
-                    ok: 'Save',
-                    docTypeId: $scope.doc.docTypeId,
-                    applicantType: $scope.doc.scanApplicant
-                }).then(function(result) {
-                    console.log(result);
-
-                    // TODO: set update data
-                    $api.updateDoc($scope.doc.id, {}).then(function(response) {
-
-                        // TODO: add update data
-                        docService.refresh(docService.id);
-                    });
-                });
+                $scope.$emit('morePopover.editDoc');
             };
 
-            /**
-             * Delete doc (delete scanned pdf, not delete doc from package)
-             */
             $scope.deleteDoc = function() {
-                console.log('delete doc:' + $scope.doc.id);
+                $scope.$emit('morePopover.deleteDoc');
             };
 
         },
