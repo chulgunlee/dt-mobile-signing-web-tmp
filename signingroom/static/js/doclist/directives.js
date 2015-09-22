@@ -34,7 +34,7 @@ directive('doc', function() {
                         docType: doc.docType,
                         docTypeName: doc.templateName,
                         applicantType: doc.scanApplicant,
-                        applicantTypeName: doc.scanApplicant ? SIGNER_TYPE_MAPPING[doc.scanApplicant] : '',
+                        applicantTypeName: doc.scanApplicant ? SIGNER_TYPE_MAPPING[doc.scanApplicant] : undefined,
                     };
                     webViewBridge.startPreview(docService.id, doc.id, docProps);
                 }
