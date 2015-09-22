@@ -32,7 +32,7 @@ directive('doc', function() {
                     // Show loading modal
                     var docProps = {
                         docType: doc.docType,
-                        docTypeName: '',
+                        docTypeName: doc.templateName,
                         applicantType: doc.scanApplicant,
                         applicantTypeName: doc.scanApplicant ? SIGNER_TYPE_MAPPING[doc.scanApplicant] : '',
                     };
