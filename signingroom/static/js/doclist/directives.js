@@ -382,4 +382,3 @@ directive('loadingIndicator', function() {
 
 });
 
-

@@ -17,7 +17,7 @@ module.exports = function(grunt) {
 
                     if (parts[1] == 'active' || parts[1] == 'hover') {
                         sprite.name= parts[0] + ':' + parts[1];
-                    } else if (parts[1] == 'disabled') {
+                    } else if (parts[1] == 'disabled' || parts[1] == 'checked') {
                         sprite.name = parts[0] + '[' + parts[1] + ']';
                     }
                 },

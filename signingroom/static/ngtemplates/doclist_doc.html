@@ -4,12 +4,8 @@
             {{doc.status | docStatusName}}
         </div>
     </signer-popover>
-    <div ng-if="!doc.isPlaceholder" class="doc-selected-wrapper" ng-click="onDocSelected(doc.id);$event.stopPropagation()">
-        <div class="roundedTwo docSelector">
-            <input type="checkbox" value="None" id="doc-{{$index}}-cbx" name="doc-{{$index}}-cbx" disabled="disabled" ng-checked="doc.selected" />
-            <label for="doc-{{$index}}-cbx"></label>
-        </div>
-    </div>
+
+    <button icon-button="icn-checkbox" width="30" height="30" class="doc-selector" ng-checked="doc.selected"  ng-if="!doc.isPlaceholder" ng-click="onDocSelected(doc.id);$event.stopPropagation()"></button>
 
     <div class="doc-body" id="doc-body-{{doc.id}}">
         <div class="doc-title-block">
