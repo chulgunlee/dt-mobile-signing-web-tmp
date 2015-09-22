@@ -99,7 +99,7 @@ directive('doc', function() {
                 $scope.doc.selected = !$scope.doc.selected;
             };
         },
-//        require: 'docPreviewModal',
+
         link: function(scope, element, attrs, docPreviewModalCtrl) {
             scope.$on('morePopover.moveDoc', function(e) {
                 scope.moveDoc();
@@ -144,10 +144,14 @@ directive('bottomBar', function() {
                     width: 526,
                     templateUrl: '/static/ngtemplates/select_signer_modal.html',
                     scope: $scope,
+                    okEnabled: function() {
+                        return $scope.signerService.selectedSigners.length > 0;
+                    },
                 }).then(function() {
                     var selectedDocIds = _.pluck(docService.selectedDocs, 'id'),
                         selectedSigners = signerService.selectedSigners;
-                    console.log('selected docs = ' + selectedDocIds + ', selected signers = ' + selectedSigners);
+
+                    webViewBridge.startSigningRoom($scope.docService.id, selectedDocIds, selectedSigners);
                 });
             };
 
@@ -168,8 +172,7 @@ directive('bottomBar', function() {
             };
 
             $scope.printDocs = function() {
-                var url = location.protocol + '//' + location.host + apiUri + 'packages/' + docService.id + '/print/',
-                    docIds = _.pluck(docService.selectedDocs, 'id'),
+                var docIds = _.pluck(docService.selectedDocs, 'id'),
                     data = JSON.stringify({ docIds: docIds });
                 
                 webViewBridge.print(docService.id, _.pluck(docService.selectedDocs, 'id'));

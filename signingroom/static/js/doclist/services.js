@@ -516,8 +516,8 @@ factory('webViewBridge', function() {
             });
         },
         
-        startSigningRoom: function(pkgId, docIds, url) {
-            this.call('startSigningRoom', { pkgId: pkgId, docIds: docIds, url: url });
+        startSigningRoom: function(pkgId, docIds, signers, url) {
+            this.call('startSigningRoom', { pkgId: pkgId, docIds: docIds, signers: signers, url: url });
         },
 
         startPOSCapture: function(docId, docType, applicantType) {
