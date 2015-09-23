@@ -1,5 +1,6 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from django.http import HttpResponse
 
 import os
 import json
@@ -19,6 +20,16 @@ class DocPackageView(APIView):
         doc_pkg = json.load(open(os.path.dirname(__file__) + '/doc_list_response.json'))
 
         return Response(doc_pkg)
+
+
+class DocPackagePrintView(View):
+    
+    def post(self, request, pkg_id):
+
+        """
+        Print documents
+        """
+        return HttpResponse(open(os.path.dirname(__file__) + '/FormRBP-1027_2012.pdf').read(), content_type='application-xpdf')
         
 
 class DocPackageSubmitView(APIView):
