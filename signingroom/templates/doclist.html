@@ -5,15 +5,15 @@
     <meta http-equiv="Content-Type" content="text/html; charset=us-ascii" />
     <title>Document List - Dealertrack</title>
     <meta name="viewport" content="user-scalable=no, initial-scale=1.0, maximum-scale=1.0, width=device-width" />
-    <link href="/static/css/reset.css" rel="stylesheet">
-    <link href="/static/css/angular-motion.css" rel="stylesheet" />
+    <link href="/static/assets/css/reset.css" rel="stylesheet">
+    <link href="/static/assets/css/angular-motion.css" rel="stylesheet" />
     <!-- Bootstrap 3.2  CSS-->
-    <link href="/static/css/bootstrap/bootstrap.css" rel="stylesheet" />
+    <link href="/static/assets/libs/bootstrap/bootstrap.css" rel="stylesheet" />
     <!-- Custom  CSS-->
-    <link href="/static/css/mystyle.css" rel="stylesheet" />
-    <link href="/static/css/icon-sprite.css" rel="stylesheet" />
+    <link href="/static/assets/css/style.css" rel="stylesheet" />
+    <link href="/static/assets/css/icon-sprite.css" rel="stylesheet" />
 </head>
-<body ng-app="docListApp">
+<body ng-app="dc.app">
     <div web-view-bridge-debug></div>
     <div id="content" ng-view></div>
     <loading-indicator></loading-indicator>
@@ -25,21 +25,32 @@
         var webViewBridgeDebugEnabled = true;
     </script>
 
-    <script src="/static/js/underscore.js"></script>
-    <script src="/static/js/fastclick.js"></script>
-    <script src="/static/js/webviewbridge.js"></script>
-    <script src="/static/js/angular/angular.js"></script>
-    <script src="/static/js/angular/angular-resource.js"></script>
-    <script src="/static/js/angular/angular-animate.js"></script>
-    <script src="/static/js/angular/angular-route.js"></script>
-    <script src="/static/js/angular/angular-touch.js"></script>
-    <script src="/static/js/angular/angular-strap.js"></script>
-    <script src="/static/js/angular/angular-strap.tpl.js"></script>
-    <script src="/static/js/doclist/app.js"></script>
-    <script src="/static/js/doclist/constants.js"></script>
-    <script src="/static/js/doclist/filters.js"></script>
-    <script src="/static/js/doclist/services.js"></script>
-    <script src="/static/js/doclist/directives.js"></script>
-    <script src="/static/js/doclist/controllers.js"></script>
+    <script src="/static/assets/libs/underscore.js"></script>
+    <script src="/static/assets/libs/fastclick.js"></script>
+    <script src="/static/assets/libs/webviewbridge.js"></script>
+    <script src="/static/assets/libs/angular/angular.js"></script>
+    <script src="/static/assets/libs/angular/angular-resource.js"></script>
+    <script src="/static/assets/libs/angular/angular-animate.js"></script>
+    <script src="/static/assets/libs/angular/angular-route.js"></script>
+    <script src="/static/assets/libs/angular/angular-touch.js"></script>
+    <script src="/static/assets/libs/angular/angular-strap.js"></script>
+    <script src="/static/assets/libs/angular/angular-strap.tpl.js"></script>
+
+    <script src="/static/app/app.module.js"></script>
+    <script src="/static/app/app.route.js"></script>
+    <script src="/static/app/components/doclist/constants.js"></script>
+    <script src="/static/app/components/doclist/docController.js"></script>
+    <script src="/static/app/components/doclist/docService.js"></script>
+    <script src="/static/app/components/doclist/filters.js"></script>
+    <script src="/static/app/components/doclist/ui.js"></script>
+    <script src="/static/app/components/preview/previewController.js"></script>
+    <script src="/static/app/shared/api/api.js"></script>
+    <script src="/static/app/shared/debug/webViewBridgeDirective.js"></script>
+    <script src="/static/app/shared/debug/webViewBridgeService.js"></script>
+    <script src="/static/app/shared/loading/loadingDirective.js"></script>
+    <script src="/static/app/shared/loading/loadingService.js"></script>
+    <script src="/static/app/shared/ui/uiDirective.js"></script>
+    <script src="/static/app/shared/ui/uiService.js"></script>
+
 </body>
 </html>

@@ -1,4 +1,7 @@
-myApp.
+angular.module('dc.components.doclist.filters', [
+    'dc.components.doclist.constants',
+]).
+
 
 filter('signerTypeName', function(SIGNER_TYPE_MAPPING) {
     return function(input) {

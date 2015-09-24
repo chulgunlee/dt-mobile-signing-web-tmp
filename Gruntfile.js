@@ -6,11 +6,11 @@ module.exports = function(grunt) {
 
         sprite: {
             all: {
-                src: ['signingroom/static/images/icons/*.png'],
-                retinaSrcFilter: ['signingroom/static/images/icons/*@2x.png'],
-                dest: 'signingroom/static/images/icon-sprite.png',
-                retinaDest: 'signingroom/static/images/icon-sprite@2x.png',
-                destCss: 'signingroom/static/css/icon-sprite.css',
+                src: ['signingroom/static/assets/img/icons/*.png'],
+                retinaSrcFilter: ['signingroom/static/assets/img/icons/*@2x.png'],
+                dest: 'signingroom/static/assets/img/icon-sprite.png',
+                retinaDest: 'signingroom/static/assets/img/icon-sprite@2x.png',
+                destCss: 'signingroom/static/assets/css/icon-sprite.css',
                 padding: 2,
                 cssVarMap: function(sprite) {
                     var parts = sprite.name.split('.');

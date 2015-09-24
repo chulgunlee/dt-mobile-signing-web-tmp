@@ -1,4 +1,4 @@
-myApp.
+angular.module('dc.components.doclist.constants', []).
 
 /* Constant definitions */
 constant('DOC_STATUS_MAPPING', {
@@ -13,4 +13,5 @@ constant('SIGNER_TYPE_MAPPING', {
     cobuyer: 'Co-applicant',
     dealer: 'Dealer'
 });
+
 
