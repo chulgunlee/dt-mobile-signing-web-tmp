@@ -307,7 +307,7 @@ html, body {
 }
 
 .signers-list {
-    margin: 0 -35px 35px 0 !important;
+    margin: 0 -35px 0 0 !important;
 }
 
 .signers-list>li {
