@@ -2,6 +2,7 @@ angular.module('dc.components.doclist.ui', [
     'dc.shared.ui.uiService',
     'dc.shared.ui.uiDirective',
     'dc.components.doclist.docService',
+    'dc.shared.webviewbridge.webviewbridge',
 ]).
 
 /**
