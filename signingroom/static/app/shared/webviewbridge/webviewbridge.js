@@ -1,4 +1,4 @@
-angular.module('dc.shared.debug.webViewBridgeService', []).
+angular.module('dc.shared.webviewbridge.webviewbridge', []).
 
 /**
  * WebViewBridge wrapper.

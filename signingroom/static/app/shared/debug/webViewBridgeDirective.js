@@ -1,5 +1,5 @@
 angular.module('dc.shared.debug.webViewBridgeDirective', [
-    'dc.shared.debug.webViewBridgeService',
+    'dc.shared.webviewbridge.webviewbridge',
 ]).
 
 /**

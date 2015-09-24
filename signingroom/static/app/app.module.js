@@ -7,7 +7,7 @@ angular.module('dc.app', [
 
     'dc.route',
     'dc.shared.debug.webViewBridgeDirective',
-    'dc.shared.debug.webViewBridgeService',
+    'dc.shared.webviewbridge.webviewbridge',
 ]).
 
 
