@@ -86,10 +86,12 @@
             border-right: solid 1px #e5e5e5;
             color: #007aff;
             font-size: 15px;
+            font-weight: 300;
             border-radius: 0 !important;
 
             &.btn-msgbox-ok {
-                font-weight: bold;
+                font-weight: 500;
+                border-right: 0;
             }
         }
 
