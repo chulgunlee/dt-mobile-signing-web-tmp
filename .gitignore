@@ -59,3 +59,6 @@ db.sqlite3
 node_modules/
 .DS_Store
 .env/
+
+bundle.js
+bundle.js.map

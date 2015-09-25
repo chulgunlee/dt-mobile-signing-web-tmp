@@ -1,3 +1,7 @@
+var templates = {
+    'webviewbridge_debug.html': require('./webviewbridge_debug.html'),
+};
+
 angular.module('dc.shared.debug.webViewBridgeDirective', [
     'dc.shared.webviewbridge.webviewbridge',
 ]).
@@ -6,10 +10,10 @@ angular.module('dc.shared.debug.webViewBridgeDirective', [
  * A directive used to debug WebViewBridge (integration with native).
  * Put this directive right after the <body> tag.
  */
-directive('webViewBridgeDebug', function() {
+directive('webViewBridgeDebug', function($templateCache) {
     return {
         restrict: 'EA',
-        templateUrl: '/static/app/shared/debug/webviewbridge_debug.html',
+        templateUrl: templates['webviewbridge_debug.html'],
         replace: true,
         scope: true,
 

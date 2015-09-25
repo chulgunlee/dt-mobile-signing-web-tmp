@@ -23,11 +23,31 @@ module.exports = function(grunt) {
                 },
             },
         },
+
+        webpack: {
+            build: {
+                entry: './signingroom/static/app/app.module.js',
+                output: {
+                    path: 'signingroom/static',
+                    filename: 'bundle.js',
+                    sourceMapFilename: 'bundle.js.map',
+                },
+                module: {
+                    loaders: [
+                        { test: /\.html$/, loader: 'ngtemplate!html' },
+                    ]
+                },
+                watch: false,
+                devtool: '#source-map',
+            },
+        },
     });
 
     // load modules
     grunt.loadNpmTasks('grunt-spritesmith');
+    grunt.loadNpmTasks('grunt-webpack');
     
-    grunt.registerTask('default', [ 'sprite' ]);
+    grunt.registerTask('sprite', [ 'sprite' ]);
+    grunt.registerTask('build', [ 'webpack:build' ]);
 
 };
