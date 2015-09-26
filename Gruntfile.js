@@ -1,6 +1,15 @@
 'use strict';
 
+
+
 module.exports = function(grunt) {
+
+    require('matchdep').filterAll('grunt-*').forEach(grunt.loadNpmTasks);
+
+    var webpack = require('webpack'),
+        webpackConfig = require('./webpack.config.js');
+
+    
 
     grunt.initConfig({
 
@@ -25,29 +34,46 @@ module.exports = function(grunt) {
         },
 
         webpack: {
+            options: webpackConfig,
             build: {
-                entry: './signingroom/static/app/app.module.js',
-                output: {
-                    path: 'signingroom/static',
-                    filename: 'bundle.js',
-                    sourceMapFilename: 'bundle.js.map',
-                },
-                module: {
-                    loaders: [
-                        { test: /\.html$/, loader: 'ngtemplate!html' },
-                    ]
-                },
                 watch: false,
-                devtool: '#source-map',
+                plugins: webpackConfig.plugins.concat(
+                    new webpack.optimize.DedupePlugin(),
+                    new webpack.optimize.UglifyJsPlugin()
+                ),
+            },
+
+            'build-dev': {
+                devtool: 'sourcemap',
+                debug: true,
             },
         },
+
+        "webpack-dev-server": {
+            options: {
+                webpack: webpackConfig,
+                contentBase: 'signingroom/',
+                proxy: {
+                    "*": "http://localhost:8001",
+                },
+                publicPath: "/" + webpackConfig.output.publicPath
+            },
+
+            start: {
+                keepAlive: true,
+                port: 8000,
+                webpack: {
+                    //devtool: 'eval', 
+                    debug: true
+                }
+            },
+        },
+
     });
 
-    // load modules
-    grunt.loadNpmTasks('grunt-spritesmith');
-    grunt.loadNpmTasks('grunt-webpack');
-    
     grunt.registerTask('sprite', [ 'sprite' ]);
     grunt.registerTask('build', [ 'webpack:build' ]);
+    grunt.registerTask('dev', [ 'webpack:build-dev' ]);
+    grunt.registerTask('default', [ 'webpack-dev-server:start' ]);
 
 };

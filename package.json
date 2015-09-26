@@ -16,11 +16,14 @@
     "angular-strap": "^2.3.3",
     "angular-touch": "^1.4.6",
     "fastclick": "^1.0.6",
+    "grunt-contrib-compress": "^0.13.0",
     "grunt-spritesmith": "^5.1.0",
     "grunt-webpack": "^1.0.11",
+    "html-loader": "^0.3.0",
     "lodash": "^3.10.1",
+    "matchdep": "^0.3.0",
     "ngtemplate-loader": "^1.3.1",
     "webpack": "^1.12.2",
-    "webpack-dev-server": "^1.11.0"
+    "webpack-dev-server": "^1.12.0"
   }
 }
