@@ -1,3 +1,5 @@
+
+// libraries
 var FastClick = require('fastclick');
 require('lodash');
 require('angular');
@@ -6,7 +8,7 @@ require('angular-animate');
 require('angular-route');
 require('angular-strap');
 
-
+// app components
 require('./app.route.js');
 require('./components/doclist/constants.js');
 require('./components/doclist/docController.js');
@@ -21,6 +23,12 @@ require('./shared/loading/loadingService.js');
 require('./shared/ui/uiDirective.js');
 require('./shared/ui/uiService.js');
 require('./shared/webviewbridge/webviewbridge.js');
+
+// include stylesheets
+require('../assets/css/reset.css');
+require('../assets/css/angular-motion.css');
+require('../assets/css/style.css');
+require('../assets/css/icon-sprite.css');
 
 // load templates
 var templates = {
