@@ -23,13 +23,25 @@ How To Build Static Files
 
 Install grunt:
 
-$ sudo npm install -g grunt grunt-cli node-gyp
+    $ sudo npm install -g grunt grunt-cli node-gyp
 
-Install GraphicsMagick for merging images:
+Install npm bundles:
 
-Install other tools:
+    $ npm install
 
-$ npm install
+This project uses [webpack](https://webpack.github.io/) to build the static files, while providing a dev server which can merge the js/css files automatically.
 
-> NOTE: The default image engine for sprity is lwip, which has a reason-unknown build error on my laptop.
-> So chose gm instead.
+To run the dev server, run:
+
+    $ grunt
+
+Then run back-end api in another terminal:
+
+    $ python manage.py runserver 0.0.0.0:8001
+
+The static dev server will listen on :8000 and proxy all non-static requests to back-end listening on 8001.
+Open http://localhost:8000/ with browser.
+
+
+
+    
