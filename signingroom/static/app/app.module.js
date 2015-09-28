@@ -6,8 +6,9 @@ require('angular');
 require('angular-touch');
 require('angular-animate');
 require('angular-route');
-require('../assets/libs/angular-strap.js');
-require('../assets/libs/angular-strap.tpl.js');
+require('../assets/libs/js/angular-strap.js');
+require('../assets/libs/js/angular-strap.tpl.js');
+require('../assets/libs/js/webviewbridge');
 
 // app components
 require('./app.route.js');
@@ -26,16 +27,13 @@ require('./shared/ui/uiService.js');
 require('./shared/webviewbridge/webviewbridge.js');
 
 // include stylesheets
-//require('../assets/css/reset.css');
-//require('../assets/css/angular-motion.css');
+require('../assets/libs/css/angular-motion.css');
+require('../assets/css/reset.css');
 require('../assets/css/style.scss');
-//require('../assets/css/icon-sprite.css');
-
-// load templates
-var templates = {
-};
+require('../assets/css/icon-sprite.css');
 
 
+// define main app
 angular.module('dc.app', [
     'ngTouch',
     'ngAnimate',
@@ -47,6 +45,7 @@ angular.module('dc.app', [
 ]).
 
 
+// initialize
 run(function() {
     // remove 300ms click delay on iPad
     FastClick.attach(document.body);
