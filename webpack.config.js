@@ -1,6 +1,7 @@
 var path = require('path');
 var webpack = require('webpack');
 var ExtractTextPlugin = require('extract-text-webpack-plugin');
+var ngAnnotatePlugin = require('ng-annotate-webpack-plugin');
 
 module.exports = {
     cache: true,
@@ -35,8 +36,9 @@ module.exports = {
 
     plugins: [
         // we don't want to embed css as <style> tag so use ExtractTextPlugin to generate separate css files
-        new ExtractTextPlugin('[name].css', {
-            allChunks: true
-        })
+        new ExtractTextPlugin('[name].css', { allChunks: true }),
+
+        // ng-annotate plugin to automatically add annotates to DI
+        new ngAnnotatePlugin({ add: true }),
     ]
 };
