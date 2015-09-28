@@ -26,6 +26,7 @@
     "lodash": "^3.10.1",
     "matchdep": "^0.3.0",
     "ngtemplate-loader": "^1.3.1",
+    "scss-loader": "0.0.1",
     "style-loader": "^0.12.4",
     "url-loader": "^0.5.6",
     "webpack": "^1.12.2",

@@ -25,10 +25,10 @@ require('./shared/ui/uiService.js');
 require('./shared/webviewbridge/webviewbridge.js');
 
 // include stylesheets
-require('../assets/css/reset.css');
-require('../assets/css/angular-motion.css');
-require('../assets/css/style.css');
-require('../assets/css/icon-sprite.css');
+//require('../assets/css/reset.css');
+//require('../assets/css/angular-motion.css');
+require('../assets/css/style.scss');
+//require('../assets/css/icon-sprite.css');
 
 // load templates
 var templates = {
