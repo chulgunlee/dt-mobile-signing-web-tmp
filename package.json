@@ -13,7 +13,6 @@
     "angular": "^1.4.6",
     "angular-animate": "^1.4.6",
     "angular-route": "^1.4.6",
-    "angular-strap": "^2.3.3",
     "angular-touch": "^1.4.6",
     "css-loader": "^0.19.0",
     "extract-text-webpack-plugin": "^0.8.2",

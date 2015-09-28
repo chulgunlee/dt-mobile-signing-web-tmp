@@ -6,7 +6,8 @@ require('angular');
 require('angular-touch');
 require('angular-animate');
 require('angular-route');
-require('angular-strap');
+require('../assets/libs/angular-strap.js');
+require('../assets/libs/angular-strap.tpl.js');
 
 // app components
 require('./app.route.js');
