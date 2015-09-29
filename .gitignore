@@ -60,7 +60,5 @@ node_modules/
 .DS_Store
 .env/
 
-bundle.js
 bundle.js.map
-main.css
 main.css.map
