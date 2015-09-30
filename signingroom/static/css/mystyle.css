@@ -1,8 +1,12 @@
 html, body {
     background: #f3f6f8;
+    font-family: "Helvetica Neue", Helvetica, Roboto, Arial, sans-serif;
     -webkit-user-select: none;          /* disable text seleting */
     -webkit-tap-highlight-color: rgba(0,0,0,0);
+}
 
+:focus {
+    outline: none;          /* remove the blue outline box on active button in chrome */
 }
 
 #doclist {
@@ -15,7 +19,8 @@ html, body {
     min-height: 34px;
     border-bottom: solid 1px #dee6ea;
     box-shadow: 0 1px 0 #f2f6f7;
-    font-weight: bold;
+    font-size: 13px;
+    font-weight: 500;
 }
 
 .doclist-container {
@@ -69,8 +74,9 @@ html, body {
 .status-badge .status {
     position: absolute;
     width: 100%;
-    padding: 0 20px 4px;
-    line-height: 14px;
+    padding: 0 20px 2px;
+    font-weight: 500;
+    line-height 13px;
     font-size: 12px;
     left: 0;
     bottom: 0;
@@ -83,12 +89,22 @@ html, body {
     padding: 30px 15px;
 }
 
+.doc-body .doc-title-block {            /* "document title + applicant name */
+    min-height: 60px;       /* apply this to push the "+" button in placeholder down */
+}
+
 .doc-body .doc-title {
     margin-top: 30px;
     margin-bottom: 2px;
     font-size: 13px;
     line-height: 15px;
     color: #2e95d2;
+    max-height: 72px;
+    overflow: hidden;
+    /* webkit only text-overflow */
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 5;
 }
 
 .doc-body .doc-placeholder-title {
@@ -97,16 +113,23 @@ html, body {
     font-size: 13px;
     color: #231f20;
     line-height: 15px;
+    max-height: 72px;
+    overflow: hidden;
+    /* webkit only text-overflow */
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 5;
 }
 
 .doc-body .doc-applicant-name {
     font-size :13px;
     color: #a1a1a1;
+    font-weight: 300;
+    margin-bottom: 0;
 }
 
 .doc-btn-add {
-    position: absolute;
-    bottom: 40px;
+    position: relative;
     left: 50%;                  /* center horizontal */
     margin-left: -22px;         /* center horizontal */
 }
@@ -156,21 +179,24 @@ html, body {
     color: #A5ABAF;
 }
 
+.doc-selector, .signer-selector {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    margin: 0;
+}
+
+.popover {
+    box-shadow: none;
+    -webkit-box-shadow: none;
+    border-radius: 3px !important;
+}
 
 /* signstatus popover */
 
 .signstatus-popover {           /* position hack for popover */
     margin-left: 170px;
     margin-top: 140px !important;
-}
-
-.signstatus-popover-mask {
-    background: rgba(0, 0, 0, .5);
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
 }
 
 .signstatus-popover .popover-title {
@@ -206,10 +232,7 @@ html, body {
 .more-popover {
     width: 200px !important;
     padding: 0 !important;
-    border-radius: 3px !important;
     border: 1px solid #dee6ea;          /* menu border */
-    box-shadow: none;
-    -webkit-box-shadow: none;
     margin-left: 60px !important;       /* move the arrow to left side; use with (".more-popover .arrow").margin-left */
 }
 
@@ -255,6 +278,10 @@ html, body {
 }
 
 /* modal dialog fix */
+
+.modal .modal-dialog .modal-content, .popover {
+    border: 0 !important;           /* remove border from popove and dialog */
+}
 .modal.center {
     top: 20%;
 }
@@ -264,6 +291,15 @@ html, body {
     font-weight: bold;
 }
 
+.modal-content {
+    box-shadow: none;
+    -webkit-box-shadow: none;
+}
+
+.modal-backdrop.am-fade {
+    background: rgba(0,0,0,.15);
+}
+
 /* signer selection modal */
 
 .signer-modal-body {
@@ -271,7 +307,7 @@ html, body {
 }
 
 .signers-list {
-    margin: 0 -35px 35px 0 !important;
+    margin: 0 -35px 0 0 !important;
 }
 
 .signers-list>li {
@@ -280,6 +316,7 @@ html, body {
 
 .signer {
     display: block;
+    position: relative;
     background: #fff url(../images/avatar.png) no-repeat center 48px;
     width: 143px;
     height: 191px;
@@ -294,7 +331,15 @@ html, body {
 }
 
 .signer-name {
-    font-weight: bold;
+    font-weight: 500;
+    font-size: 13px;
+    color: #231f20;
+}
+
+.signer-type {
+    font-weight: 400;
+    font-size: 13px;
+    color: #a1a1a1;
 }
 
 .signer-selected-wrapper {
@@ -351,7 +396,12 @@ html, body {
 
 .add-document-body .dropdown-menu>li.active>a {
     color: #231f20;                     /* remove default active color */
-    background: #fff;
+    background: #fff url(/static/images/icn-check-sm.png) no-repeat 15px 15px ;
+}
+
+@media (-webkit-min-device-pixel-ratio: 2),
+       (min-resolution: 192dpi) {
+    background: #fff url(/static/images/icn-check-sm@2x.png) no-repeat 15px 15px ;
 }
 
 /* document preview */
@@ -385,7 +435,7 @@ html, body {
  * Common dialog
  */
 .common-dialog .modal-content {
-    background: #F2F6F9;            /* make the modal body grey */
+/*    background: #F2F6F9;  */          /* make the modal body grey */
     border-radius: 3px;             /* reduce border radius to fit the design */
 }
 
@@ -490,3 +540,56 @@ html, body {
     cursor: pointer;
 }
 
+
+/**
+ * webviewbridge debug
+ */
+.debug-log {
+    width: 100%;
+    height: 100px;
+    border-bottom: 1px solid #ccc;
+    background: #ffb;
+    z-index: 9999;
+    overflow: scroll;
+    font-size: 9px;
+    padding: 2px 4px;
+}
+
+.debug-log p {
+    margin: 0;
+}
+
+/**
+ * Loading Indicator
+ */
+.loading {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.loading {
+    background: rgba(0,0,0,.15);
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.loading-spinner {
+    position: relative;
+    top: 50%;
+    left: 50%;
+    width: 200px;
+    height: 60px;
+    margin-left: -100px;
+    margin-top: -120px;
+    border-radius: 6px;
+    background: rgba(255,255,255,1) url(/static/images/ajax-loader.gif) no-repeat 14px 14px;
+    color: #000;
+    opacity: .75;
+    padding: 20px 0 20px 60px;
+}

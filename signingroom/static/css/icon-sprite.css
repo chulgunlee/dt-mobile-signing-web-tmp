@@ -17,7 +17,7 @@ Icon classes can be used entirely standalone. They are named after their origina
 }
 .icon-icn-add:active {
   background-image: url(../images/icon-sprite.png);
-  background-position: 0px -108px;
+  background-position: -46px -108px;
   width: 44px;
   height: 44px;
 }
@@ -33,39 +33,51 @@ Icon classes can be used entirely standalone. They are named after their origina
   width: 44px;
   height: 44px;
 }
-.icon-icn-more:active {
+.icon-icn-checkbox[checked] {
   background-image: url(../images/icon-sprite.png);
-  background-position: 0px -154px;
-  width: 44px;
+  background-position: -78px -154px;
+  width: 30px;
   height: 30px;
 }
-.icon-icn-more {
+.icon-icn-checkbox {
+  background-image: url(../images/icon-sprite.png);
+  background-position: -46px -154px;
+  width: 30px;
+  height: 30px;
+}
+.icon-icn-more:active {
   background-image: url(../images/icon-sprite.png);
   background-position: -154px -92px;
   width: 44px;
   height: 30px;
 }
+.icon-icn-more {
+  background-image: url(../images/icon-sprite.png);
+  background-position: 0px -154px;
+  width: 44px;
+  height: 30px;
+}
 .icon-icn-print:active {
-  background-image: url(../images/icon-sprite.png);
-  background-position: -154px -46px;
-  width: 44px;
-  height: 44px;
-}
-.icon-icn-print[disabled] {
-  background-image: url(../images/icon-sprite.png);
-  background-position: -46px -108px;
-  width: 44px;
-  height: 44px;
-}
-.icon-icn-print {
   background-image: url(../images/icon-sprite.png);
   background-position: -92px -108px;
   width: 44px;
   height: 44px;
 }
-.icon-icn-sign:active {
+.icon-icn-print[disabled] {
   background-image: url(../images/icon-sprite.png);
   background-position: -154px 0px;
+  width: 44px;
+  height: 44px;
+}
+.icon-icn-print {
+  background-image: url(../images/icon-sprite.png);
+  background-position: -154px -46px;
+  width: 44px;
+  height: 44px;
+}
+.icon-icn-sign:active {
+  background-image: url(../images/icon-sprite.png);
+  background-position: 0px -108px;
   width: 44px;
   height: 44px;
 }
@@ -103,6 +115,14 @@ Icon classes can be used entirely standalone. They are named after their origina
     background-size: 198px 184px;
   }
   .icon-icn-add {
+    background-image: url(../images/icon-sprite@2x.png);
+    background-size: 198px 184px;
+  }
+  .icon-icn-checkbox[checked] {
+    background-image: url(../images/icon-sprite@2x.png);
+    background-size: 198px 184px;
+  }
+  .icon-icn-checkbox {
     background-image: url(../images/icon-sprite@2x.png);
     background-size: 198px 184px;
   }

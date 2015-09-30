@@ -1,10 +1,10 @@
 <div class="add-document-body">
 
   <button type="button" class="btn btn-default doc-type-selector" bs-select
-      ng-model="selectedDocType"
+      ng-model="selectedDocTypeId"
       bs-options="docType.id as docType.name for docType in docTypeService.docTypes"
       data-placeholder="Select Document Type"
-      ng-change="onDocTypeSelect(selectedDocType)">
+      ng-change="onDocTypeSelect(selectedDocTypeId)">
     Action <span class="caret"></span>
   </button>
 

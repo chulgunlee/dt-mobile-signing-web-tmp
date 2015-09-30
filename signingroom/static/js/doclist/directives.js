@@ -10,7 +10,7 @@ directive('doc', function() {
             doc: '=',
         },
 
-        controller: ['$scope', '$location', function($scope, $location) {
+        controller: function($scope, $api, docService, webViewBridge, SIGNER_TYPE_MAPPING, docTypeDialog, $msgbox) {
             // used for caching a document preview
             $scope.preview = null;
 
@@ -27,20 +27,66 @@ directive('doc', function() {
             $scope.showPreview = function(doc) {
                 
                 // check if this document is previewable. scannable but not scanned documents cannot be previewed.
-                if (!doc.scannable || doc.scanned) {
+                if (!doc.isPlaceholder) {
 
                     // Show loading modal
-                    $location.path('/' + doc.id + '/preview/');
+                    var docProps = {
+                        docType: doc.docType,
+                        docTypeName: doc.templateName,
+                        applicantType: doc.scanApplicant,
+                        applicantTypeName: doc.scanApplicant ? SIGNER_TYPE_MAPPING[doc.scanApplicant] : undefined,
+                    };
+                    webViewBridge.startPreview(docService.id, doc.id, docProps);
                 }
             };
 
+            /**
+             * Invoke the POS Capture when user clicked the placeholder
+             */
             $scope.addDoc = function(doc) {
                 if (doc.isPlaceholder) {
-                    
-                    console.log('start pos capture for doc ' + doc.id);
-
-
+                    webViewBridge.startPOSCapture(doc.id, doc.docType, doc.scanApplicant);
                 }
+            };
+
+            /**
+             * Move doc to Others or to Funding Package
+             */
+            $scope.moveDoc = function() {
+                var data = { requiredForFunding: !$scope.doc.requiredForFunding };
+
+                $api.updateDoc($scope.doc.id, data).then(function(response) {
+                    // TODO: add update data
+                    docService.refresh(docService.id);
+                });
+            };
+
+            /**
+             * Update doc type
+             */
+            $scope.editDoc = function() {
+                docTypeDialog({
+                    title: 'Update Properties',
+                    ok: 'Save',
+                    docTypeId: $scope.doc.docTypeId,
+                    applicantType: $scope.doc.scanApplicant
+                }).then(function(result) {
+                    console.log(result);
+
+                    // TODO: set update data
+                    $api.updateDoc($scope.doc.id, {}).then(function(response) {
+
+                        // TODO: add update data
+                        docService.refresh(docService.id);
+                    });
+                });
+            };
+
+            /**
+             * Delete doc (delete scanned pdf, not delete doc from package)
+             */
+            $scope.deleteDoc = function() {
+                console.log('delete doc:' + $scope.doc.id);
             };
 
             /**
@@ -52,10 +98,18 @@ directive('doc', function() {
                 // Toggle doc selected status
                 $scope.doc.selected = !$scope.doc.selected;
             };
-        }],
-//        require: 'docPreviewModal',
+        },
+
         link: function(scope, element, attrs, docPreviewModalCtrl) {
- //           alert('ok');
+            scope.$on('morePopover.moveDoc', function(e) {
+                scope.moveDoc();
+            });
+            scope.$on('morePopover.editDoc', function(e) {
+                scope.editDoc();
+            });
+            scope.$on('morePopover.deleteDoc', function(e) {
+                scope.deleteDoc();
+            });
         }
     }
 }).
@@ -66,11 +120,10 @@ directive('bottomBar', function() {
         restrict: 'E',
         scope: true,
 
-        controller: function($scope, docService, docTypeService, signerService, $modal, $msgbox, $commonDialog) {
+        controller: function($scope, docService, signerService, $modal, $msgbox, $commonDialog, docTypeDialog, webViewBridge) {
 
             $scope.docService = docService;
             $scope.signerService = signerService;
-            $scope.docTypeService = docTypeService;
 
             /**
              * Toggle signer selected status when the checkbox on signers are clicked
@@ -91,10 +144,14 @@ directive('bottomBar', function() {
                     width: 526,
                     templateUrl: '/static/ngtemplates/select_signer_modal.html',
                     scope: $scope,
+                    okEnabled: function() {
+                        return $scope.signerService.selectedSigners.length > 0;
+                    },
                 }).then(function() {
                     var selectedDocIds = _.pluck(docService.selectedDocs, 'id'),
                         selectedSigners = signerService.selectedSigners;
-                    console.log('selected docs = ' + selectedDocIds + ', selected signers = ' + selectedSigners);
+
+                    webViewBridge.startSigningRoom($scope.docService.id, selectedDocIds, selectedSigners);
                 });
             };
 
@@ -108,50 +165,25 @@ directive('bottomBar', function() {
                     title: 'Submit Documents',
                     ok: 'Submit'
                 }).then(function() {
-                    docService.submitSignedDocs().then(function(reslut) {
+                    docService.submitSignedDocs().then(function(result) {
                         $msgbox.alert('Document(s) have been successfully submitted to lender.');
                     });
                 });
             };
 
             $scope.printDocs = function() {
-                var url = location.protocol + '//' + location.host + apiUri + 'packages/' + docService.id + '/print/',
-                    docIds = _.pluck(docService.selectedDocs, 'id'),
+                var docIds = _.pluck(docService.selectedDocs, 'id'),
                     data = JSON.stringify({ docIds: docIds });
                 
-                WebViewBridge.call('print', { method: 'POST', url: url, data: data });
+                webViewBridge.print(docService.id, _.pluck(docService.selectedDocs, 'id'));
             };
 
-
-            /* for "Add Document" button */
-
-            $scope.onDocTypeSelect = function(id) {
-                $scope.selectedDocTypeId = id;
-                $scope.selectedApplicantType = null;
-            };
-
-            $scope.onApplicantTypeSelect = function(type) {
-                $scope.selectedApplicantType = type;
-            };
 
             $scope.addDocument = function() {
-                // data init
-                $scope.selectedDocTypeId = null;
-                $scope.selectedApplicantType = null;
 
                 // show doc type selection dialog
-                $commonDialog({
-                    title: 'Add Document',
-                    width: 500,
-                    templateUrl: '/static/ngtemplates/add_document_modal.html',
-                    scope: $scope,
-
-                    // only enable "Continue" button when proper values are selected
-                    okEnabled: function() {
-                        return !!$scope.selectedDocTypeId && (docTypeService.getApplicantsByDocTypeId($scope.selectedDocTypeId) == null || $scope.selectedApplicantType);
-                    },
-                }).then(function() {
-                    console.log($scope.selectedDocTypeId + ',' + $scope.selectedApplicantType);
+                docTypeDialog({ title: 'Add Document' }).then(function(result) {
+                    console.log(result.docTypeId + ',' + result.applicantType);
                 });
             };
         },
@@ -187,7 +219,7 @@ directive('signerPopover', ['$popover', '$document', '$animate', function($popov
             };
 
             // init mask
-            var  mask = angular.element('<div>').addClass('am-fade').addClass('signstatus-popover-mask'),
+            var  mask = angular.element('<div>').addClass('am-fade').addClass('modal-backdrop'),
                  body = $document.find('body'),
                  after = angular.element(body[0].lastChild);
 
@@ -215,36 +247,23 @@ directive('signerPopover', ['$popover', '$document', '$animate', function($popov
 }]).
 
 
-directive('morePopover', function($popover) {
+directive('morePopover', function($popover, $document, $animate) {
     return {
         restrict: 'EA',
         scope: true,
 
-        controller: function($scope, $http, docService) {
+        controller: function($scope) {
 
-            /**
-             * Move doc to Others or to Funding Package
-             */
             $scope.moveDoc = function() {
-                var data = { requiredForFunding: !$scope.doc.requiredForFunding };
-
-                $http.put(apiUri + 'docs/' + $scope.doc.id).success(function(result) {
-                    docService.refresh(docService.id);
-                });
+                $scope.$emit('morePopover.moveDoc');
             };
 
-            /**
-             * Update doc type
-             */
             $scope.editDoc = function() {
-                console.log('edit doc:' + $scope.doc.id);
+                $scope.$emit('morePopover.editDoc');
             };
 
-            /**
-             * Delete doc (delete scanned pdf, not delete doc from package)
-             */
             $scope.deleteDoc = function() {
-                console.log('delete doc:' + $scope.doc.id);
+                $scope.$emit('morePopover.deleteDoc');
             };
 
         },
@@ -258,7 +277,28 @@ directive('morePopover', function($popover) {
                 autoClose: true,
             };
 
+            // init mask
+            var  mask = angular.element('<div>').addClass('am-fade').addClass('modal-backdrop'),
+                 body = $document.find('body'),
+                 after = angular.element(body[0].lastChild);
+
+            // initialize popover
             var popover = $popover(element, options);
+
+            // show/hide mask when popover shows/hides
+            scope.$on('tooltip.show.before', function() {
+                $animate.enter(mask, body, after);
+            });
+            scope.$on('tooltip.hide.before', function() {
+                $animate.leave(mask);
+            });
+
+            // clean up after destroy
+            scope.$on('$destroy', function() {
+                if (popover) popover.destroy();
+                options = null;
+                popover = null;
+            });
 
             element.children().eq(0).css({ left: '75%' });
         }
@@ -309,6 +349,36 @@ directive('iconButton', function() {
 
     };
 
-});
+}).
 
+/**
+ * A directive used to debug WebViewBridge (integration with native).
+ * Put this directive right after the <body> tag.
+ */
+directive('webViewBridgeDebug', function() {
+    return {
+        restrict: 'EA',
+        templateUrl: '/static/ngtemplates/webviewbridge_debug.html',
+        replace: true,
+        scope: true,
+
+        controller: function($scope, webViewBridge) {
+            $scope.logs = webViewBridge.logs;
+        },
+    };
+}).
+
+
+directive('loadingIndicator', function() {
+
+    return {
+        restrict: 'E',
+        replace: true,
+        template: '<div class="loading" ng-show="srv.visible"><div class="loading-spinner" ng-bind="srv.msg"></div></div>',
+        controller: function($scope, loadingIndicatorService) {
+            $scope.srv = loadingIndicatorService;
+        }
+    };
+
+});
 

@@ -122,6 +122,15 @@
     },
 
   };
+ 
+  // in iOS 8 we need to simulate a `_webviewBridgeNative`
+  if (window.webkit) {
+    window._webviewBridgeNative = {
+      invokeNativeCall: function(msg) {
+        window.webkit.messageHandlers.wvb.postMessage(msg);
+      },
+    }
+  }
 
   // tell native that bridge has been loaded
   var readyEvent = document.createEvent('HTMLEvents');

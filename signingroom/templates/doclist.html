@@ -10,17 +10,19 @@
     <!-- Bootstrap 3.2  CSS-->
     <link href="/static/css/bootstrap/bootstrap.css" rel="stylesheet" />
     <!-- Custom  CSS-->
-    <link href="/static/css/checkbox.css" rel="stylesheet" />
     <link href="/static/css/mystyle.css" rel="stylesheet" />
     <link href="/static/css/icon-sprite.css" rel="stylesheet" />
 </head>
 <body ng-app="docListApp">
+    <div web-view-bridge-debug></div>
     <div id="content" ng-view></div>
+    <loading-indicator></loading-indicator>
 
     <script>
         var packageId = {{ master_index_id }};
         var dealerId = 0;
         var apiUri = '/api/';
+        var webViewBridgeDebugEnabled = true;
     </script>
 
     <script src="/static/js/underscore.js"></script>

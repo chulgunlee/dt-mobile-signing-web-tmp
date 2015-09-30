@@ -38,6 +38,8 @@
             "isExternal": false
         },
 
+
+
         {
             "id": 1236,
             "docType": "",
@@ -55,9 +57,38 @@
         },
 
         {
+            "id": 1240,
+            "docType": "driver-license",
+            "docTypeId": 1,
+            "templateName": "Driver License Driver License Driver License Driver License Driver License Driver License Driver License Driver License Driver License Driver License ",
+            "requiredForFunding": true,
+            "signable": true,
+            "status": "uploaded",
+            "signStatus": {
+                "buyer": true,
+                "cobuyer": false,
+                "dealer": false
+            },
+            "isExternal": true,
+            "scanApplicant": "cobuyer"
+        },
+
+        {
             "id": 0,
             "docType": "driver-license",
             "templateName": "Driver License",
+            "requiredForFunding": true,
+            "signable": false,
+            "status": "initial",
+            "isExternal": true,
+            "scanApplicant": "buyer"
+        },
+
+
+        {
+            "id": 0,
+            "docType": "driver-license",
+            "templateName": "Driver License Driver License Driver License Driver License Driver License Driver License Driver License Driver License Driver License Driver License ",
             "requiredForFunding": true,
             "signable": false,
             "status": "initial",

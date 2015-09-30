@@ -6,7 +6,7 @@ Django settings for signingroom project.
 import os
 import logging.config
 from rest_framework import ISO_8601
-from dtplatform.conf import settings as platform_settings
+#from dtplatform.conf import settings as platform_settings          # TODO: restore dtplatform settings
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -25,11 +25,11 @@ MAIN_DB_CONNECTION_KEY = 'Deal'
 SECRET_KEY = '!)8jshnj*q(+bq$#dv-3=w4^^hz4mup3gmdovl*ys!w9%@+$(+'
 
 MIDDLEWARE_CLASSES = (
-    'doorman_middleware.tenant_middleware.TenantMiddleware',
-    'django_tenant_templates.middleware.TenantMiddleware',
+    #'doorman_middleware.tenant_middleware.TenantMiddleware',                            # TODO: restore dtplatform settings
+    #'django_tenant_templates.middleware.TenantMiddleware',
     'django.middleware.common.CommonMiddleware',
-    'dt_django_base.core.middleware.context_middleware.ContextMiddleware',
-    'dt_django_base.core.middleware.sqlalchemy_middleware.SQLAlchemyMiddleware',
+    #'dt_django_base.core.middleware.context_middleware.ContextMiddleware',              # TODO: restore dtplatform settings
+    #'dt_django_base.core.middleware.sqlalchemy_middleware.SQLAlchemyMiddleware',        # TODO: restore dtplatform settings
 )
 
 
@@ -44,7 +44,7 @@ INSTALLED_APPS = (
     'signingroom.signingroom',
     'signingroom.fakeapi',
     'rest_framework',
-    'dt_django_base',
+    #'dt_django_base',               # TODO: restore dtplatform settings
 )
 
 TEMPLATE_DIRS = (
@@ -123,7 +123,7 @@ LOGGING = {
             'format': '%(asctime)s [%(levelname)s]'
                       ' %(name)s: %(message)s'
         },
-        'dtapi': {'format': ('"%(asctime)s", "doc_center_api", "[%(levelname)s]", "%(corelation_id)s",'
+        'signingweb': {'format': ('"%(asctime)s", "dt_mobile_signing_web", "[%(levelname)s]", "%(corelation_id)s",'
                              ' "%(tenant_code)s", "%(fusion_prod_code)s",'
                              ' "%(branding_id)s", "%(branding_folder)s",'
                              ' "%(feature_code)s", "%(functional_area)s",'
@@ -143,43 +143,38 @@ LOGGING = {
         'default': {
             'level': 'NOTSET',
             'class': 'logging.handlers.RotatingFileHandler',
-            'filename': '/var/log/dt-api/doc_center_api.log',
+            'filename': '/var/log/dt-mobile-signing-web/dt-mobile-signing-web.log',
             'maxBytes': 1024 * 1024 * 5,  # 5 MB
             'backupCount': 5,
-            'formatter': 'dtapi',
+            'formatter': 'signingweb',
         },
-        'dtapi_console': {
+        'signingweb_console': {
             'level': 'DEBUG',
             'class': 'logging.StreamHandler',
-            'formatter': 'dtapi'
+            'formatter': 'signingweb'
         },
         'syslog': {
             'level': 'NOTSET',
             'class': 'logging.handlers.SysLogHandler',
-            'address': '/dev/dtapi-log',
+            'address': '/dev/dt-mobile-signing-web-log',
             'facility': 'local5',
-            'formatter': 'dtapi',
-        },
-        'console': {
-            'level': 'DEBUG',
-            'class': 'logging.StreamHandler',
-            'formatter': 'standard'
+            'formatter': 'signingweb',
         },
     },
     'loggers': {
         'django.request': {
-            'handlers': ['console'],
+            'handlers': ['signingweb_console'],
             'level': 'WARNING',
             'propagate': True,
         },
-        'doc_center_api': {
+        'dt_mobile_signing_web': {
             'handlers': ['syslog'],
             'level': 'INFO',
             'propagate': True,
         },
     },
 }
-LOGGING_EXTRA_DATA = platform_settings.LOGGING_EXTRA_DATA.copy()
+#LOGGING_EXTRA_DATA = platform_settings.LOGGING_EXTRA_DATA.copy()           # TODO: restore dtplatform settings
 
 logging.config.dictConfig(LOGGING)
 
