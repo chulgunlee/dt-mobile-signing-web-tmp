@@ -108,7 +108,7 @@ REST_FRAMEWORK = {
         ISO_8601,
         "%m/%d/%Y",
     ),
-    'EXCEPTION_HANDLER': 'dt_django_base.api.exceptions.custom_exception_handler',
+#    'EXCEPTION_HANDLER': 'dt_django_base.api.exceptions.custom_exception_handler',
 }
  
 LOGGING = {

@@ -1,18 +1,18 @@
 from django.conf.urls import patterns, include, url
+
 from .views import *
 
 
 urlpatterns = patterns('',
 
-    url(r'^packages/(?P<pkg_id>\d+)/?$', DocPackageView.as_view()),
-    url(r'^packages/(?P<pkg_id>\d+)/print/?$', DocPackagePrintView.as_view()),
-    url(r'docs/(?P<doc_id>\d+)/preview/?$', DocPreviewView.as_view()),
-    url(r'docs/(?P<doc_id>\d+)/print/?$', DocPrintView.as_view()),
-    url(r'docs/(?P<doc_id>\d+)/?$', DocUpdateView.as_view()),
-    url(r'doctypes/?$', DocTypeListView.as_view()),
-    url(r'packages/(?P<pkg_id>\d+)/submit/?$', DocPackageSubmitView.as_view()),
+    # get info from dealjacket
+    url(r'^dealjackets/(?P<dj_id>\d+)/?$', DealJacketView.as_view()),                         # get package info
 
-    url(r'signingroom/(?P<pkg_id>\d+)/docs/(?P<doc_id>\d+)/?$', SigningRoomInitView.as_view()),
-    url(r'signingroom/(?P<pkg_id>\d+)/docs/(?P<doc_id>\d+)/signatures/(?P<signer_type>\w+)/$', SigningRoomSigView.as_view()),
-    url(r'signingroom/(?P<pkg_id>\d+)/consents/(?P<signer_type>\w+)/$', SigningRoomConsentView.as_view()),
+    # doc packages views
+    url(r'^packages/(?P<pkg_id>\d+)/?$', PackageDetailView.as_view()),                        # get package detail (doc list)
+    url(r'^packages/(?P<pkg_id>\d+)/docs/(?P<doc_id>\d+)/?$', DocDetailView.as_view()),       # sign, preview, update, upload, delete doc
+    url(r'^packages/(?P<pkg_id>\d+)/doctypes/?$', DocTypeListView.as_view()),                 # doc types
+    url(r'^packages/(?P<pkg_id>\d+)/consents/?$', ConsentListView.as_view()),                 # get consent list
+    url(r'^packages/(?P<pkg_id>\d+)/submit/?$', DocSubmitView.as_view()),                     # submit docs
 )
+

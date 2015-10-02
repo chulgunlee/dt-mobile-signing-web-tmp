@@ -10,78 +10,73 @@ from django.http import HttpResponse
 
 #from dtplatform.common.base_manager import getManager
 
-class DocPackageView(APIView):
+class DealJacketView(APIView):
 
+    """
+    Returns some information about the dealjacket required by doccenter.
+    """
+
+    def get(self, request, dj_id):
+        
+        dj_id = int(dj_id)
+
+        result = {
+            'id': dj_id,
+            'package': {
+                'id': 2,
+            },
+            'signers': {
+                'buyer': 'James Green',
+                'cobuyer': 'Linda Green',
+                'dealer': 'Mark Chart',
+            },
+        }
+        
+        return Response(result)
+
+class PackageDetailView(APIView):
     def get(self, request, pkg_id):
-        """
-        Get document package detail, including the document list.
-        """
-
-        doc_pkg = json.load(open(os.path.dirname(__file__) + '/doc_list_response.json'))
-
-        return Response(doc_pkg)
-
-
-class DocPackagePrintView(View):
-    
-    def post(self, request, pkg_id):
-
-        """
-        Print documents
-        """
-        return HttpResponse(open(os.path.dirname(__file__) + '/FormRBP-1027_2012.pdf').read(), content_type='application-xpdf')
         
+        pkg_id = int(pkg_id)
 
-class DocPackageSubmitView(APIView):
-    def put(self, request, pkg_id):
-        return Response(status=204)
+        result = json.load(open(os.path.dirname(__file__) + '/package_detail_response.json'))
+        result['id'] = pkg_id
 
+        return Response(result)
 
-
-class DocPreviewView(APIView):
-    
-    def get(self, request, doc_id):
-        
-        doc_pkg = json.load(open(os.path.dirname(__file__) + '/doc_preview_response.json'))
-        return Response(doc_pkg)
-
-
-class DocUpdateView(APIView):
-    
-    def put(self, request, doc_id):
-
-        return Response(status=204)
-
-
-class DocPrintView(View):
-    def get(self, request, doc_id):
-        pass
-
-
-class DocTypeListView(APIView):
-    def get(self, request):
-
-        doc_pkg = json.load(open(os.path.dirname(__file__) + '/doc_type_list_response.json'))
-        return Response(doc_pkg)
-
-class SigningRoomInitView(View):
+class DocDetailView(APIView):
 
     def get(self, request, pkg_id, doc_id):
 
-        pass
+        doc_id = int(doc_id)
+        pkg_id = int(pkg_id)
 
+        result = json.load(open(os.path.dirname(__file__) + '/doc_detail_response.json'))
+        result['id'] = doc_id
 
-class SigningRoomSigView(View):
-    
-    def put(self, request, pkg_id, doc_id, signer_type):
+        return Response(result)
 
-        pass
+    def put(self, request, pkg_id, doc_id):
+        return HttpResponse(status=204)
 
+    def delete(self, request, pkg_id, doc_id):
+        return HttpResponse(status=204)
 
-class SigningRoomConsentView(View):
+class DocTypeListView(APIView):
+    def get(self, request, pkg_id):
+        result = json.load(open(os.path.dirname(__file__) + '/doc_type_list_response.json'))
+        return Response(result)
 
-    def put(self, request, pkg_id, signer_type):
-        pass
+class DocSubmitView(APIView):
 
-    def delete(self, pkg_id, signer_type):
-        pass
+    def post(self, request, pkg_id):
+        return HttpResponse(status=204)
+
+class ConsentListView(APIView):
+    def get(self, request, pkg_id):
+        result = json.load(open(os.path.dirname(__file__) + '/consent_response.json'))
+        return Response(result)
+
+    def put(self, request, pkg_id):
+        return HttpResponse(status=204)
+

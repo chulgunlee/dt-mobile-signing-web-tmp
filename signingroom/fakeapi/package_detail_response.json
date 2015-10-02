@@ -1,8 +1,8 @@
 {
     "id": 2,
-    "signers": {
-        "buyer": "James Green",
-        "cobuyer": "Linda Green"
+    "consents": {
+        "buyer": false,
+        "cobuyer": false
     },
     "docs": [
         
@@ -11,6 +11,7 @@
             "docType": "contract",
             "templateName": "eContract",
             "requiredForFunding": true,
+            "requireFullReview": true,
             "signable": true,
             "status": "signed",
             "requiredSigners": [ "buyer", "cobuyer", "dealer" ],
@@ -45,6 +46,7 @@
             "docType": "",
             "templateName": "Notice to Co-buyer",
             "requiredForFunding": true,
+            "requireFullReview": false,
             "signable": true,
             "status": "not-signed",
             "requiredSigners": [ "cobuyer" ],
@@ -62,6 +64,7 @@
             "docTypeId": 1,
             "templateName": "Driver License Driver License Driver License Driver License Driver License Driver License Driver License Driver License Driver License Driver License ",
             "requiredForFunding": true,
+            "requireFullReview": false,
             "signable": true,
             "status": "uploaded",
             "signStatus": {
@@ -78,6 +81,7 @@
             "docType": "driver-license",
             "templateName": "Driver License",
             "requiredForFunding": true,
+            "requireFullReview": false,
             "signable": false,
             "status": "initial",
             "isExternal": true,
@@ -104,6 +108,6 @@
             "signable": false,
             "isExternal": false
         }
-
     ]
 }
+

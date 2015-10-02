@@ -10,7 +10,7 @@ angular.module('dc.components.preview.previewCtrl', [
  */
 controller('DocPreviewCtrl', function($scope, $routeParams, $api) {
 
-    $api.getDocPreview($routeParams.docId).then(function(response) {
+    $api.getDocPreview($routeParams.packageId, $routeParams.docId).then(function(response) {
 
         if (response.status == 302) {
             // TODO: session timeout

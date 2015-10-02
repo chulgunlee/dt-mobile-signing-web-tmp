@@ -39,24 +39,28 @@ factory('$api', function($http, $q, loadingIndicatorService) {
 
     var service = {
 
+        getDealJacketInfo: function(dealJacketId) {
+            return request('GET', 'dealjackets/' + dealJacketId);
+        },
+
         getDocList: function(packageId) {
             return request('GET', 'packages/' + packageId);
         },
 
         submitDocs: function(packageId, docIds) {
-            return request('GET', 'packages/' + packageId + '/submit/', { docIds: docIds });
+            return request('POST', 'packages/' + packageId + '/submit/', { docIds: docIds });
         },
 
-        getDocTypes: function() {
-            return request('GET', 'doctypes/');
+        getDocTypes: function(packageId) {
+            return request('GET', 'packages/' + packageId + '/doctypes/');
         },
 
-        updateDoc: function(docId, data) {
-            return request('PUT', 'docs/' + docId, data);
+        updateDoc: function(packageId, docId, data) {
+            return request('PUT', 'packages/' + packageId + '/docs/' + docId, data);
         },
 
-        getDocPreview: function(docId) {
-            return request('GET', 'docs/' + docId + '/preview');
+        getDocPreview: function(packageId, docId) {
+            return request('GET', 'packages/' + packageId + '/docs/' + docId);
         },
 
     };
