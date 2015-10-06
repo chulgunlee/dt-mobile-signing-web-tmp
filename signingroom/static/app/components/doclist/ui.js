@@ -1,9 +1,63 @@
-myApp.
+angular.module('dc.components.doclist.ui', [
+    'dc.shared.ui.uiService',
+    'dc.shared.ui.uiDirective',
+    'dc.components.doclist.docService',
+    'dc.shared.webviewbridge.webviewbridge',
+]).
+
+/**
+ * Doc type selection dialog ("Add Document / Update Document")
+ * @param {object} options: title -> dialog title, docTypeId, applicantType
+ */
+factory('docTypeDialog', function($commonDialog, $q, $rootScope, docTypeService) {
+
+    return function(options) {
+
+        var scope = options.scope && options.scope.$new() || $rootScope.$new(),
+            deferred = $q.defer();
+
+        scope.docTypeService = docTypeService;
+
+        // initial values
+        scope.selectedDocTypeId = options.docTypeId;
+        scope.selectedApplicantType = options.applicantType;
+
+        scope.onDocTypeSelect = function(id) {
+            scope.selectedDocTypeId = id;
+            scope.selectedApplicantType = null;
+        };
+
+        scope.onApplicantTypeSelect = function(type) {
+            scope.selectedApplicantType = type;
+        };
+
+        
+        $commonDialog({
+            title: options.title,
+            ok: options.ok,
+            width: 500,
+            templateUrl: '/static/app/components/doclist/add_document_modal.html',
+            scope: scope,
+
+            okEnabled: function() {
+                return !!scope.selectedDocTypeId && (docTypeService.getApplicantsByDocTypeId(scope.selectedDocTypeId) == null || scope.selectedApplicantType);
+            },
+        }).then(function() {
+            deferred.resolve({
+                docTypeId: scope.selectedDocTypeId,
+                applicantType: scope.selectedApplicantType,
+            });
+        });
+
+        return deferred.promise;
+    };
+}).
+
 
 /* Directives */
 directive('doc', function() {
     return {
-        templateUrl: '/static/ngtemplates/doclist_doc.html',
+        templateUrl: '/static/app/components/doclist/doclist_doc.html',
         restrict: 'E',
 
         scope: {
@@ -116,7 +170,7 @@ directive('doc', function() {
 
 directive('bottomBar', function() {
     return {
-        templateUrl: '/static/ngtemplates/bottom_bar.html',
+        templateUrl: '/static/app/components/doclist/bottom_bar.html',
         restrict: 'E',
         scope: true,
 
@@ -142,7 +196,7 @@ directive('bottomBar', function() {
                     ok: 'Continue',
                     cancel: 'Cancel',
                     width: 526,
-                    templateUrl: '/static/ngtemplates/select_signer_modal.html',
+                    templateUrl: '/static/app/components/doclist/select_signer_modal.html',
                     scope: $scope,
                     okEnabled: function() {
                         return $scope.signerService.selectedSigners.length > 0;
@@ -160,7 +214,7 @@ directive('bottomBar', function() {
              */
             $scope.submitDocs = function() {
                 $msgbox.confirm({
-                    templateUrl: '/static/ngtemplates/submit_docs_confirm.html',
+                    templateUrl: '/static/app/components/doclist/submit_docs_confirm.html',
                     scope: $scope,
                     title: 'Submit Documents',
                     ok: 'Submit'
@@ -211,7 +265,7 @@ directive('signerPopover', ['$popover', '$document', '$animate', function($popov
             // popover options
             var options = {
                 scope: scope,
-                templateUrl: '/static/ngtemplates/signstatus_popover.html',
+                templateUrl: '/static/app/components/doclist/signstatus_popover.html',
                 container: 'body',
                 placement: 'top',
                 autoClose: true,
@@ -271,7 +325,7 @@ directive('morePopover', function($popover, $document, $animate) {
         link: function(scope, element, attr) {
             var options = {
                 scope: scope,
-                templateUrl: '/static/ngtemplates/more_popover.html',
+                templateUrl: '/static/app/components/doclist/more_popover.html',
                 container: 'body',
                 placement: 'top',
                 autoClose: true,
@@ -303,82 +357,6 @@ directive('morePopover', function($popover, $document, $animate) {
             element.children().eq(0).css({ left: '75%' });
         }
     };
-}).
-
-
-/**
- * icon-button directive
- *
- * Usage:
- *
- *   <butotn icon-button="icn_add" width="44" height="44">Add</button>
- *
- * NOTE:
- *   The icon button is 44px wide, 44px high by default.  `width` and `height` parameters are optional.
- *   The icon-button attribute should be one of the class name in icon-sprite.css.
- */
-directive('iconButton', function() {
-
-    var defaultWidth = 44,
-        defaultHeight = 44;
-
-    return {
-        restrict: 'EA',
-        scope: {
-            iconButton: '@',
-            width: '@',
-            height: '@',
-        },
-
-        template: '<button class="icon-button"><ng-transclude></ng-transclude></button>',
-        transclude: true,
-        replace: true,
-
-        link: function(scope, element, attr) {
-
-            var width = parseInt(scope.width) || defaultWidth,
-                height = parseInt(scope.height) || defaultHeight;
-
-            element.addClass('icon-' + scope.iconButton);
-
-            element.css({
-                'width': width + 'px',
-                'height': height + 'px',
-            });
-        },
-
-    };
-
-}).
-
-/**
- * A directive used to debug WebViewBridge (integration with native).
- * Put this directive right after the <body> tag.
- */
-directive('webViewBridgeDebug', function() {
-    return {
-        restrict: 'EA',
-        templateUrl: '/static/ngtemplates/webviewbridge_debug.html',
-        replace: true,
-        scope: true,
-
-        controller: function($scope, webViewBridge) {
-            $scope.logs = webViewBridge.logs;
-        },
-    };
-}).
-
-
-directive('loadingIndicator', function() {
-
-    return {
-        restrict: 'E',
-        replace: true,
-        template: '<div class="loading" ng-show="srv.visible"><div class="loading-spinner" ng-bind="srv.msg"></div></div>',
-        controller: function($scope, loadingIndicatorService) {
-            $scope.srv = loadingIndicatorService;
-        }
-    };
-
 });
+
 
