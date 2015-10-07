@@ -1,3 +1,8 @@
+var templates = {
+    'doclist.html': require('./components/doclist/doclist.html'),
+    'doc_preview.html': require('./components/preview/doc_preview.html'),
+};
+
 angular.module('dc.route', [
     'ngRoute',
 
@@ -10,12 +15,12 @@ config(function($routeProvider) {
 
     $routeProvider.
         when('/docs/', {
-            templateUrl: '/static/app/components/doclist/doclist.html',
+            templateUrl: templates['doclist.html'],
             controller: 'DocListCtrl'
         }).
 
         when('/:docId/preview/', {
-            templateUrl: '/static/app/components/preview/doc_preview.html',
+            templateUrl: templates['doc_preview.html'],
             controller: 'DocPreviewCtrl'
         }).
 

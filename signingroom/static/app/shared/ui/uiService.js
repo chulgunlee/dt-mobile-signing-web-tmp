@@ -1,3 +1,8 @@
+var templates = {
+    'common_dialog.html': require('./common_dialog.html'),
+    'msgbox.html': require('./msgbox.html'),
+};
+
 angular.module('dc.shared.ui.uiService', [
     'mgcrea.ngStrap',
 ]).
@@ -57,7 +62,7 @@ provider('$msgbox', function() {
                 title: options.title,
                 placement: 'center',
                 scope: scope,
-                templateUrl: '/static/app/shared/ui/msgbox.html'
+                templateUrl: templates['msgbox.html'],
             });
 
             return deferred.promise;
@@ -127,7 +132,7 @@ provider('$commonDialog', function() {
                 title: options.title,
                 placement: 'center',
                 scope: scope,
-                templateUrl: '/static/app/shared/ui/common_dialog.html'
+                templateUrl: templates['common_dialog.html'],
             });
 
             return deferred.promise;

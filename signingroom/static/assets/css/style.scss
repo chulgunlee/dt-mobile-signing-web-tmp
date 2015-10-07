@@ -1,0 +1,26 @@
+@import 'definition';
+
+/* global settings and hacks */
+
+html, body {
+    background: #f3f6f8;
+    font-family: "Helvetica Neue", Helvetica, Roboto, Arial, sans-serif;
+    font-size: 14px !important;
+    -webkit-user-select: none;          /* disable text seleting */
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+}
+
+:focus {
+    outline: none;          /* remove the blue outline box on active button in chrome */
+}
+
+
+/* common */
+@import 'shared-loading.scss';
+@import 'shared-ui.scss';
+@import 'shared-debug.scss';
+
+/* modules */
+@import 'doclist.scss';
+@import 'preview.scss';
+

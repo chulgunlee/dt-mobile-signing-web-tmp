@@ -1,0 +1,118 @@
+/**
+ * Common dialog
+ */
+.common-dialog .modal-content {
+/*    background: #F2F6F9;  */          /* make the modal body grey */
+    border-radius: 3px;             /* reduce border radius to fit the design */
+
+    .modal-header {
+        background: #fff;               /* overlay the dialog title back to white */
+        height: 45px;
+        padding: 12px;
+        border-radius: 3px 3px 0 0;     /* cut round corners (otherwise white header will show sharp right angle over grey body */
+
+        .modal-title {
+            color: #231f20;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        /* buttons */
+        .btn-link {
+            margin: 0 !important;
+            padding: 0 10px !important;     /* adjust position of the butons */
+            color: #2e95d2;
+            font-size: 14px;
+
+            &:hover {
+                text-decoration: none;
+            }
+
+            &[disabled] {
+                color: #c7cfd3 !important;
+            }
+        }
+
+    }
+
+    .modal-body {
+        padding: 0;                     /* clear the padding; leave the margin/padding to content template of $commonDialog */
+    }
+
+
+}
+
+
+
+/**
+ * $msgbox styles
+ */
+
+.msgbox-modal-dialog {
+    width: 320px;
+
+    .modal-header {
+        border-bottom: 0;
+    }
+
+    .modal-body {
+        padding: 15px 45px;
+
+        ul {
+            list-style-type: disc;
+        }
+
+        li {
+            margin-left: 30px;
+        }
+    }
+
+    .btn-msgbox-buttons {
+        display: flex;
+        display: -webkit-flex;
+        display: -moz-flex;
+        display: -ms-flexbox;
+        border-top: solid 1px #e5e5e5;
+
+        &:last-child {
+            border-right: 0;
+        }
+
+        .btn-msgbox {
+            border: 0;
+            background: transparent;
+            height: 44px;
+            width: 100%;
+            border-right: solid 1px #e5e5e5;
+            color: #007aff;
+            font-size: 15px;
+            border-radius: 0 !important;
+
+            &.btn-msgbox-ok {
+                font-weight: bold;
+            }
+        }
+
+    }
+
+
+}
+
+
+
+
+/**
+ * icon button
+ */
+.icon-button {
+    width: 44px;
+    height: 44px;
+    border: 0;
+    padding: 0;
+    background-color: transparent;
+    background-repeat: no-repeat;
+    color: transparent;
+    display: inline-block;
+    cursor: pointer;
+}
+

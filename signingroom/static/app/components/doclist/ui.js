@@ -1,3 +1,13 @@
+var templates = {
+    'add_document_modal.html': require('./add_document_modal.html'),
+    'doclist_doc.html': require('./doclist_doc.html'),
+    'bottom_bar.html': require('./bottom_bar.html'),
+    'select_signer_modal.html': require('./select_signer_modal.html'),
+    'submit_docs_confirm.html': require('./submit_docs_confirm.html'),
+    'signstatus_popover.html': require('./signstatus_popover.html'),
+    'more_popover.html': require('./more_popover.html'),
+}
+
 angular.module('dc.components.doclist.ui', [
     'dc.shared.ui.uiService',
     'dc.shared.ui.uiDirective',
@@ -36,7 +46,7 @@ factory('docTypeDialog', function($commonDialog, $q, $rootScope, docTypeService)
             title: options.title,
             ok: options.ok,
             width: 500,
-            templateUrl: '/static/app/components/doclist/add_document_modal.html',
+            templateUrl: templates['add_document_modal.html'],
             scope: scope,
 
             okEnabled: function() {
@@ -57,7 +67,7 @@ factory('docTypeDialog', function($commonDialog, $q, $rootScope, docTypeService)
 /* Directives */
 directive('doc', function() {
     return {
-        templateUrl: '/static/app/components/doclist/doclist_doc.html',
+        templateUrl: templates['doclist_doc.html'],
         restrict: 'E',
 
         scope: {
@@ -170,7 +180,7 @@ directive('doc', function() {
 
 directive('bottomBar', function() {
     return {
-        templateUrl: '/static/app/components/doclist/bottom_bar.html',
+        templateUrl: templates['bottom_bar.html'],
         restrict: 'E',
         scope: true,
 
@@ -196,7 +206,7 @@ directive('bottomBar', function() {
                     ok: 'Continue',
                     cancel: 'Cancel',
                     width: 526,
-                    templateUrl: '/static/app/components/doclist/select_signer_modal.html',
+                    templateUrl: templates['select_signer_modal.html'],
                     scope: $scope,
                     okEnabled: function() {
                         return $scope.signerService.selectedSigners.length > 0;
@@ -214,7 +224,7 @@ directive('bottomBar', function() {
              */
             $scope.submitDocs = function() {
                 $msgbox.confirm({
-                    templateUrl: '/static/app/components/doclist/submit_docs_confirm.html',
+                    templateUrl: templates['submit_docs_confirm.html'],
                     scope: $scope,
                     title: 'Submit Documents',
                     ok: 'Submit'
@@ -249,7 +259,7 @@ directive('bottomBar', function() {
  * signerPopover
  * This is a patch to popover directive to add a black mask to the background.
  */
-directive('signerPopover', ['$popover', '$document', '$animate', function($popover, $document, $animate) {
+directive('signerPopover', function($popover, $document, $animate) {
 
     return {
         restrict: 'EA',
@@ -265,7 +275,7 @@ directive('signerPopover', ['$popover', '$document', '$animate', function($popov
             // popover options
             var options = {
                 scope: scope,
-                templateUrl: '/static/app/components/doclist/signstatus_popover.html',
+                templateUrl: templates['signstatus_popover.html'],
                 container: 'body',
                 placement: 'top',
                 autoClose: true,
@@ -298,7 +308,7 @@ directive('signerPopover', ['$popover', '$document', '$animate', function($popov
         }
     };
 
-}]).
+}).
 
 
 directive('morePopover', function($popover, $document, $animate) {
@@ -325,7 +335,7 @@ directive('morePopover', function($popover, $document, $animate) {
         link: function(scope, element, attr) {
             var options = {
                 scope: scope,
-                templateUrl: '/static/app/components/doclist/more_popover.html',
+                templateUrl: templates['more_popover.html'],
                 container: 'body',
                 placement: 'top',
                 autoClose: true,

@@ -1,0 +1,27 @@
+/* document preview */
+
+#docpreview {
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+.docpreview-container {
+    margin: 10px;
+    background: #fff;
+    border-radius: 3px;
+    border: solid 1px #e6e6e6;
+}
+
+.docpreview-titlebar {
+    height: 48px;
+    width: 100%;
+    border-bottom: solid 1px #e6e6e6;
+    padding: 14px 22px;
+    text-align: center;
+}
+
+.docpreview-content {
+    padding: 14px 22px;
+    text-align: center;
+}
+
