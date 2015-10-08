@@ -43,7 +43,7 @@ WSGI_APPLICATION = 'signingroom.wsgi.application'
 INSTALLED_APPS = (
     'signingroom.doclist',
     'signingroom.signingroom',
-    'signingroom.fakeapi',
+    'signingroom.api',
     'rest_framework',
     'dt_django_base',
 )

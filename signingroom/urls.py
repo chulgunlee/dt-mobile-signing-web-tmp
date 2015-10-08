@@ -10,7 +10,7 @@ from .doclist.views import doc_preview_api, doc_package_api, doc_preview_page   
 urlpatterns = patterns('',
     url(r'^signingroom/', include('signingroom.signingroom.urls')),
     url(r'^dealjackets/', include('signingroom.doclist.urls')),
-    url(r'^api/', include('signingroom.fakeapi.urls')),
+    url(r'^api/', include('signingroom.api.urls')),
 )
 
 
