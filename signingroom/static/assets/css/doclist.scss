@@ -61,7 +61,7 @@
         .status {
             position: absolute;
             width: 100%;
-            padding: 0 20px 2px;
+            padding: 0 20px 4px;
             font-weight: 500;
             line-height: 13px;
             font-size: 12px;
@@ -91,6 +91,7 @@
             display: -webkit-box;
             -webkit-box-orient: vertical;
             -webkit-line-clamp: 5;
+            font-weight: 400;
         }
 
         .doc-placeholder-title {
@@ -324,13 +325,13 @@
                 margin-top: 129px;
 
                 .signer-name {
-                    font-weight: 500;
+                    font-weight: 400;
                     font-size: 13px;
                     color: #231f20;
                 }
 
                 .signer-type {
-                    font-weight: 400;
+                    font-weight: 300;
                     font-size: 13px;
                     color: #a1a1a1;
                 }

@@ -248,6 +248,8 @@ directive('bottomBar', function() {
                 // show doc type selection dialog
                 docTypeDialog({ title: 'Add Document' }).then(function(result) {
                     console.log(result.docTypeId + ',' + result.applicantType);
+
+                    webViewBridge.startPOSCapture(null, result.docTypeId, result.applicantType);
                 });
             };
         },
