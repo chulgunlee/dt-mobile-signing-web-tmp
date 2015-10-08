@@ -1,5 +1,6 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from dt_django_base.api.viewsets import BaseAPIView
 from django.http import HttpResponse
 
 import os
@@ -10,7 +11,7 @@ from django.http import HttpResponse
 
 #from dtplatform.common.base_manager import getManager
 
-class DealJacketView(APIView):
+class DealJacketView(BaseAPIView):
 
     """
     Returns some information about the dealjacket required by doccenter.
