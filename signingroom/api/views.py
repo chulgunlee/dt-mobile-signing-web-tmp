@@ -9,24 +9,38 @@ from django.views.generic.base import View
 
 from django.http import HttpResponse
 
+from signingroom.lib.dtmobile import get_dtmobile
+
 class DealJacketView(BaseAPIView):
 
     """
     Returns some information about the dealjacket required by doccenter.
     """
 
-    def get(self, request, dj_id):
+    def get(self, request, dealjacket_id, deal_id):
         
-        dj_id = int(dj_id)
+        # format parameters
+        dealjacket_id = int(dealjacket_id)
+        deal_id = int(deal_id)
+
+        # call dtmobile service
+        dm = get_dtmobile()
+        response = dm.get_dealjacket_summary(dealjacket_id, deal_id, context=request.context_data)
+        deal = json.loads(response.text)
+
+        buyer_name = ' '.join(filter(None, (deal['applicant_first_name'], deal['applicant_last_name'])))
+        cobuyer_name = ' '.join(filter(None, (deal['coapplicant_first_name'], deal['coapplicant_last_name'])))
+
 
         result = {
-            'id': dj_id,
+            'deal_id': deal_id,
+            'dealjacket_id': dealjacket_id,
             'package': {
                 'id': 2,
             },
             'signers': {
-                'buyer': 'James Green',
-                'cobuyer': 'Linda Green',
+                'buyer': buyer_name,
+                'cobuyer': cobuyer_name,
                 'dealer': 'Mark Chart',
             },
         }

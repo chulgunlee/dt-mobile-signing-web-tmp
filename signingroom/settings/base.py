@@ -11,7 +11,8 @@ from dtplatform.conf import settings as platform_settings          # TODO: resto
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
+VERIFY_WS_CERT = True
 
 ALLOWED_HOSTS = []
 TEMPLATE_DEBUG = DEBUG
