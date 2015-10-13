@@ -232,6 +232,30 @@ class DocDetailView(APIView):
         """
         return HttpResponse(status=204)
 
+class DocPrintView(View):
+    """Get printable pdf document.
+
+    API endpoints:
+
+    - GET /packages/<pkg_id>/printable?docids=1,2,3
+    """
+
+    def get(self, request, pkg_id):
+        """Get printable pdf. The server will merge specified docs into one pdf and return it to caller.
+
+        Parameters:
+
+        - `pkg_id`: The package id
+        - [QS] `docids`: a comma-delimited list which specifies the docs that needs to be merged and printed.
+
+        Return value:
+
+        An `application/x-pdf` with binary PDF data.
+        """
+        pass
+        
+
+
 class DocTypeListView(APIView):
     """Get the doc type list.
 
