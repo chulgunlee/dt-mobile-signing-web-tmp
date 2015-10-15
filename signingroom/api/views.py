@@ -1,5 +1,6 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from rest_framework.exceptions import NotFound
 from dt_django_base.api.viewsets import BaseAPIView
 from django.http import HttpResponse
 
@@ -64,23 +65,27 @@ class DealJacketView(BaseAPIView):
 
         # call doccenter api to get docs
         dc = get_doccenter_api()
-        dc.get_docs_by_dj_id(dealjacket_id, context=request.context_data)
+        docs = dc.get_docs_by_dj_id(dealjacket_id, context=request.context_data)
 
+        if not docs:
+            raise NotFound('Doc package associated to deal jacket %s does not exist or contains no document' % dealjacket_id)
 
         result = {
             'id': str(deal_id),
             'dealjacketId': str(dealjacket_id),
             'package': {
-                'id': str(2),
+                'id': str(docs[0].get('master_index_id')),
             },
             'signers': {
                 'buyer': buyer_name,
                 'cobuyer': cobuyer_name,
                 'dealer': 'Mark Chart',
             },
+            'docs': [ _convert_doc(doc) for doc in docs ],
         }
         
         return Response(result)
+
 
 class PackageDetailView(APIView):
     """Get document package detail.
@@ -137,28 +142,33 @@ class PackageDetailView(APIView):
         docs = dc.get_docs_by_pkg_id(pkg_id, context=request.context_data)
 
         result = {
-            'id': pkg_id,
-            'docs': [ {
-                'id': doc['document_index_id'],
-                'docType': doc.get('template_doc_type'),
-                'templateName': '',                     # TODO
-                'requiredForFunding': doc.get('needed_for_funding') == 'Y',
-                'requireFullReview': False,             # TODO
-                'signable': True,                       # TODO
-                'status': r('document_status', doc.get('document_status_cd')),
-                'requiredSigners': [],                  # TODO
-                'signStatus': {                         # TODO
-                    'buyer': True,
-                    'cobuyer': False,
-                    'dealer': False,
-                },
-
-                'isExternal': False,                    # TODO
-
-            } for doc in docs ],
+            'id': str(pkg_id),
+            'docs': [ _convert_doc(doc) for doc in docs ],
         }
 
         return Response(result)
+
+
+def _convert_doc(doc):
+    return {
+        'id': doc['document_index_id'],
+        'docType': doc.get('template_doc_type'),
+        'templateName': '',                     # TODO
+        'requiredForFunding': doc.get('needed_for_funding') == 'Y',
+        'requireFullReview': False,             # TODO
+        'signable': True,                       # TODO
+        'status': r('document_status', doc.get('document_status_cd')),
+        'requiredSigners': [],                  # TODO
+        'signStatus': {                         # TODO
+            'buyer': True,
+            'cobuyer': False,
+            'dealer': False,
+        },
+
+        'isExternal': False,                    # TODO
+    }
+
+    
 
 class DocDetailView(APIView):
     """Get the detail for specified doc, or update its properties.
