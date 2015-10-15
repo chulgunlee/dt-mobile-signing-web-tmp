@@ -10,6 +10,8 @@ from django.views.generic.base import View
 from django.http import HttpResponse
 
 from signingroom.lib.dtmobile import get_dtmobile
+from signingroom.lib.doccenter_api import get_doccenter_api
+from signingroom.lib.doccenter_ref import r
 
 class DealJacketView(BaseAPIView):
 
@@ -59,6 +61,10 @@ class DealJacketView(BaseAPIView):
 
         buyer_name = ' '.join(filter(None, (deal['applicant_first_name'], deal['applicant_last_name'])))
         cobuyer_name = ' '.join(filter(None, (deal['coapplicant_first_name'], deal['coapplicant_last_name'])))
+
+        # call doccenter api to get docs
+        dc = get_doccenter_api()
+        dc.get_docs_by_dj_id(dealjacket_id, context=request.context_data)
 
 
         result = {
@@ -127,8 +133,30 @@ class PackageDetailView(APIView):
         
         pkg_id = int(pkg_id)
 
-        result = json.load(open(os.path.dirname(__file__) + '/package_detail_response.json'))
-        result['id'] = pkg_id
+        dc = get_doccenter_api()
+        docs = dc.get_docs_by_pkg_id(pkg_id, context=request.context_data)
+
+        result = {
+            'id': pkg_id,
+            'docs': [ {
+                'id': doc['document_index_id'],
+                'docType': doc.get('template_doc_type'),
+                'templateName': '',                     # TODO
+                'requiredForFunding': doc.get('needed_for_funding') == 'Y',
+                'requireFullReview': False,             # TODO
+                'signable': True,                       # TODO
+                'status': r('document_status', doc.get('document_status_cd')),
+                'requiredSigners': [],                  # TODO
+                'signStatus': {                         # TODO
+                    'buyer': True,
+                    'cobuyer': False,
+                    'dealer': False,
+                },
+
+                'isExternal': False,                    # TODO
+
+            } for doc in docs ],
+        }
 
         return Response(result)
 
