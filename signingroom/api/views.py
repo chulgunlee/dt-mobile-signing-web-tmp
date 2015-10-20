@@ -58,10 +58,15 @@ class DealJacketView(BaseAPIView):
         # call dtmobile service
         dm = get_dtmobile()
         response = dm.get_dealjacket_summary(dealjacket_id, deal_id, context=request.context_data)
-        deal = json.loads(response.text)
+        if response.status_code == 200:
+            deal = json.loads(response.text)
 
-        buyer_name = ' '.join(filter(None, (deal['applicant_first_name'], deal['applicant_last_name'])))
-        cobuyer_name = ' '.join(filter(None, (deal['coapplicant_first_name'], deal['coapplicant_last_name'])))
+            buyer_name = ' '.join(filter(None, (deal['applicant_first_name'], deal['applicant_last_name'])))
+            cobuyer_name = ' '.join(filter(None, (deal['coapplicant_first_name'], deal['coapplicant_last_name'])))
+
+        else:
+            buyer_name = 'Applicant'
+            cobuyer_name = 'Co-Applicant'
 
         # call doccenter api to get docs
         dc = get_doccenter_api()
