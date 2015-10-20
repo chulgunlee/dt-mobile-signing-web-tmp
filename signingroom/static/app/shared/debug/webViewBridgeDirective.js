@@ -11,7 +11,7 @@ angular.module('dc.shared.debug.webViewBridgeDirective', [
  * Put this directive right after the <body> tag.
  */
 directive('webViewBridgeDebug', function($templateCache) {
-    return {
+    return webViewBridgeDebugEnabled ? {
         restrict: 'EA',
         templateUrl: templates['webviewbridge_debug.html'],
         replace: true,
@@ -20,5 +20,9 @@ directive('webViewBridgeDebug', function($templateCache) {
         controller: function($scope, webViewBridge) {
             $scope.logs = webViewBridge.logs;
         },
+    } : {
+        restrict: 'EA',
+        template: '',
+        replace: true
     };
 });
