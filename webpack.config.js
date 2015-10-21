@@ -2,6 +2,7 @@ var path = require('path');
 var webpack = require('webpack');
 var ExtractTextPlugin = require('extract-text-webpack-plugin');
 var ngAnnotatePlugin = require('ng-annotate-webpack-plugin');
+var CompressionPlugin = require('compression-webpack-plugin');
 
 module.exports = {
     cache: true,
@@ -40,5 +41,7 @@ module.exports = {
 
         // ng-annotate plugin to automatically add annotates to DI
         new ngAnnotatePlugin({ add: true }),
+
+        new CompressionPlugin({ }),
     ]
 };
