@@ -19,7 +19,7 @@ factory('webViewBridge', function() {
         },
 
         log: function(text) {
-            if (window.webViewBridgeDebugEnabled) {
+            if (webViewBridgeDebugEnabled) {
                 this.logs.push(text);
             }
         },

@@ -1,8 +1,9 @@
 <div class="doclist-bottom-bar">
     <button icon-button="icn-print" class="pull-left" ng-disabled="!docService.hasSelected" ng-click="printDocs()">Print</button>
     <button icon-button="icn-sign" class="pull-left" ng-disabled="docService.requiredSignersInSelectedDocs.length == 0" ng-click="selectSigner()">Sign</button>
-    <button class="btn btn-success pull-left" ng-show="docService.contractSigned" ng-click="submitDocs()">
+    <button icon-button="icn-add" class="pull-right" ng-click="addDocument()">Add Document</button>
+
+    <button id="submit-button" class="btn btn-success" ng-show="docService.contractSigned" ng-click="submitDocs()">
         {{docService.contractSubmitted ? "Submit to Lender" : "Submit for Funding"}}
     </button>
-    <button icon-button="icn-add" class="pull-right" ng-click="addDocument()">Add Document</button>
 </div>

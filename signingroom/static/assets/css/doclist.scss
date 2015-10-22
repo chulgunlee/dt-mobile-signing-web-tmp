@@ -136,12 +136,12 @@
 /* bottom bar */
 .doclist-bottom-bar {
     position: fixed;
+    left: 0;
     bottom: 0;
     width: 100%;
-    height: 60px;
+    height: 50px;
     background: #3f3f40;
-    left: 0;
-    padding: 7px 14px;
+    padding: 4px 14px;
     z-index: 1000;
 
     button {
@@ -168,6 +168,17 @@
         &.btn:active {
             background: transparent;
             color: #A5ABAF;
+        }
+
+        &#submit-button {
+            /* center the submit button */
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translateX(-50%) translateY(-50%);
+
+            /* all uppercase */
+            text-transform: uppercase;
         }
     }
 
