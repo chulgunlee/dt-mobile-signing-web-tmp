@@ -1,7 +1,7 @@
 import json 
 from django.conf import settings
 from django.core.exceptions import ImproperlyConfigured
-from dtplatform.utils.dt_requests import get_json, post_json
+from dtplatform.utils.dt_requests import get_json, post_json, put_json
 
 
 class DocCenterService(object):
@@ -61,6 +61,15 @@ class DocCenterService(object):
             docs = []
 
         return docs
+
+    def update_funding_in(self, doc_id, needed_for_funding, context):
+        """
+        Update required for funding indicator
+        """
+        headers = self._headers(context)
+        response = put_json(self._url('/docs/%d/funding_in/', doc_id), context=context, headers=headers, payload={ 'needed_for_funding': needed_for_funding })
+
+        return response
 
 
 def get_doccenter_api():

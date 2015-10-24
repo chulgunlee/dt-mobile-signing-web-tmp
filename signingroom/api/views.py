@@ -1,6 +1,7 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework.exceptions import NotFound
+from rest_framework.status import HTTP_400_BAD_REQUEST
+from rest_framework.exceptions import NotFound, ValidationError
 from dt_django_base.api.viewsets import BaseAPIView
 from django.http import HttpResponse
 
@@ -246,6 +247,15 @@ class DocDetailView(APIView):
         - `pkg_id`: The package id
         - `doc_id`: document id
 
+        - data:
+
+            {
+                "docType": "",
+                "scanApplicants": "buyer" | "cobuyer" | null,
+                "requiredForFunding": true | false,
+                "pdf": "",           // base64 encoded PDF binary
+            }
+
         Return value:
 
         - Returns http 204 if success.
@@ -256,6 +266,32 @@ class DocDetailView(APIView):
         - Only external docs can be updated with "pdf" property.
 
         """
+        doc_id = int(doc_id)            # TODO: catch exception
+
+        # TODO: Have to deal with the logic for changing docType and scanApplicant
+        # TODO: MUST valid if the document specified is valid for update
+        try:
+            request_data = json.loads(request.body)
+        except ValueError as e:
+            return Response(data={'error': 'Data is not valid JSON'}, status=HTTP_400_BAD_REQUEST)
+
+        dc = get_doccenter_api()
+
+        # update needed_for_funding indicator
+        if 'requiredForFunding' in request_data:
+            required_for_funding = request_data.get('requiredForFunding')
+            if not isinstance(required_for_funding, bool):
+                raise ValidationError('requiredForFunding must be a boolean value.')
+
+            # update through doccenter API
+            dc.update_funding_in(doc_id, required_for_funding, context=request.context_data)
+
+        # upload PDF file
+        if 'document' in request_data:
+            base64_pdf = request_data.get('pdf')
+            # TODO: store
+             
+
         return HttpResponse(status=204)
 
     def delete(self, request, pkg_id, doc_id):
