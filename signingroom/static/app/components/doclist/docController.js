@@ -12,13 +12,14 @@ controller('DocListCtrl', function($scope, $api, docService, signerService, docT
 
     $scope.data = docService;
 
-    $api.getDealJacketInfo(dealJacketId).then(function(response) {
+    // `dealJacketId`, `dealId` are global variables from the django template
+    $api.getDealJacketInfo(dealJacketId, dealId).then(function(response) {
         var data = response.data;
 
         $scope.packageId = data.package.id;
         $scope.signers = data.signers;
 
-        docService.refresh($scope.packageId);
+        docService.refresh($scope.packageId, response.data.docs);
         docTypeService.init($scope.packageId);
         signerService.init($scope.signers);
     });

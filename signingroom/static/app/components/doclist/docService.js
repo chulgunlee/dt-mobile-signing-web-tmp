@@ -61,22 +61,29 @@ factory('docService', function($q, $api, Doc, signerService, docTypeService, DOC
         id: null,
         docs: [],
 
-        refresh: function(packageId) {
+        refresh: function(packageId, docs) {
             
-            $api.getDocList(packageId).then(function(response) {
-                if (response.status == 302) {
-                    // TODO: session time out
-                    return;
-                }
-
-                var data = response.data;
-
-                service.id = data.id;
-
-                service.docs = data.docs.map(function(docData) {
+            // docs are retrieved from /dealjacket/<>/deales/<>/
+            // so no need to call getDocList() again
+            if (docs) {
+                service.id = packageId;
+                service.docs = docs.map(function(docData) {
                     return new Doc(docData);
                 });
-            });
+            } else {
+                $api.getDocList(packageId).then(function(response) {
+                    if (response.status == 302) {
+                        // TODO: session time out
+                        return;
+                    }
+
+                    var data = response.data;
+                    service.id = data.id;
+                    service.docs = data.docs.map(function(docData) {
+                        return new Doc(docData);
+                    });
+                });
+            }
 
             // extract data from response and save it to docService
         },

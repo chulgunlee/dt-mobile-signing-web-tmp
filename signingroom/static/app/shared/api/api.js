@@ -39,8 +39,8 @@ factory('$api', function($http, $q, loadingIndicatorService) {
 
     var service = {
 
-        getDealJacketInfo: function(dealJacketId) {
-            return request('GET', 'dealjackets/' + dealJacketId);
+        getDealJacketInfo: function(dealJacketId, dealId) {
+            return request('GET', 'dealjackets/' + dealJacketId + '/deals/' + dealId + '/');
         },
 
         getDocList: function(packageId) {
