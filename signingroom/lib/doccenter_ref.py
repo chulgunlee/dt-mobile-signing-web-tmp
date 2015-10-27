@@ -1,6 +1,11 @@
 
 _ref = {
 
+    'bool': {
+        'Y': True,
+        'N': False,
+    },
+
     'document_status': {
         'SUBM': 'submitted',
         'SCAN': 'scanned',

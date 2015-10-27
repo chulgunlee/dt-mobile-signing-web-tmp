@@ -59,7 +59,7 @@ class DealJacketView(BaseAPIView):
         # call dtmobile service
         dm = get_dtmobile()
         response = dm.get_dealjacket_summary(dealjacket_id, deal_id, context=request.context_data)
-        if response.status_code == 200:
+        if _status_code(response) == 200:
             deal = json.loads(response.text)
 
             buyer_name = ' '.join(filter(None, (deal['applicant_first_name'], deal['applicant_last_name'])))
@@ -155,14 +155,24 @@ class PackageDetailView(APIView):
         return Response(result)
 
 
+def _status_code(response):
+    if response.status_code != 200:
+        return response.status_code
+    else:
+        result = json.loads(response.text)
+        if 'status_code' in result:
+            return result.get('status_code')
+
+    return 200
+
 def _convert_doc(doc):
     return {
         'id': doc['document_index_id'],
         'docType': doc.get('template_doc_type'),
-        'templateName': '',                     # TODO
-        'requiredForFunding': doc.get('needed_for_funding') == 'Y',
+        'templateName': doc.get('template_document_description'),
+        'requiredForFunding': r('bool', doc.get('needed_for_funding')),
         'requireFullReview': False,             # TODO
-        'signable': True,                       # TODO
+        'signable': r('bool', doc.get('electronic_sig')),
         'status': r('document_status', doc.get('document_status_cd')),
         'requiredSigners': [],                  # TODO
         'signStatus': {                         # TODO
@@ -171,7 +181,7 @@ def _convert_doc(doc):
             'dealer': False,
         },
 
-        'isExternal': False,                    # TODO
+        'isExternal': r('bool', doc.get('external')),
     }
 
     
