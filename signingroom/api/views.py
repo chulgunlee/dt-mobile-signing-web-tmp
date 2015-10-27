@@ -9,8 +9,6 @@ from django.views.generic.base import View
 
 from django.http import HttpResponse
 
-#from dtplatform.common.base_manager import getManager
-
 class DealJacketView(BaseAPIView):
 
     """
