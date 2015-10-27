@@ -15,8 +15,6 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 TEMPLATE_DEBUG = DEBUG
-#MAIN_DB_CONNECTION_KEY = 'Deal'
-
 
 
 # Quick-start development settings - unsuitable for production
@@ -30,7 +28,6 @@ MIDDLEWARE_CLASSES = (
     'django_tenant_templates.middleware.TenantMiddleware',
     'django.middleware.common.CommonMiddleware',
     'dt_django_base.core.middleware.context_middleware.ContextMiddleware',              # TODO: restore dtplatform settings
-    #'dt_django_base.core.middleware.sqlalchemy_middleware.SQLAlchemyMiddleware',        # TODO: restore dtplatform settings
 )
 
 
@@ -108,7 +105,6 @@ REST_FRAMEWORK = {
         ISO_8601,
         "%m/%d/%Y",
     ),
-#    'EXCEPTION_HANDLER': 'dt_django_base.api.exceptions.custom_exception_handler',
 }
  
 LOGGING = {
