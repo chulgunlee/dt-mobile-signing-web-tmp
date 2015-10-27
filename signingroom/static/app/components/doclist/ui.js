@@ -119,7 +119,7 @@ directive('doc', function() {
             $scope.moveDoc = function() {
                 var data = { requiredForFunding: !$scope.doc.requiredForFunding };
 
-                $api.updateDoc($scope.doc.id, data).then(function(response) {
+                $api.updateDoc(docService.id, $scope.doc.id, data).then(function(response) {
                     // TODO: add update data
                     docService.refresh(docService.id);
                 });

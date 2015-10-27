@@ -6,10 +6,11 @@ from django.conf.urls import include, url, patterns
 from django.conf.urls.static import static
 
 from .doclist.views import doc_preview_api, doc_package_api, doc_preview_page       # paul
+from .doclist.views import DocListView
 
 urlpatterns = patterns('',
     url(r'^signingroom/', include('signingroom.signingroom.urls')),
-    url(r'^dealjackets/', include('signingroom.doclist.urls')),
+    url(r'^dealjackets/(?P<dealjacket_id>\d+)/deals/(?P<deal_id>\d+)/?$', DocListView.as_view()),
     url(r'^api/', include('signingroom.api.urls')),
 )
 

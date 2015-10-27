@@ -15,6 +15,8 @@ from signingroom.lib.dtmobile import get_dtmobile
 from signingroom.lib.doccenter_api import get_doccenter_api
 from signingroom.lib.doccenter_ref import r
 
+from dtplatform.utils.dt_context import Context
+
 class DealJacketView(BaseAPIView):
 
     """Returns some information about the dealjacket required by doccenter.
@@ -139,6 +141,11 @@ class PackageDetailView(APIView):
         """
         
         pkg_id = int(pkg_id)
+
+        request.context_data.update({
+            'dealer_code': '1089761',            # TODO: dummy data for dealercode
+        })
+
 
         dc = get_doccenter_api()
         docs = dc.get_docs_by_pkg_id(pkg_id, context=request.context_data)
