@@ -20,6 +20,16 @@ _ref = {
         'PRS': 'prompt-saved',
     },
 
+    'sig_status_cd': {
+        'BN': ('cobuyer', 'dealer'),
+        'CN': ('buyer', 'dealer'),
+        'DN': ('buyer', 'cobuyer'),
+        'BNCN': ('dealer',),
+        'BNDN': ('cobuyer',),
+        'CNDN': ('buyer',),
+        'ALLS': (),
+        'ALLNS': ('buyer', 'cobuyer', 'dealer'),
+    },
 
 
 }
@@ -27,11 +37,11 @@ _ref = {
 class InvalidCategory(Exception):
     pass
 
-def r(category, key):
+def r(category, key, default=None):
     if category not in _ref:
         raise InvalidCategory('Category "%s" does not exist.' % category)
 
-    return _ref[category].get(key)
+    return _ref[category].get(key, default)
     
 
     

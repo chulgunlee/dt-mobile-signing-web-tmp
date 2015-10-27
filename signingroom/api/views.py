@@ -166,6 +166,8 @@ def _status_code(response):
     return 200
 
 def _convert_doc(doc):
+    sign_status = r('sig_status_cd', doc.get('sig_status_cd', ()))
+
     return {
         'id': doc['document_index_id'],
         'docType': doc.get('template_doc_type'),
@@ -176,15 +178,14 @@ def _convert_doc(doc):
         'status': r('document_status', doc.get('document_status_cd')),
         'requiredSigners': [],                  # TODO
         'signStatus': {                         # TODO
-            'buyer': True,
-            'cobuyer': False,
-            'dealer': False,
+            'buyer': 'buyer' in sign_status,
+            'cobuyer': 'cobuyer' in sign_status,
+            'dealer': 'dealer' in sign_status,
         },
 
         'isExternal': r('bool', doc.get('external')),
     }
 
-    
 
 class DocDetailView(APIView):
     """Get the detail for specified doc, or update its properties.
