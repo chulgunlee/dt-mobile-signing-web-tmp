@@ -9,11 +9,8 @@ from .doclist.views import doc_preview_api, doc_package_api, doc_preview_page   
 
 urlpatterns = patterns('',
     url(r'^signingroom/', include('signingroom.signingroom.urls')),
-    url(r'^doclist/', include('signingroom.doclist.urls')),
-    url(r'^api/', include('signingroom.fakeapi.urls')),
-    url(r'^api/doclist/(?P<master_index_id>\d+)/docs/(?P<doc_index_id>\d+)/preview/$', doc_preview_api),        # paul
-    url(r'^api/doclist/(?P<master_index_id>\d+)/docs/(?P<doc_index_id>\d+)/page/(?P<page_number>\d+)/$', doc_preview_page),     # paul
-    url(r'^api/doclist/(?P<master_index_id>\d+)$', doc_package_api),        # paul
+    url(r'^dealjackets/', include('signingroom.doclist.urls')),
+    url(r'^api/', include('signingroom.api.urls')),
 )
 
 

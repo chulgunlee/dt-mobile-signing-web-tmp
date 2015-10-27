@@ -3,7 +3,8 @@ import os
 import sys
 
 if __name__ == "__main__":
-    os.environ.setdefault("DJANGO_SETTINGS_MODULE", "signingroom.settings")
+    deploy_env = os.environ.get("DEPLOY_ENVIRONMENT", "dev_local")
+    os.environ["DJANGO_SETTINGS_MODULE"] = "signingroom.settings." + deploy_env
 
     from django.core.management import execute_from_command_line
 

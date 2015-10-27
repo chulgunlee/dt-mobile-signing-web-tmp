@@ -47,7 +47,7 @@ factory('webViewBridge', function() {
         startPreview: function(pkgId, docId, docProps) {
             this.call('startPreview', {
                 method: 'GET',
-                url: this._absUrl('doclist/' + pkgId + '#/' + docId + '/preview/'),
+                url: this._absUrl('doclist/' + pkgId + '#/packages/' + pkgId + '/docs/' + docId + '/preview/'),
                 pkgId: pkgId,
                 docId: docId,
                 docProps: docProps

@@ -6,7 +6,7 @@ Django settings for signingroom project.
 import os
 import logging.config
 from rest_framework import ISO_8601
-#from dtplatform.conf import settings as platform_settings          # TODO: restore dtplatform settings
+from dtplatform.conf import settings as platform_settings          # TODO: restore dtplatform settings
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -15,8 +15,6 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 TEMPLATE_DEBUG = DEBUG
-MAIN_DB_CONNECTION_KEY = 'Deal'
-
 
 
 # Quick-start development settings - unsuitable for production
@@ -26,11 +24,10 @@ MAIN_DB_CONNECTION_KEY = 'Deal'
 SECRET_KEY = '!)8jshnj*q(+bq$#dv-3=w4^^hz4mup3gmdovl*ys!w9%@+$(+'
 
 MIDDLEWARE_CLASSES = (
-    #'doorman_middleware.tenant_middleware.TenantMiddleware',                            # TODO: restore dtplatform settings
-    #'django_tenant_templates.middleware.TenantMiddleware',
+    'doorman_middleware.tenant_middleware.TenantMiddleware',                            # TODO: restore dtplatform settings
+    'django_tenant_templates.middleware.TenantMiddleware',
     'django.middleware.common.CommonMiddleware',
-    #'dt_django_base.core.middleware.context_middleware.ContextMiddleware',              # TODO: restore dtplatform settings
-    #'dt_django_base.core.middleware.sqlalchemy_middleware.SQLAlchemyMiddleware',        # TODO: restore dtplatform settings
+    'dt_django_base.core.middleware.context_middleware.ContextMiddleware',              # TODO: restore dtplatform settings
 )
 
 
@@ -43,9 +40,9 @@ WSGI_APPLICATION = 'signingroom.wsgi.application'
 INSTALLED_APPS = (
     'signingroom.doclist',
     'signingroom.signingroom',
-    'signingroom.fakeapi',
+    'signingroom.api',
     'rest_framework',
-    #'dt_django_base',               # TODO: restore dtplatform settings
+    'dt_django_base',
 )
 
 TEMPLATE_DIRS = (
@@ -108,7 +105,6 @@ REST_FRAMEWORK = {
         ISO_8601,
         "%m/%d/%Y",
     ),
-    'EXCEPTION_HANDLER': 'dt_django_base.api.exceptions.custom_exception_handler',
 }
  
 LOGGING = {
@@ -175,7 +171,7 @@ LOGGING = {
         },
     },
 }
-#LOGGING_EXTRA_DATA = platform_settings.LOGGING_EXTRA_DATA.copy()           # TODO: restore dtplatform settings
+LOGGING_EXTRA_DATA = platform_settings.LOGGING_EXTRA_DATA.copy()           # TODO: restore dtplatform settings
 
 logging.config.dictConfig(LOGGING)
 

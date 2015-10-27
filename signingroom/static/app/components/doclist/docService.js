@@ -76,11 +76,6 @@ factory('docService', function($q, $api, Doc, signerService, docTypeService, DOC
                 service.docs = data.docs.map(function(docData) {
                     return new Doc(docData);
                 });
-                
-                // store signer data in signerService
-                signerService.init(data.signers);
-
-                docTypeService.init();
             });
 
             // extract data from response and save it to docService
@@ -204,9 +199,9 @@ factory('docService', function($q, $api, Doc, signerService, docTypeService, DOC
 factory('docTypeService', function($api) {
     var service = {
         
-        init: function() {
+        init: function(packageId) {
             
-            $api.getDocTypes().then(function(response) {
+            $api.getDocTypes(packageId).then(function(response) {
                 service.docTypes = response.data.docTypes;
             });
         },
