@@ -3,6 +3,7 @@
  */
 
 angular.module('dc.shared.api.api', [
+    'dc.shared.loading.loadingDirective',
     'dc.shared.loading.loadingService',
 ]).
 
