@@ -77,9 +77,6 @@ class DealJacketView(BaseAPIView):
         result = {
             'id': str(deal_id),
             'dealjacketId': str(dealjacket_id),
-            'package': {
-                'id': str(docs[0].get('master_index_id')),
-            },
             'signers': {
                 'buyer': buyer_name,
                 'cobuyer': cobuyer_name,
@@ -92,7 +89,7 @@ class DealJacketView(BaseAPIView):
 
 
 class DocListView(APIView):
-    """Get document package detail.
+    """Get document list only (without dealjacket info such as signers..).
 
     API endpoints:
     
@@ -101,7 +98,7 @@ class DocListView(APIView):
 
     def get(self, request, dealjacket_id, deal_id):
 
-        """Get the document package detail.
+        """Get document list only (without dealjacket info such as signers..).
 
         Parameters:
 
@@ -225,7 +222,6 @@ class DocDetailView(APIView):
         """
 
         doc_id = int(doc_id)
-        pkg_id = int(pkg_id)
 
         result = json.load(open(os.path.dirname(__file__) + '/doc_detail_response.json'))
         result['id'] = doc_id
