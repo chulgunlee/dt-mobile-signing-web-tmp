@@ -1,7 +1,7 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.status import HTTP_400_BAD_REQUEST
-from rest_framework.exceptions import NotFound, ValidationError, APIException
+from rest_framework.exceptions import ValidationError, APIException
 from dt_django_base.api.viewsets import BaseAPIView
 from django.http import HttpResponse
 
@@ -9,13 +9,12 @@ import os
 import json
 from django.views.generic.base import View
 
-from django.http import HttpResponse
-
 from signingroom.lib.dtmobile import get_dtmobile
 from signingroom.lib.doccenter_api import get_doccenter_api
 from signingroom.lib.doccenter_ref import r
 
 from dtplatform.utils.dt_context import Context
+
 
 class DealJacketView(BaseAPIView):
 
@@ -53,7 +52,7 @@ class DealJacketView(BaseAPIView):
         }
         ```
         """
-        
+
         # format parameters
         dealjacket_id = int(dealjacket_id)
         deal_id = int(deal_id)
@@ -82,9 +81,9 @@ class DealJacketView(BaseAPIView):
                 'cobuyer': cobuyer_name,
                 'dealer': 'Mark Chart',
             },
-            'docs': [ _convert_doc(doc) for doc in docs ],
+            'docs': [_convert_doc(doc) for doc in docs],
         }
-        
+
         return Response(result)
 
 
@@ -92,7 +91,7 @@ class DocListView(APIView):
     """Get document list only (without dealjacket info such as signers..).
 
     API endpoints:
-    
+
     - GET /packages/<pkg_id>/
     """
 
@@ -138,9 +137,7 @@ class DocListView(APIView):
         dc = get_doccenter_api(request.context_data)
         docs = dc.get_docs_by_dj_id(dealjacket_id)
 
-        result = {
-            'docs': [ _convert_doc(doc) for doc in docs ],
-        }
+        result = {'docs': [_convert_doc(doc) for doc in docs]}
 
         return Response(result)
 
@@ -262,7 +259,7 @@ class DocDetailView(APIView):
         # TODO: MUST valid if the document specified is valid for update
         try:
             request_data = json.loads(request.body)
-        except ValueError as e:
+        except ValueError:
             return Response(data={'error': 'Data is not valid JSON'}, status=HTTP_400_BAD_REQUEST)
 
         dc = get_doccenter_api(request.context_data)
@@ -280,7 +277,6 @@ class DocDetailView(APIView):
         if 'document' in request_data:
             base64_pdf = request_data.get('pdf')
             # TODO: store
-             
 
         return HttpResponse(status=204)
 
@@ -300,6 +296,7 @@ class DocDetailView(APIView):
 
         """
         return HttpResponse(status=204)
+
 
 class DocPrintView(View):
     """Get printable pdf document.
@@ -322,7 +319,6 @@ class DocPrintView(View):
         An `application/x-pdf` with binary PDF data.
         """
         pass
-        
 
 
 class DocTypeListView(APIView):
@@ -360,6 +356,7 @@ class DocTypeListView(APIView):
         result = json.load(open(os.path.dirname(__file__) + '/doc_type_list_response.json'))
         return Response(result)
 
+
 class DocSubmitView(APIView):
     """Submit documents to lender
 
@@ -370,7 +367,7 @@ class DocSubmitView(APIView):
 
     def post(self, request, pkg_id):
         """Submit specified documents to the lender.
-        
+
         Parameters:
 
         - `pkg_id`: package id
@@ -384,6 +381,7 @@ class DocSubmitView(APIView):
 
         return HttpResponse(status=204)
 
+
 class ConsentListView(APIView):
     """Provide operations to user consents.
 
@@ -394,7 +392,7 @@ class ConsentListView(APIView):
     """
     def get(self, request, pkg_id):
         """Get the user consents
-        
+
         Basically this returns the same value as in the package detail request.
 
         Parameters:
@@ -430,4 +428,3 @@ class ConsentListView(APIView):
         - Returns http 400 if error happened.
         """
         return HttpResponse(status=204)
-

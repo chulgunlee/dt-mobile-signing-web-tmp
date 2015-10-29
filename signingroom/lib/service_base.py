@@ -8,37 +8,46 @@ class BadRequest(APIException):
     status_code = 400
     default_detail = 'Bad Request'
 
+
 class Unauthorized(APIException):
     status_code = 401
     default_detail = 'Unauthorized'
+
 
 class Forbidden(APIException):
     status_code = 403
     default_detail = 'Forbidden'
 
+
 class NotFound(APIException):
     status_code = 404
     default_detail = 'Not Found'
+
 
 class MethodNotAllowed(APIException):
     status_code = 405
     default_detail = 'Method Not ALlowed'
 
+
 class InternalServerError(APIException):
     status_code = 500
     default_detail = 'Internal Server Error'
+
 
 class BadGateway(APIException):
     status_code = 502
     default_detail = 'Bad Gateway'
 
+
 class ServiceUnavailable(APIException):
     status_code = 503
     default_detail = 'Service Unavailable'
 
+
 class GatewayTimeout(APIException):
     status_code = 504
     default_detail = 'Gateway Timeout'
+
 
 class BadContentType(APIException):
     status_code = 500
@@ -46,7 +55,7 @@ class BadContentType(APIException):
 
 
 class ServiceBase(object):
-    
+
     SETTING_KEY = ''
 
     def __init__(self, context):
@@ -55,7 +64,7 @@ class ServiceBase(object):
             self.context = context
 
             self.verify = getattr(settings, 'VERIFY_WS_CERT', True)
-                
+
         except Exception as e:
             raise ImproperlyConfigured('%s not specified: %s' % (self.SETTING_KEY,  e))
 
@@ -77,17 +86,15 @@ class ServiceBase(object):
             'Accept': 'application/json',
         }
 
-
     def get(self, path, params=None):
         """
         Wrapper for sending GET request through dt_requests.
         """
 
-        headers = self._headers() 
+        headers = self._headers()
         url = self._url(path)
         response = get_json(url, self.context, headers=headers, params=params, verify=self.verify)
         return self.process_response(response)
-
 
     def post(self, path, data, params=None):
         headers = self._headers()
@@ -96,7 +103,6 @@ class ServiceBase(object):
         response = post_json(url, self.context, payload=data, headers=headers, params=params, verify=self.verify)
         return self.process_response(response)
 
-
     def put(self, path, data, params=None):
         headers = self._headers()
         url = self._url(path)
@@ -104,17 +110,15 @@ class ServiceBase(object):
         response = put_json(url, self.context, payload=data, headers=headers, params=params, verify=self.verify)
         return self.process_response(response)
 
-
     def delete(self, path, params=None):
         """
         Wrapper for sending DELETE request through dt_requests.
         """
 
-        headers = self._headers() 
+        headers = self._headers()
         url = self._url(path)
         response = delete_json(url, self.context, headers=headers, params=params, verify=self.verify)
         return self.process_response(response)
-
 
     def process_response(self, response):
         """
@@ -129,14 +133,13 @@ class ServiceBase(object):
 
             if 'status_code' in result:
                 # workaround for the DTMobile status_code issue       FIXME FIXME
-                response.status_code = result['status_code']        
+                response.status_code = result['status_code']
 
                 error_detail = result.get('message')
 
-
         # 401 is returned by siteminder and will not have a json body
         if response.status_code == 401:
-            raise AuthenticationFailed(error_detail)
+            raise Unauthorized(error_detail)
 
         # 403 is normally impossible. if this happens there must be a env bug
         elif response.status_code == 403:
@@ -174,4 +177,3 @@ class ServiceBase(object):
 
         else:
             return response.json()
-

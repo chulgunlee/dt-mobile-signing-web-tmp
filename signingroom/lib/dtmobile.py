@@ -1,6 +1,3 @@
-import json
-from django.conf import settings
-from dtplatform.utils.dt_requests import get_json
 from signingroom.lib.service_base import ServiceBase
 
 

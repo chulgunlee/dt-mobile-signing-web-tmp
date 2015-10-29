@@ -34,14 +34,13 @@ _ref = {
 
 }
 
+
 class InvalidCategory(Exception):
     pass
+
 
 def r(category, key, default=None):
     if category not in _ref:
         raise InvalidCategory('Category "%s" does not exist.' % category)
 
     return _ref[category].get(key, default)
-    
-
-    

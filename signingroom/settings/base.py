@@ -66,8 +66,6 @@ STATICFILES_DIRS = (
 # SQLTap
 SQLTAP_ENABLED = os.environ.get('SQLTAP_ENABLED', False)
 
-
-
 # Database
 # https://docs.djangoproject.com/en/1.8/ref/settings/#databases
 

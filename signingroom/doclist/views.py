@@ -9,7 +9,7 @@ from django.http import HttpResponse
 class DocListView(View):
 
     def get(self, request, dealjacket_id, deal_id):
-        
+
         context = {
             'dealjacket_id': dealjacket_id,
             'deal_id': deal_id,
@@ -33,7 +33,6 @@ def doc_package_api(request, master_index_id):
         return HttpResponse(json.dumps(doc_list_json), content_type='application/json')
 
 
-
 def doc_preview_api(request, master_index_id, doc_index_id):
     """ Get a doc preview
 
@@ -44,7 +43,7 @@ def doc_preview_api(request, master_index_id, doc_index_id):
     Returns:
         application/pdf
     """
-    data={
+    data = {
         'id': doc_index_id,
         'pages': [
             'http://localhost:8000/api/doclist/{}/docs/{}/page/1'.format(master_index_id, doc_index_id),
