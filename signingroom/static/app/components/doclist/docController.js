@@ -12,8 +12,7 @@ controller('DocListCtrl', function($scope, $api, docService, signerService, docT
 
     $scope.data = docService;
 
-    // `dealJacketId`, `dealId` are global variables from the django template
-    $api.getDealJacketInfo(dealJacketId, dealId).then(function(response) {
+    $api.getDealJacketInfo().then(function(response) {
         var data = response.data;
 
         $scope.packageId = data.package.id;

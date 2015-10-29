@@ -12,63 +12,71 @@ angular.module('dc.shared.api.api', [
 /**
  * server API wrapper
  */
-factory('$api', function($http, $q, loadingIndicatorService) {
+provider('$api', function() {
     
-    // the path base for assemble the api uri
-    // TODO: manage global variables dealJacketId and dealId
-    var pathBase = 'dealjackets/' + dealJacketId + '/deals/' + dealId;
+    var apiUri = '/api/';
+
+    this.setApiUri = function(value) {
+        apiUri = value;
+    }
+
+    this.$get = function($http, $rootScope, $q, loadingIndicatorService) {
     
-    var request = function(method, uri, data) {
+        // the path base for assemble the api uri
+        var pathBase = 'dealjackets/' + $rootScope.dealJacketId + '/deals/' + $rootScope.dealId;
         
-        loadingIndicatorService.show('Loading data...');
+        var request = function(method, uri, data) {
+            
+            loadingIndicatorService.show('Loading data...');
 
-        var deferred = $q.defer();
+            var deferred = $q.defer();
 
-        $http({
-            method: method.toUpperCase(),
-            url: apiUri + pathBase + uri,
-            data: data,
-        }).then(function(response) {
+            $http({
+                method: method.toUpperCase(),
+                url: apiUri + pathBase + uri,
+                data: data,
+            }).then(function(response) {
 
-            loadingIndicatorService.hide();
-            deferred.resolve(response);
+                loadingIndicatorService.hide();
+                deferred.resolve(response);
 
-        }, function(response) {
+            }, function(response) {
 
-            loadingIndicatorService.hide();
-            deferred.reject(response);
-        });
+                loadingIndicatorService.hide();
+                deferred.reject(response);
+            });
 
-        return deferred.promise;
-    };
+            return deferred.promise;
+        };
 
-    var service = {
+        var service = {
 
-        getDealJacketInfo: function() {
-            return request('GET', '/');
-        },
+            getDealJacketInfo: function() {
+                return request('GET', '/');
+            },
 
-        getDocList: function() {
-            return request('GET', '/docs/');
-        },
+            getDocList: function() {
+                return request('GET', '/docs/');
+            },
 
-        submitDocs: function(packageId, docIds) {
-            return request('POST', '/submit/', { docIds: docIds });
-        },
+            submitDocs: function(packageId, docIds) {
+                return request('POST', '/submit/', { docIds: docIds });
+            },
 
-        getDocTypes: function(packageId) {
-            return request('GET', '/doctypes/');
-        },
+            getDocTypes: function(packageId) {
+                return request('GET', '/doctypes/');
+            },
 
-        updateDoc: function(packageId, docId, data) {
-            return request('PUT', '/docs/' + docId, data);
-        },
+            updateDoc: function(packageId, docId, data) {
+                return request('PUT', '/docs/' + docId, data);
+            },
 
-        getDocPreview: function(packageId, docId) {
-            return request('GET', '/docs/' + docId);
-        },
+            getDocPreview: function(packageId, docId) {
+                return request('GET', '/docs/' + docId);
+            },
 
-    };
+        };
 
-    return service;
+        return service;
+    }
 });

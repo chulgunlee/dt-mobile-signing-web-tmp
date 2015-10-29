@@ -8,20 +8,23 @@
     <link rel="stylesheet" href="/static/assets/libs/css/bootstrap.css" />
     <link rel="stylesheet" href="/static/main.css" />
 </head>
-<body ng-app="dc.app">
+<body>
     <div web-view-bridge-debug></div>
     <div id="content" ng-view></div>
     <loading-indicator></loading-indicator>
 
-    <script>
-        var dealJacketId = '{{ dealjacket_id }}';
-        var dealId = '{{ deal_id }}';
-        var dealerId = 0;
-        var apiUri = '/api/';
-        var webViewBridgeDebugEnabled = false;
-    </script>
-
     <script src="/static/bundle.js"></script>
+
+    <script>
+        var webViewBridgeDebugEnabled = false;
+
+        angular.module('dc.app').run(function($rootScope) {
+            $rootScope.dealJacketId = '{{ dealjacket_id }}';
+            $rootScope.dealId = '{{ deal_id }}';
+        });
+
+        angular.bootstrap(document, ['dc.app']);
+    </script>
 
 </body>
 </html>

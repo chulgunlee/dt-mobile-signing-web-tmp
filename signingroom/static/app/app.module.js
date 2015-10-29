@@ -44,6 +44,11 @@ angular.module('dc.app', [
     'dc.shared.webviewbridge.webviewbridge',
 ]).
 
+config(function($apiProvider) {
+    // config the mashup API base uri.
+    // $apiProvider.setApiUri('/api/');
+}).
+
 
 // initialize
 run(function() {
