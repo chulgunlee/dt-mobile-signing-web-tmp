@@ -20,10 +20,15 @@ provider('$api', function() {
         apiUri = value;
     }
 
+
     this.$get = function($http, $rootScope, $q, loadingIndicatorService) {
     
         // the path base for assemble the api uri
         var pathBase = 'dealjackets/' + $rootScope.dealJacketId + '/deals/' + $rootScope.dealId;
+
+        var getUrl = function(uri) {
+            return apiUri + pathBase + uri;
+        };
         
         var request = function(method, uri, data) {
             
@@ -33,7 +38,7 @@ provider('$api', function() {
 
             $http({
                 method: method.toUpperCase(),
-                url: apiUri + pathBase + uri,
+                url: getUrl(uri),
                 data: data,
             }).then(function(response) {
 
@@ -49,7 +54,13 @@ provider('$api', function() {
             return deferred.promise;
         };
 
+
         var service = {
+
+            // expose url generator, mainly for webviewbridge to provide api url to native
+            url: function(uri) {
+                return getUrl(uri);
+            },
 
             getDealJacketInfo: function() {
                 return request('GET', '/');
@@ -59,19 +70,19 @@ provider('$api', function() {
                 return request('GET', '/docs/');
             },
 
-            submitDocs: function(packageId, docIds) {
+            submitDocs: function(docIds) {
                 return request('POST', '/submit/', { docIds: docIds });
             },
 
-            getDocTypes: function(packageId) {
+            getDocTypes: function() {
                 return request('GET', '/doctypes/');
             },
 
-            updateDoc: function(packageId, docId, data) {
+            updateDoc: function(docId, data) {
                 return request('PUT', '/docs/' + docId, data);
             },
 
-            getDocPreview: function(packageId, docId) {
+            getDocPreview: function(docId) {
                 return request('GET', '/docs/' + docId);
             },
 

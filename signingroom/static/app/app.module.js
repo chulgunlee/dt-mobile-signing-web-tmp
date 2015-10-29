@@ -47,7 +47,7 @@ config(function($apiProvider, webViewBridgeProvider) {
     // $apiProvider.setApiUri('/api/');
     
     // config webviewbridge debug, default=false
-    // webViewBridgeProvider.enableWebViewBridgeDebug(false);
+    webViewBridgeProvider.enableWebViewBridgeDebug(true);
 
 }).
 

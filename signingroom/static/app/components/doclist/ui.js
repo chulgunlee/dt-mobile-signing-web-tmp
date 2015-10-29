@@ -100,7 +100,7 @@ directive('doc', function() {
                         applicantType: doc.scanApplicant,
                         applicantTypeName: doc.scanApplicant ? SIGNER_TYPE_MAPPING[doc.scanApplicant] : undefined,
                     };
-                    webViewBridge.startPreview(docService.id, doc.id, docProps);
+                    webViewBridge.startPreview(doc.id, docProps);
                 }
             };
 
@@ -119,9 +119,9 @@ directive('doc', function() {
             $scope.moveDoc = function() {
                 var data = { requiredForFunding: !$scope.doc.requiredForFunding };
 
-                $api.updateDoc(docService.id, $scope.doc.id, data).then(function(response) {
+                $api.updateDoc($scope.doc.id, data).then(function(response) {
                     // TODO: add update data
-                    docService.refresh(docService.id);
+                    docService.refresh();
                 });
             };
 
@@ -141,13 +141,13 @@ directive('doc', function() {
                     $api.updateDoc($scope.doc.id, {}).then(function(response) {
 
                         // TODO: add update data
-                        docService.refresh(docService.id);
+                        docService.refresh();
                     });
                 });
             };
 
             /**
-             * Delete doc (delete scanned pdf, not delete doc from package)
+             * Delete doc (delete scanned pdf, not delete doc from dealjacket)
              */
             $scope.deleteDoc = function() {
                 console.log('delete doc:' + $scope.doc.id);
@@ -215,7 +215,7 @@ directive('bottomBar', function() {
                     var selectedDocIds = _.pluck(docService.selectedDocs, 'id'),
                         selectedSigners = signerService.selectedSigners;
 
-                    webViewBridge.startSigningRoom($scope.docService.id, selectedDocIds, selectedSigners);
+                    webViewBridge.startSigningRoom(selectedDocIds, selectedSigners);
                 });
             };
 
@@ -239,7 +239,7 @@ directive('bottomBar', function() {
                 var docIds = _.pluck(docService.selectedDocs, 'id'),
                     data = JSON.stringify({ docIds: docIds });
                 
-                webViewBridge.print(docService.id, _.pluck(docService.selectedDocs, 'id'));
+                webViewBridge.print(_.pluck(docService.selectedDocs, 'id'));
             };
 
 

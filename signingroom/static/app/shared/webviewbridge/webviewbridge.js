@@ -11,7 +11,7 @@ provider('webViewBridge', function() {
         webViewBridgeDebugEnabled = !!value;
     ;}
 
-    this.$get = function() {
+    this.$get = function($api, $rootScope) {
         var service = {
             
             logs: [],
@@ -31,35 +31,34 @@ provider('webViewBridge', function() {
                 }
             },
 
-            debugEnabled: function() {
+            get debugEnabled() {
                 return webViewBridgeDebugEnabled;
             },
 
             _absUrl: function(url) {
-                return location.protocol + '//' + location.host + '/' + url;
+                return location.protocol + '//' + location.host + url;
             },
 
             /* Native API wrappers */
 
-            print: function(pkgId, docIds, url) {
+            print: function(docIds, url) {
                 this.call('print', {
                     method: 'POST',
-                    url: this._absUrl('packages/' + pkgId),
-                    data: JSON.stringify({ docIds: docIds }),
-                    pkgId: pkgId,           // for native reference only
+                    url: this._absUrl($api.url('/printable/')) + '?docIds=' + encodeURIComponent(docIds.join(',')),         // TODO
                     docIds: docIds,         // for native reference only
                 });
             },
 
-            logEvent: function(pkgId, msg) {
-                this.call('logEvent', { pkgId: pkgId, msg: msg });
+            logEvent: function(msg) {
+                this.call('logEvent', { msg: msg });
             },
 
-            startPreview: function(pkgId, docId, docProps) {
+            startPreview: function(docId, docProps) {
                 this.call('startPreview', {
                     method: 'GET',
-                    url: this._absUrl('doclist/' + pkgId + '#/packages/' + pkgId + '/docs/' + docId + '/preview/'),
-                    pkgId: pkgId,
+                    url: this._absUrl('/dealjackets/' + encodeURIComponent($rootScope.dealJacketId) + 
+                                      '/deals/' + encodeURIComponent($rootScope.dealId) + 
+                                      '/#/docs/' + encodeURIComponent(docId) + '/preview/'),
                     docId: docId,
                     docProps: docProps
                 });
@@ -94,7 +93,7 @@ provider('webViewBridge', function() {
  * Put this directive right after the <body> tag.
  */
 directive('webViewBridgeDebug', function(webViewBridge) {
-    return webViewBridge.debugEnabled() ? {
+    return webViewBridge.debugEnabled ? {
         restrict: 'EA',
         template: '<div class="debug-log"><p ng-repeat="log in logs track by $index">{{log}}</p></div>',
         replace: true,
