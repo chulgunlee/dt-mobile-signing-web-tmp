@@ -1,7 +1,7 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.status import HTTP_400_BAD_REQUEST
-from rest_framework.exceptions import NotFound, ValidationError
+from rest_framework.exceptions import NotFound, ValidationError, APIException
 from dt_django_base.api.viewsets import BaseAPIView
 from django.http import HttpResponse
 
@@ -57,24 +57,20 @@ class DealJacketView(BaseAPIView):
         deal_id = int(deal_id)
 
         # call dtmobile service
-        dm = get_dtmobile()
-        response = dm.get_dealjacket_summary(dealjacket_id, deal_id, context=request.context_data)
-        if _status_code(response) == 200:
-            deal = json.loads(response.text)
+        try:
+            dm = get_dtmobile(request.context_data)
+            deal = dm.get_dealjacket_summary(dealjacket_id, deal_id)
 
             buyer_name = ' '.join(filter(None, (deal['applicant_first_name'], deal['applicant_last_name'])))
             cobuyer_name = ' '.join(filter(None, (deal['coapplicant_first_name'], deal['coapplicant_last_name'])))
 
-        else:
+        except APIException:
             buyer_name = 'Applicant'
             cobuyer_name = 'Co-Applicant'
 
         # call doccenter api to get docs
-        dc = get_doccenter_api()
-        docs = dc.get_docs_by_dj_id(dealjacket_id, context=request.context_data)
-
-        if not docs:
-            raise NotFound('Doc package associated to deal jacket %s does not exist or contains no document' % dealjacket_id)
+        dc = get_doccenter_api(request.context_data)
+        docs = dc.get_docs_by_dj_id(dealjacket_id)
 
         result = {
             'id': str(deal_id),
@@ -154,16 +150,6 @@ class PackageDetailView(APIView):
 
         return Response(result)
 
-
-def _status_code(response):
-    if response.status_code != 200:
-        return response.status_code
-    else:
-        result = json.loads(response.text)
-        if 'status_code' in result:
-            return result.get('status_code')
-
-    return 200
 
 def _convert_doc(doc):
     sign_status = r('sig_status_cd', doc.get('sig_status_cd', ()))

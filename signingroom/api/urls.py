@@ -6,7 +6,7 @@ from .views import *
 urlpatterns = patterns('',
 
     # get info from dealjacket
-    url(r'^dealjackets/(?P<dealjacket_id>\d+)/deals/(?P<deal_id>\d+)/?$', DealJacketView.as_view()),                         # get package info
+    url(r'^dealjackets/(?P<dealjacket_id>\d+)/deals/(?P<deal_id>\d+)/?$', DealJacketView.as_view(), name='dealjacket'),                         # get package info
 
     # doc packages views
     url(r'^packages/(?P<pkg_id>\d+)/?$', PackageDetailView.as_view()),                        # get package detail (doc list)
