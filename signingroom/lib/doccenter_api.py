@@ -29,7 +29,7 @@ class DocCenterService(ServiceBase):
             return []
 
 
-    def update_funding_in(self, doc_id, needed_for_funding, context):
+    def update_funding_in(self, doc_id, needed_for_funding):
         """
         Update required for funding indicator
         """

@@ -14,6 +14,10 @@ angular.module('dc.shared.api.api', [
  */
 factory('$api', function($http, $q, loadingIndicatorService) {
     
+    // the path base for assemble the api uri
+    // TODO: manage global variables dealJacketId and dealId
+    var pathBase = 'dealjackets/' + dealJacketId + '/deals/' + dealId;
+    
     var request = function(method, uri, data) {
         
         loadingIndicatorService.show('Loading data...');
@@ -22,7 +26,7 @@ factory('$api', function($http, $q, loadingIndicatorService) {
 
         $http({
             method: method.toUpperCase(),
-            url: apiUri + uri,
+            url: apiUri + pathBase + uri,
             data: data,
         }).then(function(response) {
 
@@ -40,28 +44,28 @@ factory('$api', function($http, $q, loadingIndicatorService) {
 
     var service = {
 
-        getDealJacketInfo: function(dealJacketId, dealId) {
-            return request('GET', 'dealjackets/' + dealJacketId + '/deals/' + dealId + '/');
+        getDealJacketInfo: function() {
+            return request('GET', '/');
         },
 
-        getDocList: function(packageId) {
-            return request('GET', 'packages/' + packageId);
+        getDocList: function() {
+            return request('GET', '/docs/');
         },
 
         submitDocs: function(packageId, docIds) {
-            return request('POST', 'packages/' + packageId + '/submit/', { docIds: docIds });
+            return request('POST', '/submit/', { docIds: docIds });
         },
 
         getDocTypes: function(packageId) {
-            return request('GET', 'packages/' + packageId + '/doctypes/');
+            return request('GET', '/doctypes/');
         },
 
         updateDoc: function(packageId, docId, data) {
-            return request('PUT', 'packages/' + packageId + '/docs/' + docId, data);
+            return request('PUT', '/docs/' + docId, data);
         },
 
         getDocPreview: function(packageId, docId) {
-            return request('GET', 'packages/' + packageId + '/docs/' + docId);
+            return request('GET', '/docs/' + docId);
         },
 
     };

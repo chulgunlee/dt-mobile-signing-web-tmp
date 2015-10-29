@@ -10,7 +10,7 @@ from .doclist.views import DocListView
 
 urlpatterns = patterns('',
     url(r'^signingroom/', include('signingroom.signingroom.urls')),
-    url(r'^dealjackets/(?P<dealjacket_id>\d+)/deals/(?P<deal_id>\d+)/?$', DocListView.as_view()),
+    url(r'^dealjackets/(?P<dealjacket_id>\d+)/deals/(?P<deal_id>\d+)/$', DocListView.as_view()),
     url(r'^api/', include('signingroom.api.urls')),
 )
 

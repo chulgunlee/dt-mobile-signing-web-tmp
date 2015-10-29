@@ -91,7 +91,7 @@ class DealJacketView(BaseAPIView):
         return Response(result)
 
 
-class PackageDetailView(APIView):
+class DocListView(APIView):
     """Get document package detail.
 
     API endpoints:
@@ -99,23 +99,19 @@ class PackageDetailView(APIView):
     - GET /packages/<pkg_id>/
     """
 
-    def get(self, request, pkg_id):
+    def get(self, request, dealjacket_id, deal_id):
 
         """Get the document package detail.
 
         Parameters:
 
-        - `pkg_id`: The package id
+        - `dealjacket_id`: The deal jacket id
+        - `deal_id`: The deal id
 
         Return value:
 
         ```json
         {
-            "id": <input package id>,
-            "consents": {               // buyer consents
-                "buyer": <true|false>,
-                "cobuyer": <true|false>,
-            },
             "docs": [
                 {
                     "id": <doc id>,
@@ -139,19 +135,13 @@ class PackageDetailView(APIView):
         ```
 
         """
-        
-        pkg_id = int(pkg_id)
+        dealjacket_id = int(dealjacket_id)
 
-        request.context_data.update({
-            'dealer_code': '1089761',            # TODO: dummy data for dealercode
-        })
-
-
-        dc = get_doccenter_api()
-        docs = dc.get_docs_by_pkg_id(pkg_id, context=request.context_data)
+        # call doccenter api to get docs
+        dc = get_doccenter_api(request.context_data)
+        docs = dc.get_docs_by_dj_id(dealjacket_id)
 
         result = {
-            'id': str(pkg_id),
             'docs': [ _convert_doc(doc) for doc in docs ],
         }
 
@@ -242,7 +232,7 @@ class DocDetailView(APIView):
 
         return Response(result)
 
-    def put(self, request, pkg_id, doc_id):
+    def put(self, request, dealjacket_id, deal_id, doc_id):
         """
         Update the document properties.
 
@@ -279,7 +269,7 @@ class DocDetailView(APIView):
         except ValueError as e:
             return Response(data={'error': 'Data is not valid JSON'}, status=HTTP_400_BAD_REQUEST)
 
-        dc = get_doccenter_api()
+        dc = get_doccenter_api(request.context_data)
 
         # update needed_for_funding indicator
         if 'requiredForFunding' in request_data:
@@ -288,7 +278,7 @@ class DocDetailView(APIView):
                 raise ValidationError('requiredForFunding must be a boolean value.')
 
             # update through doccenter API
-            dc.update_funding_in(doc_id, required_for_funding, context=request.context_data)
+            dc.update_funding_in(doc_id, required_for_funding)
 
         # upload PDF file
         if 'document' in request_data:
