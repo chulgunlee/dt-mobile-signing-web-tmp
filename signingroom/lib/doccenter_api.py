@@ -15,17 +15,6 @@ class DocCenterService(ServiceBase):
         except APIException:
             return []
 
-    def get_docs_by_pkg_id(self, pkg_id, context):
-
-        try:
-            dealer_code = context.get('dealer_code', 0)
-            docs = self.get('/document-packages/%d/' % pkg_id, params={'dealer_code': dealer_code})
-
-            return json.loads(docs)             # TODO: workaround, fix this after doc-center-api fixed json encoding issue
-
-        except APIException:
-            return []
-
     def update_funding_in(self, doc_id, needed_for_funding):
         """
         Update required for funding indicator
