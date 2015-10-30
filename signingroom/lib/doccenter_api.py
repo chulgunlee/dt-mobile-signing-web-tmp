@@ -1,4 +1,3 @@
-import json
 from rest_framework.exceptions import APIException
 from signingroom.lib.service_base import ServiceBase
 

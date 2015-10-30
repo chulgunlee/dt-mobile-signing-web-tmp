@@ -13,8 +13,6 @@ from signingroom.lib.dtmobile import get_dtmobile
 from signingroom.lib.doccenter_api import get_doccenter_api
 from signingroom.lib.doccenter_ref import r
 
-from dtplatform.utils.dt_context import Context
-
 
 class DealJacketView(BaseAPIView):
 
@@ -59,7 +57,7 @@ class DealJacketView(BaseAPIView):
 
         # call dtmobile service
         try:
-            dm = get_dtmobile(request.context_data)
+            dm = get_dtmobile(request.context_data)         # TODO: should generate context from smsession
             deal = dm.get_dealjacket_summary(dealjacket_id, deal_id)
 
             buyer_name = ' '.join(filter(None, (deal['applicant_first_name'], deal['applicant_last_name'])))
