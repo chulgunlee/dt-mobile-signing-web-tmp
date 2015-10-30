@@ -66,8 +66,8 @@ class DealJacketView(BaseAPIView):
             cobuyer_name = ' '.join(filter(None, (deal['coapplicant_first_name'], deal['coapplicant_last_name'])))
 
         except APIException:
-            buyer_name = 'Applicant'
-            cobuyer_name = 'Co-Applicant'
+            buyer_name = 'Applicant'                # TODO: workaround code for dev
+            cobuyer_name = 'Co-Applicant'           # TODO: in prod this need to be deleted because if dtmobile is down this api won't be called
 
         # call doccenter api to get docs
         dc = get_doccenter_api(request.context_data)
@@ -75,7 +75,7 @@ class DealJacketView(BaseAPIView):
 
         result = {
             'id': str(deal_id),
-            'dealjacketId': str(dealjacket_id),
+            'dealJacketId': str(dealjacket_id),
             'signers': {
                 'buyer': buyer_name,
                 'cobuyer': cobuyer_name,
@@ -153,12 +153,12 @@ def _convert_doc(doc):
         'requireFullReview': False,             # TODO
         'signable': r('bool', doc.get('electronic_sig')),
         'status': r('document_status', doc.get('document_status_cd')),
-        'requiredSigners': [],                  # TODO
         'signStatus': {                         # TODO
             'buyer': 'buyer' in sign_status,
             'cobuyer': 'cobuyer' in sign_status,
             'dealer': 'dealer' in sign_status,
         },
+        'requiredSigners': ['buyer', 'cobuyer', 'dealer'],
 
         'isExternal': r('bool', doc.get('external')),
     }
