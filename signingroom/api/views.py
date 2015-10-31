@@ -38,14 +38,25 @@ class DealJacketView(BaseAPIView):
         {
             "dealjacketId": <the input dealjacket id>,
             "id": <the input deal id>,
-            "package": {
-                "id": <associated document package id>,
-            },
             "signers": {
                 "buyer": <applicant name>,
                 "cobuyer": <co-applicant name>,
                 "dealer": <dealer name>,
             },
+            "docs": [
+                "id": <doc id>,
+                "docType": <document template type>,
+                "requiredForFunding": true|false,
+                "signable": true|false,
+                "status": "initial|partially-signed|signed|submitted",
+                "signStatus": {
+                    "buyer": true|false,
+                    "cobuyer": true|false,
+                    "dealer": true|false,
+                },
+                "requiredSigners": ['buyer', 'cobuyer', 'dealer'],
+                "isExternal": true|false
+            ]
         }
         ```
         """
@@ -89,7 +100,7 @@ class DocListView(APIView):
 
     API endpoints:
 
-    - GET /packages/<pkg_id>/
+    - GET /dealjackets/<dealjacket_id>/deals/<deal_id>/docs/
     """
 
     def get(self, request, dealjacket_id, deal_id):
@@ -166,9 +177,9 @@ class DocDetailView(APIView):
 
     API endpoints:
 
-    - GET /packages/<pkg_id>/docs/<doc_id>/
-    - PUT /packages/<pkg_id>/docs/<doc_id>/
-    - DELETE /packages/<pkg_id>/docs/<doc_id>/
+    - GET /dealjackets/<dealjacket_id>/deals/<deal_id>/docs/<doc_id>/
+    - PUT /dealjackets/<dealjacket_id>/deals/<deal_id>/docs/<doc_id>/
+    - DELETE /dealjackets/<dealjacket_id>/deals/<deal_id>/docs/<doc_id>/
     """
 
     def get(self, request, pkg_id, doc_id):
@@ -300,7 +311,7 @@ class DocPrintView(View):
 
     API endpoints:
 
-    - GET /packages/<pkg_id>/printable?docids=1,2,3
+    - GET /dealjackets/<dealjacket_id>/deals/<deal_id>/docs/<doc_id>/printable?docids=1,2,3
     """
 
     def get(self, request, pkg_id):
@@ -323,7 +334,7 @@ class DocTypeListView(APIView):
 
     API endpoints:
 
-    - GET /packages/<pkg_id>/doctypes/
+    - GET /dealjackets/<dealjacket_id>/deals/<deal_id>/doctypes/
     """
 
     def get(self, request, pkg_id):
@@ -359,7 +370,7 @@ class DocSubmitView(APIView):
 
     API endpoints:
 
-    - post /packages/<pkg_id>/submit/
+    - POST /dealjackets/<dealjacket_id>/deals/<deal_id>/submit/
     """
 
     def post(self, request, pkg_id):
@@ -384,8 +395,8 @@ class ConsentListView(APIView):
 
     API endpoints:
 
-    - GET /packages/<pkg_id>/consents/
-    - PUT /packages/<pkg_id>/consents/
+    - GET /dealjackets/<dealjacket_id>/deals/<deal_id>/consents/
+    - PUT /dealjackets/<dealjacket_id>/deals/<deal_id>/consents/
     """
     def get(self, request, pkg_id):
         """Get the user consents
