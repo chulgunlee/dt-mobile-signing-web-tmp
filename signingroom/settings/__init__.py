@@ -1,1 +1,1 @@
-from signingroom.settings.base import *         # noqa
+from signingroom.settings.base import *  # noqa

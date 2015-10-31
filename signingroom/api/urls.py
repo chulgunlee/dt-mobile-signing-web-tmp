@@ -1,6 +1,15 @@
-from django.conf.urls import patterns, include, url
+from django.conf.urls import include, patterns, url
 
-from .views import DealJacketView, DocListView, DocDetailView, DocTypeListView, DocPrintView, ConsentListView, DocSubmitView
+from .views import (
+    ConsentListView,
+    DealJacketView,
+    DocDetailView,
+    DocListView,
+    DocPrintView,
+    DocSubmitView,
+    DocTypeListView,
+)
+
 
 urlpatterns = patterns('',
 

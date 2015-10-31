@@ -3,10 +3,12 @@ Django settings for signingroom project.
 """
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
-import os
 import logging.config
+import os
+
+from dtplatform.conf import settings as platform_settings  # TODO: restore dtplatform settings
 from rest_framework import ISO_8601
-from dtplatform.conf import settings as platform_settings          # TODO: restore dtplatform settings
+
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 

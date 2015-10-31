@@ -1,9 +1,9 @@
-import os
 import json
+import os
 
-from django.views.generic.base import View
-from django.shortcuts import render_to_response
 from django.http import HttpResponse
+from django.shortcuts import render_to_response
+from django.views.generic.base import View
 
 
 class DocListView(View):

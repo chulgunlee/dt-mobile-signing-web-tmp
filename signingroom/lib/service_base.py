@@ -1,7 +1,12 @@
 from django.conf import settings
-from rest_framework.exceptions import APIException
 from django.core.exceptions import ImproperlyConfigured
-from dtplatform.utils.dt_requests import get_json, post_json, put_json, delete_json
+from dtplatform.utils.dt_requests import (
+    delete_json,
+    get_json,
+    post_json,
+    put_json,
+)
+from rest_framework.exceptions import APIException
 
 
 class BadRequest(APIException):

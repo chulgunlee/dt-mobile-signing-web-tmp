@@ -2,10 +2,11 @@
 
 """
 from django.conf import settings
-from django.conf.urls import include, url, patterns
+from django.conf.urls import include, patterns, url
 from django.conf.urls.static import static
 
 from .doclist.views import DocListView
+
 
 urlpatterns = patterns('',
     url(r'^signingroom/', include('signingroom.signingroom.urls')),

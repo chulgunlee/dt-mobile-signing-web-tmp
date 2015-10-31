@@ -1,4 +1,5 @@
-from .base import *     # noqa
+from .base import *  # noqa
+
 
 DEBUG = True
 VERIFY_WS_CERT = False

@@ -1,17 +1,16 @@
-from rest_framework.views import APIView
+import json
+import os
+
+from django.http import HttpResponse
+from django.views.generic.base import View
+from dt_django_base.api.viewsets import BaseAPIView
+from rest_framework.exceptions import APIException, ValidationError
 from rest_framework.response import Response
 from rest_framework.status import HTTP_400_BAD_REQUEST
-from rest_framework.exceptions import ValidationError, APIException
-from dt_django_base.api.viewsets import BaseAPIView
-from django.http import HttpResponse
-
-import os
-import json
-from django.views.generic.base import View
-
-from signingroom.lib.dtmobile import get_dtmobile
+from rest_framework.views import APIView
 from signingroom.lib.doccenter_api import get_doccenter_api
 from signingroom.lib.doccenter_ref import r
+from signingroom.lib.dtmobile import get_dtmobile
 
 
 class DealJacketView(BaseAPIView):
