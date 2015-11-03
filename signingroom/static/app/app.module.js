@@ -19,7 +19,6 @@ require('./components/doclist/filters.js');
 require('./components/doclist/ui.js');
 require('./components/preview/previewController.js');
 require('./shared/api/api.js');
-require('./shared/debug/webViewBridgeDirective.js');
 require('./shared/loading/loadingDirective.js');
 require('./shared/loading/loadingService.js');
 require('./shared/ui/uiDirective.js');
@@ -40,9 +39,17 @@ angular.module('dc.app', [
     'mgcrea.ngStrap',
 
     'dc.route',
-    'dc.shared.debug.webViewBridgeDirective',
     'dc.shared.webviewbridge.webviewbridge',
 ]).
+
+config(function($apiProvider, webViewBridgeProvider) {
+    // config the mashup API base uri, default='/api/'
+    // $apiProvider.setApiUri('/api/');
+    
+    // config webviewbridge debug, default=false
+    webViewBridgeProvider.enableWebViewBridgeDebug(true);
+
+}).
 
 
 // initialize

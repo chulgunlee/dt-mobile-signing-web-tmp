@@ -19,7 +19,7 @@ config(function($routeProvider) {
             controller: 'DocListCtrl'
         }).
 
-        when('/packages/:packageId/docs/:docId/preview/', {
+        when('/docs/:docId/preview/', {
             templateUrl: templates['doc_preview.html'],
             controller: 'DocPreviewCtrl'
         }).

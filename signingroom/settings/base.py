@@ -3,15 +3,18 @@ Django settings for signingroom project.
 """
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
-import os
 import logging.config
+import os
+
+from dtplatform.conf import settings as platform_settings  # TODO: restore dtplatform settings
 from rest_framework import ISO_8601
-from dtplatform.conf import settings as platform_settings          # TODO: restore dtplatform settings
+
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
+VERIFY_WS_CERT = True
 
 ALLOWED_HOSTS = []
 TEMPLATE_DEBUG = DEBUG
@@ -65,8 +68,6 @@ STATICFILES_DIRS = (
 # SQLTap
 SQLTAP_ENABLED = os.environ.get('SQLTAP_ENABLED', False)
 
-
-
 # Database
 # https://docs.djangoproject.com/en/1.8/ref/settings/#databases
 
@@ -93,6 +94,8 @@ USE_TZ = True
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
+APPEND_SLASH = True
+
 REST_FRAMEWORK = {
     'DEFAULT_RENDERER_CLASSES': (
         'rest_framework.renderers.JSONRenderer',
@@ -105,8 +108,9 @@ REST_FRAMEWORK = {
         ISO_8601,
         "%m/%d/%Y",
     ),
+    'EXCEPTION_HANDLER': 'dt_django_base.api.exceptions.custom_exception_handler',
 }
- 
+
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': True,
@@ -120,20 +124,24 @@ LOGGING = {
             'format': '%(asctime)s [%(levelname)s]'
                       ' %(name)s: %(message)s'
         },
-        'signingweb': {'format': ('"%(asctime)s", "dt_mobile_signing_web", "[%(levelname)s]", "%(corelation_id)s",'
-                             ' "%(tenant_code)s", "%(fusion_prod_code)s",'
-                             ' "%(branding_id)s", "%(branding_folder)s",'
-                             ' "%(feature_code)s", "%(functional_area)s",'
-                             ' "%(short_event_name)s", "%(error_type)s", "%(route_name)s", "%(url)s",'
-                             ' "%(name)s", "%(filepath)s", "%(pathname)s", "%(process)d", "%(processName)s",'
-                             ' "%(thread)d", "%(threadName)s", "%(funcName)s", "%(lineno)d",'
-                             ' "%(session_id)s", "%(client_ip)s", "%(login_id)s",'
-                             ' "%(user_code)s", "%(user_type)s", "%(dealer_code)s",'
-                             ' "%(user_lender_id)s", "%(browser_type)s",'
-                             ' "%(partner_id)s", "%(partner_code)s", "%(deal_jacket_id)s", "%(deal_id)s",'
-                             ' "%(app_id)s", "%(lender_app_id)s",'
-                             ' "%(message)s", "%(full_form)s", "%(form)s"'),
-                  'datefmt': '%Y-%m-%d %H:%M:%S'}
+        'signingweb': {
+            'format': (
+                '"%(asctime)s", "dt_mobile_signing_web", "[%(levelname)s]", "%(corelation_id)s",'
+                ' "%(tenant_code)s", "%(fusion_prod_code)s",'
+                ' "%(branding_id)s", "%(branding_folder)s",'
+                ' "%(feature_code)s", "%(functional_area)s",'
+                ' "%(short_event_name)s", "%(error_type)s", "%(route_name)s", "%(url)s",'
+                ' "%(name)s", "%(filepath)s", "%(pathname)s", "%(process)d", "%(processName)s",'
+                ' "%(thread)d", "%(threadName)s", "%(funcName)s", "%(lineno)d",'
+                ' "%(session_id)s", "%(client_ip)s", "%(login_id)s",'
+                ' "%(user_code)s", "%(user_type)s", "%(dealer_code)s",'
+                ' "%(user_lender_id)s", "%(browser_type)s",'
+                ' "%(partner_id)s", "%(partner_code)s", "%(deal_jacket_id)s", "%(deal_id)s",'
+                ' "%(app_id)s", "%(lender_app_id)s",'
+                ' "%(message)s", "%(full_form)s", "%(form)s"'
+            ),
+            'datefmt': '%Y-%m-%d %H:%M:%S'
+        }
     },
 
     'handlers': {
@@ -174,4 +182,3 @@ LOGGING = {
 LOGGING_EXTRA_DATA = platform_settings.LOGGING_EXTRA_DATA.copy()           # TODO: restore dtplatform settings
 
 logging.config.dictConfig(LOGGING)
-

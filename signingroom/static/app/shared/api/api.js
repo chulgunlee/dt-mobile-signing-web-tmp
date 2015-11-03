@@ -3,6 +3,7 @@
  */
 
 angular.module('dc.shared.api.api', [
+    'dc.shared.loading.loadingDirective',
     'dc.shared.loading.loadingService',
 ]).
 
@@ -11,59 +12,82 @@ angular.module('dc.shared.api.api', [
 /**
  * server API wrapper
  */
-factory('$api', function($http, $q, loadingIndicatorService) {
+provider('$api', function() {
     
-    var request = function(method, uri, data) {
+    var apiUri = '/api/';
+
+    this.setApiUri = function(value) {
+        apiUri = value;
+    }
+
+
+    this.$get = function($http, $rootScope, $q, loadingIndicatorService) {
+    
+        // the path base for assemble the api uri
+        var pathBase = 'dealjackets/' + $rootScope.dealJacketId + '/deals/' + $rootScope.dealId;
+
+        var getUrl = function(uri) {
+            return apiUri + pathBase + uri;
+        };
         
-        loadingIndicatorService.show('Loading data...');
+        var request = function(method, uri, data) {
+            
+            loadingIndicatorService.show('Loading data...');
 
-        var deferred = $q.defer();
+            var deferred = $q.defer();
 
-        $http({
-            method: method.toUpperCase(),
-            url: apiUri + uri,
-            data: data,
-        }).then(function(response) {
+            $http({
+                method: method.toUpperCase(),
+                url: getUrl(uri),
+                data: data,
+            }).then(function(response) {
 
-            loadingIndicatorService.hide();
-            deferred.resolve(response);
+                loadingIndicatorService.hide();
+                deferred.resolve(response);
 
-        }, function(response) {
+            }, function(response) {
 
-            loadingIndicatorService.hide();
-            deferred.reject(response);
-        });
+                loadingIndicatorService.hide();
+                deferred.reject(response);
+            });
 
-        return deferred.promise;
-    };
+            return deferred.promise;
+        };
 
-    var service = {
 
-        getDealJacketInfo: function(dealJacketId) {
-            return request('GET', 'dealjackets/' + dealJacketId);
-        },
+        var service = {
 
-        getDocList: function(packageId) {
-            return request('GET', 'packages/' + packageId);
-        },
+            // expose url generator, mainly for webviewbridge to provide api url to native
+            url: function(uri) {
+                return getUrl(uri);
+            },
 
-        submitDocs: function(packageId, docIds) {
-            return request('POST', 'packages/' + packageId + '/submit/', { docIds: docIds });
-        },
+            getDealJacketInfo: function() {
+                return request('GET', '/');
+            },
 
-        getDocTypes: function(packageId) {
-            return request('GET', 'packages/' + packageId + '/doctypes/');
-        },
+            getDocList: function() {
+                return request('GET', '/docs/');
+            },
 
-        updateDoc: function(packageId, docId, data) {
-            return request('PUT', 'packages/' + packageId + '/docs/' + docId, data);
-        },
+            submitDocs: function(docIds) {
+                return request('POST', '/submit/', { docIds: docIds });
+            },
 
-        getDocPreview: function(packageId, docId) {
-            return request('GET', 'packages/' + packageId + '/docs/' + docId);
-        },
+            getDocTypes: function() {
+                return request('GET', '/doctypes/');
+            },
 
-    };
+            updateDoc: function(docId, data) {
+                return request('PUT', '/docs/' + docId, data);
+            },
 
-    return service;
+            getDocPreview: function(docId) {
+                return request('GET', '/docs/' + docId);
+            },
+
+        };
+
+        return service;
+    }
 });

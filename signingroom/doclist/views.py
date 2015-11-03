@@ -1,21 +1,18 @@
+import json
 import os
 
-from django.views.generic.base import View
-from django.shortcuts import render_to_response
 from django.http import HttpResponse
-
-try:
-    import simplejson as json
-except ImportError:
-    import json
+from django.shortcuts import render_to_response
+from django.views.generic.base import View
 
 
 class DocListView(View):
 
-    def get(self, request, master_index_id):
-        
+    def get(self, request, dealjacket_id, deal_id):
+
         context = {
-            'master_index_id': master_index_id,
+            'dealjacket_id': dealjacket_id,
+            'deal_id': deal_id,
             'user_code': 100502,
         }
         return render_to_response('doclist.html', context)
@@ -36,7 +33,6 @@ def doc_package_api(request, master_index_id):
         return HttpResponse(json.dumps(doc_list_json), content_type='application/json')
 
 
-
 def doc_preview_api(request, master_index_id, doc_index_id):
     """ Get a doc preview
 
@@ -47,7 +43,7 @@ def doc_preview_api(request, master_index_id, doc_index_id):
     Returns:
         application/pdf
     """
-    data={
+    data = {
         'id': doc_index_id,
         'pages': [
             'http://localhost:8000/api/doclist/{}/docs/{}/page/1'.format(master_index_id, doc_index_id),

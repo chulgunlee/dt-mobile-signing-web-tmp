@@ -1,6 +1,8 @@
-from django.conf.urls import patterns, include, url
+from django.conf.urls import patterns, url
 from django.views.generic import TemplateView
+
 from .views import SigningRoomView
+
 
 urlpatterns = patterns('',
     url(r'^(?P<master_index_id>\d+)/?$', SigningRoomView.as_view()),
