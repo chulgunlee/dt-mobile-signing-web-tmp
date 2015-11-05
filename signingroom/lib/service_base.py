@@ -1,11 +1,6 @@
+import requests
 from django.conf import settings
 from django.core.exceptions import ImproperlyConfigured
-from dtplatform.utils.dt_requests import (
-    delete_json,
-    get_json,
-    post_json,
-    put_json,
-)
 from rest_framework.exceptions import APIException
 
 
@@ -98,21 +93,21 @@ class ServiceBase(object):
 
         headers = self._headers()
         url = self._url(path)
-        response = get_json(url, self.context, headers=headers, params=params, verify=self.verify)
+        response = requests.get(url, headers=headers, params=params, verify=self.verify)
         return self.process_response(response)
 
     def post(self, path, data, params=None):
         headers = self._headers()
         url = self._url(path)
 
-        response = post_json(url, self.context, payload=data, headers=headers, params=params, verify=self.verify)
+        response = requests.post(url, data=data, headers=headers, params=params, verify=self.verify)
         return self.process_response(response)
 
     def put(self, path, data, params=None):
         headers = self._headers()
         url = self._url(path)
 
-        response = put_json(url, self.context, payload=data, headers=headers, params=params, verify=self.verify)
+        response = requests.put(url, data=data, headers=headers, params=params, verify=self.verify)
         return self.process_response(response)
 
     def delete(self, path, params=None):
@@ -122,7 +117,7 @@ class ServiceBase(object):
 
         headers = self._headers()
         url = self._url(path)
-        response = delete_json(url, self.context, headers=headers, params=params, verify=self.verify)
+        response = requests.delete(url, headers=headers, params=params, verify=self.verify)
         return self.process_response(response)
 
     def process_response(self, response):

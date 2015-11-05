@@ -6,7 +6,7 @@ Django settings for signingroom project.
 import logging.config
 import os
 
-from dtplatform.conf import settings as platform_settings  # TODO: restore dtplatform settings
+from dtplatform.conf import settings as platform_settings
 from rest_framework import ISO_8601
 
 
@@ -27,10 +27,10 @@ TEMPLATE_DEBUG = DEBUG
 SECRET_KEY = '!)8jshnj*q(+bq$#dv-3=w4^^hz4mup3gmdovl*ys!w9%@+$(+'
 
 MIDDLEWARE_CLASSES = (
-    'doorman_middleware.tenant_middleware.TenantMiddleware',                            # TODO: restore dtplatform settings
+    'doorman_middleware.tenant_middleware.TenantMiddleware',
     'django_tenant_templates.middleware.TenantMiddleware',
     'django.middleware.common.CommonMiddleware',
-    'dt_django_base.core.middleware.context_middleware.ContextMiddleware',              # TODO: restore dtplatform settings
+    'dt_django_base.core.middleware.context_middleware.ContextMiddleware',
 )
 
 
@@ -179,6 +179,6 @@ LOGGING = {
         },
     },
 }
-LOGGING_EXTRA_DATA = platform_settings.LOGGING_EXTRA_DATA.copy()           # TODO: restore dtplatform settings
+LOGGING_EXTRA_DATA = platform_settings.LOGGING_EXTRA_DATA.copy()
 
 logging.config.dictConfig(LOGGING)
