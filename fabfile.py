@@ -28,9 +28,9 @@ def build():
         pkgfile = '%s-%s.tar.gz' % (pkgname, version)
 
     # if virtualenv is not setup (by jenkins), install it
-    if not os.path.isdir('.env'):
-        local('virtualenv .env')
-        local('/bin/bash .env/bin/activate && .env/bin/pip install -r requires_install.txt')
+    if not os.path.isdir('env'):
+        local('virtualenv env')
+        local('/bin/bash env/bin/activate && env/bin/pip install -r requires_install.txt')
     
     # make build directory
     local('mkdir -p build')
@@ -59,7 +59,7 @@ def clean():
     """
     Clean packages.
     """
-    local('rm -rf .env')
+    local('rm -rf env')
     local('rm -rf build')
 
 

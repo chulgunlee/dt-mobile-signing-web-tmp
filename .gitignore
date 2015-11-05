@@ -57,7 +57,7 @@ db.sqlite3
 
 node_modules/
 .DS_Store
-.env/
+env/
 
 bundle.js.map
 main.css.map
