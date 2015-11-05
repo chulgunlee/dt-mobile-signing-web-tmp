@@ -12,8 +12,7 @@ BASEDIR = os.path.abspath(os.path.dirname(__file__))
 sys.path.insert(0, BASEDIR)
 
 env.deploy_dest = '/opt'
-env.pkgname = 'cms'
-#env.archive_path = '~/archive'
+env.pkgname = 'dt-mobile-signing-web'
 
 @task
 def build():
