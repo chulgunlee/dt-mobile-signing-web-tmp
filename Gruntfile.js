@@ -38,8 +38,8 @@ module.exports = function(grunt) {
             build: {
                 watch: false,
                 plugins: webpackConfig.plugins.concat(
-                    new webpack.optimize.DedupePlugin(),
-                    new webpack.optimize.UglifyJsPlugin()
+                    new webpack.optimize.DedupePlugin()
+                    //new webpack.optimize.UglifyJsPlugin()
                 ),
             },
 
