@@ -1,0 +1,8 @@
+*.pyc
+*.swp
+build
+tests
+.buildignore
+webpack.config.js
+fabfile.py
+node_modules/
