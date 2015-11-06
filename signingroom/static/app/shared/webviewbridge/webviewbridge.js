@@ -99,9 +99,10 @@ directive('webViewBridgeDebug', function(webViewBridge) {
         replace: true,
         scope: true,
 
-        controller: function($scope, webViewBridge) {
+        // MUST annotate here since ngAnnotatePlugin won't do this automatically
+        controller: ['$scope', 'webViewBridge', function($scope, webViewBridge) {
             $scope.logs = webViewBridge.logs;
-        },
+        }],
     } : {
         restrict: 'EA',
         template: '',
