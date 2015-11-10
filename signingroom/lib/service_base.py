@@ -79,12 +79,17 @@ class ServiceBase(object):
         Generate headers from client API call for web service
         TODO: this might be useless because dt_request support context
         """
-        return {
+        headers = {
             'DEALER-CODE': self.context.get('dealer_code'),
             'TENANT-CODE': self.context.get('tenant_code'),
             'FUSION-PROD-CODE': self.context.get('fusion_prod_code'),
             'Accept': 'application/json',
         }
+
+        if 'user_code' in self.context:
+            headers['USER-CODE'] = self.context.get('user_code')
+
+        return headers
 
     def get(self, path, params=None):
         """

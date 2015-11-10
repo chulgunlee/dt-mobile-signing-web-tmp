@@ -21,5 +21,31 @@ class DocCenterService(ServiceBase):
         return self.put('/docs/%d/funding-in/' % doc_id, data={'needed_for_funding': needed_for_funding})
 
 
+    def store(self, pdf, doc_id, dj_id, doc_type):
+        """
+        Store a pdf file to doc-center-api
+        :params doc_id: document id
+        :params dj_id: deal jacket id
+        :params template_ds: template description
+        """
+        data = {
+            'doc_index_id': doc_id,
+            'external_transation_id': dj_id,
+            'template_document_type': doc_type,
+            'base64_document_content': pdf,
+
+            'nonlistable_metadata': {
+                'file_name': '%s.pdf' % doc_type,
+                'encoding': '',
+                'doc_version_code': 'F',
+                'document_type': 'pdf',
+                'mime_type': 'application/x-pdf',
+            }
+        }
+
+        return self.put('/docs/store/', data)
+
+
+
 def get_doccenter_api(context):
     return DocCenterService(context)
