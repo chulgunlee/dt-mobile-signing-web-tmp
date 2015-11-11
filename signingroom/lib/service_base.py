@@ -1,4 +1,5 @@
 import requests
+import json
 from django.conf import settings
 from django.core.exceptions import ImproperlyConfigured
 from rest_framework.exceptions import APIException
@@ -105,12 +106,18 @@ class ServiceBase(object):
         headers = self._headers()
         url = self._url(path)
 
+        data = json.dumps(data)
+        headers['Content-Type'] = 'application/json'
+
         response = requests.post(url, data=data, headers=headers, params=params, verify=self.verify)
         return self.process_response(response)
 
     def put(self, path, data, params=None):
         headers = self._headers()
         url = self._url(path)
+
+        data = json.dumps(data)
+        headers['Content-Type'] = 'application/json'
 
         response = requests.put(url, data=data, headers=headers, params=params, verify=self.verify)
         return self.process_response(response)

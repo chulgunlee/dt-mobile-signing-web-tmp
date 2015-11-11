@@ -1,3 +1,4 @@
+import json
 from rest_framework.exceptions import APIException
 from signingroom.lib.service_base import ServiceBase
 
@@ -30,7 +31,7 @@ class DocCenterService(ServiceBase):
         """
         data = {
             'doc_index_id': doc_id,
-            'external_transation_id': dj_id,
+            'external_transaction_id': dj_id,
             'template_document_type': doc_type,
             'base64_document_content': pdf,
 
@@ -40,10 +41,13 @@ class DocCenterService(ServiceBase):
                 'doc_version_code': 'F',
                 'document_type': 'pdf',
                 'mime_type': 'application/x-pdf',
+                'content_type': 'application/x-pdf',
             }
         }
 
-        return self.put('/docs/store/', data)
+        print json.dumps(data)
+
+        return self.put('/docs/store/', data=data)
 
 
 
