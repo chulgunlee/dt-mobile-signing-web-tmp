@@ -4,6 +4,8 @@ from signingroom.lib.service_base import ServiceBase
 
 
 class DocCenterService(ServiceBase):
+    """Wrapper for calling `doc-center-api`
+    """
 
     SETTING_KEY = 'DOCCENTER_URI'
 
@@ -21,14 +23,16 @@ class DocCenterService(ServiceBase):
         """
         return self.put('/docs/%d/funding-in/' % doc_id, data={'needed_for_funding': needed_for_funding})
 
-
     def store(self, pdf, doc_id, dj_id, doc_type):
         """
         Store a pdf file to doc-center-api
-        :params doc_id: document id
-        :params dj_id: deal jacket id
-        :params template_ds: template description
+
+        Args:
+            doc_id: document id
+            dj_id: deal jacket id
+            template_ds: template description
         """
+
         data = {
             'doc_index_id': doc_id,
             'external_transaction_id': dj_id,
@@ -45,11 +49,10 @@ class DocCenterService(ServiceBase):
             }
         }
 
-        print json.dumps(data)
-
         return self.put('/docs/store/', data=data)
 
 
-
 def get_doccenter_api(context):
+    """Factory method
+    """
     return DocCenterService(context)
