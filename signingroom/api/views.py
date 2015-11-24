@@ -11,6 +11,7 @@ from rest_framework.views import APIView
 from signingroom.lib.doccenter_api import get_doccenter_api
 from signingroom.lib.doccenter_ref import r
 from signingroom.lib.dtmobile import get_dtmobile
+from signingroom.api.serializers import DocSerializer
 
 
 class DealJacketView(BaseAPIView):
@@ -237,16 +238,19 @@ class DocDetailView(APIView):
         """
         Update the document properties.
 
+        NOTE this API will NOT update the whole object; instead it will update specified fields only (equivalent to `PATCH` which is not implement).
+
         Parameters:
 
-        - `pkg_id`: The package id
+        - `dealjacket_id`: deal jacket id
+        - `deal_id`: deal id
         - `doc_id`: document id
 
         - data:
 
             {
                 "docType": "",
-                "scanApplicants": "buyer" | "cobuyer" | null,
+                "applicant": "buyer" | "cobuyer" | null,
                 "requiredForFunding": true | false,
                 "pdf": "",           // base64 encoded PDF binary
             }
@@ -261,20 +265,17 @@ class DocDetailView(APIView):
         - Only external docs can be updated with "pdf" property.
 
         """
-        doc_id = int(doc_id)            # TODO: catch exception
-
-        # TODO: Have to deal with the logic for changing docType and scanApplicant
-        # TODO: MUST valid if the document specified is valid for update
-        try:
-            request_data = json.loads(request.body)
-        except ValueError:
-            return Response(data={'error': 'Data is not valid JSON'}, status=HTTP_400_BAD_REQUEST)
-
+        doc_id = int(doc_id)
         dc = get_doccenter_api(request.context_data)
 
+        serializer = DocSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+
+        data = serializer.data
+
         # update needed_for_funding indicator
-        if 'requiredForFunding' in request_data:
-            required_for_funding = request_data.get('requiredForFunding')
+        if 'requiredForFunding' in data:
+            required_for_funding = data.get('requiredForFunding')
             if not isinstance(required_for_funding, bool):
                 raise ValidationError('requiredForFunding must be a boolean value.')
 
@@ -282,9 +283,11 @@ class DocDetailView(APIView):
             dc.update_funding_in(doc_id, required_for_funding)
 
         # upload PDF file
-        if 'document' in request_data:
-            base64_pdf = request_data.get('pdf')
-            # TODO: store
+        if 'pdf' in data:
+            base64_pdf = data.get('pdf')
+            doc_type = data.get('docType')
+            scan_applicant = data.get('applicant')
+            dc.store(base64_pdf, doc_id, dealjacket_id, doc_type)
 
         return HttpResponse(status=204)
 

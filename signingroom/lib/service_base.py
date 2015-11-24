@@ -1,4 +1,5 @@
 import requests
+import json
 from django.conf import settings
 from django.core.exceptions import ImproperlyConfigured
 from rest_framework.exceptions import APIException
@@ -55,6 +56,8 @@ class BadContentType(APIException):
 
 
 class ServiceBase(object):
+    """Base class for lib classes that access internal backedn services
+    """
 
     SETTING_KEY = ''
 
@@ -69,26 +72,34 @@ class ServiceBase(object):
             raise ImproperlyConfigured('%s not specified: %s' % (self.SETTING_KEY,  e))
 
     def _url(self, path, *args):
-        """
-        Generate service URL
+        """Generate service URL
         """
         return self.server_uri + path % args
 
     def _headers(self):
+        """Generate headers from client API call for web service
         """
-        Generate headers from client API call for web service
-        TODO: this might be useless because dt_request support context
-        """
-        return {
+        headers = {
             'DEALER-CODE': self.context.get('dealer_code'),
             'TENANT-CODE': self.context.get('tenant_code'),
             'FUSION-PROD-CODE': self.context.get('fusion_prod_code'),
             'Accept': 'application/json',
         }
 
+        if 'user_code' in self.context:
+            headers['USER-CODE'] = self.context.get('user_code')
+
+        return headers
+
     def get(self, path, params=None):
-        """
-        Wrapper for sending GET request through dt_requests.
+        """Wrapper for sending GET request through dt_requests.
+
+        Args:
+            path: API path
+            params: query params dict
+
+        Returns:
+            json object (in python representive); or raise exception if server fails
         """
 
         headers = self._headers()
@@ -97,22 +108,56 @@ class ServiceBase(object):
         return self.process_response(response)
 
     def post(self, path, data, params=None):
+        """Wrapper for sending POST request through dt_requests.
+
+        Args:
+            path: API path
+            data: post data object; will be sent as 'application/json'
+            params: query params dict
+
+        Returns:
+            json object (in python representive); or raise exception if server fails
+        """
+
         headers = self._headers()
         url = self._url(path)
+
+        data = json.dumps(data)
+        headers['Content-Type'] = 'application/json'
 
         response = requests.post(url, data=data, headers=headers, params=params, verify=self.verify)
         return self.process_response(response)
 
     def put(self, path, data, params=None):
+        """Wrapper for sending PUT request through dt_requests.
+
+        Args:
+            path: API path
+            data: put data object; will be sent as 'application/json'
+            params: query params dict
+
+        Returns:
+            json object (in python representive); or raise exception if server fails
+        """
+
         headers = self._headers()
         url = self._url(path)
+
+        data = json.dumps(data)
+        headers['Content-Type'] = 'application/json'
 
         response = requests.put(url, data=data, headers=headers, params=params, verify=self.verify)
         return self.process_response(response)
 
     def delete(self, path, params=None):
-        """
-        Wrapper for sending DELETE request through dt_requests.
+        """Wrapper for sending DELETE request through dt_requests.
+
+        Args:
+            path: API path
+            params: query params dict
+
+        Returns:
+            json object (in python representive); or raise exception if server fails
         """
 
         headers = self._headers()
@@ -121,8 +166,15 @@ class ServiceBase(object):
         return self.process_response(response)
 
     def process_response(self, response):
-        """
-        Do nothing if response is success (2xx or 3xx), or raise exception if error happens (4xx or 5xx)
+        """Process http response
+
+        Args:
+            response: HTTP response returned by `requests` library
+
+        Returns:
+            Parsed object if server returns 200
+            None if server returns 204
+            raise Exceptions if server fails (4xx or 5xx)
         """
 
         error_detail = None
