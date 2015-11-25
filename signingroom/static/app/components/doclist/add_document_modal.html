@@ -10,10 +10,9 @@
 
   <button type="button" class="btn btn-default doc-type-selector" bs-select
       ng-model="selectedApplicantType"
-      bs-options="applicant as applicant | signerTypeName for applicant in docTypeService.getApplicantsByDocTypeId(selectedDocTypeId)" 
+      bs-options="applicant.id as applicant.name for applicant in applicantChoices" 
       data-placeholder="Select Person"
-      ng-change="onApplicantTypeSelect(selectedApplicantType)"
-      ng-disabled="!docTypeService.getApplicantsByDocTypeId(selectedDocTypeId)">
+      ng-change="onApplicantTypeSelect(selectedApplicantType)">
     Action <span class="caret"></span>
   </button>
 
