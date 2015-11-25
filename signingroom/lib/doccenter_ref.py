@@ -6,9 +6,9 @@ _ref = {
     },
 
     'document_status': {
+        'INI': 'initial',
+        'CMPT': 'complete',
         'SUBM': 'submitted',
-        'SCAN': 'scanned',
-        'UPLD': 'uploaded',
         'PM': 'prompt-collected',
         'ES': 'signed',
         'PR': 'printed',
