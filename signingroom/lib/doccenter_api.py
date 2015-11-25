@@ -51,6 +51,11 @@ class DocCenterService(ServiceBase):
 
         return self.put('/docs/store/', data=data)
 
+    def type_choices(self):
+        """Get document template types
+        """
+        return self.get('/templates/type-choices/')
+
 
 def get_doccenter_api(context):
     """Factory method

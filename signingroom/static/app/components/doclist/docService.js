@@ -214,6 +214,7 @@ factory('docTypeService', function($api) {
 
         /**
          * Returns the applicants of specified docType
+         * TODO: this function won't be useful as per applicant type req change
          */
         getApplicantsByDocTypeId: function(id) {
             var docType = _.find(service.docTypes, function(docType) {
