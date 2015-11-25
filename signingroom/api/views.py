@@ -340,7 +340,7 @@ class DocTypeListView(APIView):
     - GET /dealjackets/<dealjacket_id>/deals/<deal_id>/doctypes/
     """
 
-    def get(self, request, pkg_id):
+    def get(self, request, dealjacket_id, deal_id):
         """Get the doc type list.
 
         Parameters:
@@ -351,20 +351,24 @@ class DocTypeListView(APIView):
 
         ```json
         {
-            "packageId": <doc package id>,
             "docTypes": [
                 {
-                    "id": <doc type id>,
-                    "docTypeName": <doc type name(code)>,
+                    "code": <doc type name(code)>,
                     "name": <humna-readable doc type description>,
-                    "requiredApplicant": <buyer|cobuyer|null>,     // the applicant specification for this doc. null == both
                 },
             ],
         }
         ```
         """
 
-        result = json.load(open(os.path.dirname(__file__) + '/doc_type_list_response.json'))
+        # call doccenter api to get docs
+        dc = get_doccenter_api(request.context_data)
+        doctypes = dc.type_choices()
+
+        result = {
+            'docTypes': [{'code': t[0], 'name': t[1]} for t in doctypes]
+        }
+
         return Response(result)
 
 

@@ -28,6 +28,12 @@ factory('docTypeDialog', function($commonDialog, $q, $rootScope, docTypeService)
 
         scope.docTypeService = docTypeService;
 
+        scope.applicantChoices = [
+            { id: 'both', name: 'Both' },
+            { id: 'buyer', name: 'Applicant' },
+            { id: 'cobuyer', name: 'Co-Applicant' },
+        ];
+
         // initial values
         scope.selectedDocTypeId = options.docTypeId;
         scope.selectedApplicantType = options.applicantType;

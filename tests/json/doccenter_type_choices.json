@@ -1,0 +1,10 @@
+[
+    [ "contract", "Contract" ],
+    [ "contract_addendum", "Contract Addendum" ],
+    [ "cosignor_notice", "CoSignor Notice" ],
+    [ "credit_application", "Credit Application" ],
+    [ "gps_form", "GPS Form" ],
+    [ "tire_wheel", "Tire Wheel" ],
+    [ "auto_pay_form", "Auto-Pay Form" ],
+    [ "unknown", "Unknown" ]
+]

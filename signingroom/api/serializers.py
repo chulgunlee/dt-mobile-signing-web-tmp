@@ -1,6 +1,5 @@
 from drf_braces import fields
 from dt_django_base.api.serializers import BaseSerializer
-from rest_framework import serializers
 from rest_framework.serializers import ValidationError
 
 
@@ -43,6 +42,3 @@ class DocSerializer(BaseSerializer):
             raise ValidationError({'applicant': 'invalid applicant type'})
 
         return data
-
-    
-
