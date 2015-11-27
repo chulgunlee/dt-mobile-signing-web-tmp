@@ -95,10 +95,6 @@ class TestDealJacketViewGet(DRFApiMixin, SigningWebUnitTest):
         # assert http status
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
-        # assert signer names
-        #result = response.data
-        #self.assertDictContainsSubset({'buyer': 'Applicant', 'cobuyer': 'Co-Applicant'}, result.get('signers'))
-
     def test_dealjacket_get_fail_summary_500(self, mock_get_dtmobile, mock_get_doccenter_api):
         "Test when the get dj summary failed"
         request = self._make_request()
@@ -111,10 +107,6 @@ class TestDealJacketViewGet(DRFApiMixin, SigningWebUnitTest):
 
         # assert http status
         self.assertEqual(response.status_code, status.HTTP_500_INTERNAL_SERVER_ERROR)
-
-        # assert signer names
-        #result = response.data
-        #self.assertDictContainsSubset({'buyer': 'Applicant', 'cobuyer': 'Co-Applicant'}, result.get('signers'))
 
     def test_dealjacket_get_fail_doclist_404(self, mock_get_dtmobile, mock_get_doccenter_api):
         "Test when the get doc list failed"
