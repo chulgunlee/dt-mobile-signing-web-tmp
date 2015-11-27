@@ -7,16 +7,16 @@ from rest_framework.reverse import reverse
 from rest_framework.response import Response
 from tests.test_bases import SigningWebUnitTest
 from dt_django_base.core.test_bases import DRFApiMixin
-from signingroom.api.views import DealJacketView
+from signingroom.api.views import DocListView
 from signingroom.lib.service_base import *          # NOQA
 
 
 @mock.patch('signingroom.api.views.get_doccenter_api')
-class TestDealJacketViewGet(DRFApiMixin, SigningWebUnitTest):
+class TestDocListViewGet(DRFApiMixin, SigningWebUnitTest):
 
     def setUp(self):
-        super(TestDealJacketViewGet, self).setUp()
-        self.view = DealJacketView.as_view()
+        super(TestDocListViewGet, self).setUp()
+        self.view = DocListView.as_view()
 
         self.url_name = 'doclist'
         self.dealjacket_id = '1'
@@ -69,7 +69,7 @@ class TestDealJacketViewGet(DRFApiMixin, SigningWebUnitTest):
             'isExternal': False,
         }, doc)
 
-    def test_dealjacket_get_fail_doclist_404(self, mock_get_doccenter_api):
+    def test_doclist_get_fail_doclist_404(self, mock_get_doccenter_api):
         "Test when the get doc list failed"
         request = self._make_request()
 
@@ -85,7 +85,7 @@ class TestDealJacketViewGet(DRFApiMixin, SigningWebUnitTest):
         result = response.data
         self.assertDictContainsSubset({'status_code': 404, 'message': 'Not Found'}, result)
 
-    def test_dealjacket_get_fail_doclist_500(self, mock_get_doccenter_api):
+    def test_doclist_get_fail_doclist_500(self, mock_get_doccenter_api):
         "Test when the get doc list failed"
         request = self._make_request()
 

@@ -183,6 +183,7 @@ class TestLibServiceBase(SigningWebUnitTest):
         self.assertDictEqual(result, test_data)
 
 
+@mock.patch('signingroom.lib.service_base.requests')
 class TestLibServiceBaseHttpMethods(SigningWebUnitTest):
     
     def setUp(self):
@@ -209,44 +210,40 @@ class TestLibServiceBaseHttpMethods(SigningWebUnitTest):
     def tearDown(self):
         pass
 
-    @mock.patch('signingroom.lib.service_base.get_json')
-    def test_get(self, mock_get_json):
+    def test_get(self, mock_requests):
         self.test_service.get('/url/')
-        mock_get_json.assert_called_with(self.url, self.context, headers=self.headers, params=None, verify=False)
+        mock_requests.get.assert_called_with(self.url, headers=self.headers, params=None, verify=False)
 
         params = {'arg1':'value1'}
         self.test_service.get('/url/', params=params)
-        mock_get_json.assert_called_with(self.url, self.context, headers=self.headers, params=params, verify=False)
+        mock_requests.get.assert_called_with(self.url, headers=self.headers, params=params, verify=False)
 
-    @mock.patch('signingroom.lib.service_base.post_json')
-    def test_post(self, mock_post_json):
+    def test_post(self, mock_requests):
         self.test_service.post('/url/', data=None)
-        mock_post_json.assert_called_with(self.url, self.context, payload=None, headers=self.headers, params=None, verify=False)
+        mock_requests.post.assert_called_with(self.url, data=None, headers=self.headers, params=None, verify=False)
 
         self.test_service.post('/url/', data='abc')
-        mock_post_json.assert_called_with(self.url, self.context, payload='abc', headers=self.headers, params=None, verify=False)
+        mock_requests.post.assert_called_with(self.url, data='abc', headers=self.headers, params=None, verify=False)
 
         params = {'arg1':'value1'}
         self.test_service.post('/url/', data='abc', params=params)
-        mock_post_json.assert_called_with(self.url, self.context, payload='abc', headers=self.headers, params=params, verify=False)
+        mock_requests.post.assert_called_with(self.url, data='abc', headers=self.headers, params=params, verify=False)
 
-    @mock.patch('signingroom.lib.service_base.put_json')
-    def test_put(self, mock_put_json):
+    def test_put(self, mock_requests):
         self.test_service.put('/url/', data=None)
-        mock_put_json.assert_called_with(self.url, self.context, payload=None, headers=self.headers, params=None, verify=False)
+        mock_requests.put.assert_called_with(self.url, data=None, headers=self.headers, params=None, verify=False)
 
         self.test_service.put('/url/', data='abc')
-        mock_put_json.assert_called_with(self.url, self.context, payload='abc', headers=self.headers, params=None, verify=False)
+        mock_requests.put.assert_called_with(self.url, data='abc', headers=self.headers, params=None, verify=False)
 
         params = {'arg1':'value1'}
         self.test_service.put('/url/', data='abc', params=params)
-        mock_put_json.assert_called_with(self.url, self.context, payload='abc', headers=self.headers, params=params, verify=False)
+        mock_requests.put.assert_called_with(self.url, data='abc', headers=self.headers, params=params, verify=False)
 
-    @mock.patch('signingroom.lib.service_base.delete_json')
-    def test_delete(self, mock_delete_json):
+    def test_delete(self, mock_requests):
         self.test_service.delete('/url/')
-        mock_delete_json.assert_called_with(self.url, self.context, headers=self.headers, params=None, verify=False)
+        mock_requests.delete.assert_called_with(self.url, headers=self.headers, params=None, verify=False)
 
         params = {'arg1':'value1'}
         self.test_service.delete('/url/', params=params)
-        mock_delete_json.assert_called_with(self.url, self.context, headers=self.headers, params=params, verify=False)
+        mock_requests.delete.assert_called_with(self.url, headers=self.headers, params=params, verify=False)
