@@ -12,6 +12,7 @@ from signingroom.lib.doccenter_api import get_doccenter_api
 from signingroom.lib.doccenter_ref import r
 from signingroom.lib.dtmobile import get_dtmobile
 from signingroom.api.serializers import DocSerializer
+from signingroom.lib.common import underscore_to_camelCase
 
 
 class DealJacketView(BaseAPIView):
@@ -66,28 +67,26 @@ class DealJacketView(BaseAPIView):
         dealjacket_id = int(dealjacket_id)
         deal_id = int(deal_id)
 
+        context_data = {
+            'dealer_code': '1089761',
+            'tenant_code': 'DTCOM',
+            'fusion_prod_code': 'DTCOM',
+        }
+
         # call dtmobile service
-        try:
-            dm = get_dtmobile(request.context_data)         # TODO: should generate context from smsession
-            deal = dm.get_dealjacket_summary(dealjacket_id, deal_id)
-
-            buyer_name = ' '.join(filter(None, (deal['applicant_first_name'], deal['applicant_last_name'])))
-            cobuyer_name = ' '.join(filter(None, (deal['coapplicant_first_name'], deal['coapplicant_last_name'])))
-
-        except APIException:
-            buyer_name = 'Applicant'                # TODO: workaround code for dev
-            cobuyer_name = 'Co-Applicant'           # TODO: in prod this need to be deleted because if dtmobile is down this api won't be called
+        dm = get_dtmobile(context_data)         # TODO: should generate context from smsession
+        deal = dm.get_dealjacket_summary(dealjacket_id, deal_id)
 
         # call doccenter api to get docs
-        dc = get_doccenter_api(request.context_data)
+        dc = get_doccenter_api(context_data)
         docs = dc.get_docs_by_dj_id(dealjacket_id)
 
         result = {
             'id': str(deal_id),
             'dealJacketId': str(dealjacket_id),
             'signers': {
-                'buyer': buyer_name,
-                'cobuyer': cobuyer_name,
+                'buyer': get_applicant_info(deal, 'applicant'),
+                'cobuyer': get_applicant_info(deal, 'coapplicant'),
                 'dealer': 'Mark Chart',
             },
             'docs': [_convert_doc(doc) for doc in docs],
@@ -158,6 +157,7 @@ def _convert_doc(doc):
         'id': doc['document_index_id'],
         'docType': doc.get('template_doc_type'),
         'templateName': doc.get('template_document_description'),
+        'version': doc.get('latest_doc_version_cd'),
         'requiredForFunding': r('bool', doc.get('needed_for_funding')),
         'requireFullReview': False,             # TODO
         'signable': r('bool', doc.get('electronic_sig')),
@@ -172,6 +172,26 @@ def _convert_doc(doc):
         'isExternal': r('bool', doc.get('external')),
     }
 
+
+def get_applicant_info(deal, applicant):
+    """Get singer information from the deal returned by dt-mobile-api
+
+    Args:
+        deal: the deal result returned by dealjacket list API
+        applicant: 'applicant' or 'coapplicant'
+
+    Returns:
+        A dictionary that contains all the available values for specified appliant from the deal data
+    """
+    
+    result = {}
+    for k in ('first_name', 'last_name', 'line_1_address', 'city', 'state_code', 'zip_code', 'phone_number'):
+        v = deal.get('%s_%s' % (applicant, k))
+        if v is not None:
+            result[underscore_to_camelCase(k)] = v
+    return result
+
+    
 
 class DocDetailView(APIView):
     """Get the detail for specified doc, or update its properties.

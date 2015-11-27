@@ -232,8 +232,9 @@ factory('docTypeService', function($api) {
 
 factory('Signer', function(SIGNER_TYPE_MAPPING) {
     
-    function Signer(name, type) {
-        this.name = name;
+    function Signer(data, type) {
+        _.extend(this, data);
+        this.name = _.filter([this.firstName, this.lastName]).join(' ');
         this.type = type;
         this.selected = false;
     }
@@ -257,7 +258,7 @@ factory('signerService', function(Signer) {
         init: function(signers) {
             this.buyer = new Signer(signers.buyer, 'buyer');
             this.cobuyer = new Signer(signers.cobuyer, 'cobuyer');
-            this.dealer = new Signer('Dealer', 'dealer');
+            this.dealer = new Signer({ firstName: 'Dealer', lastName: 'dealer' }, 'dealer');
         },
 
         /**
