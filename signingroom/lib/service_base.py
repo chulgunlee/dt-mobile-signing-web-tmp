@@ -122,7 +122,7 @@ class ServiceBase(object):
         headers = self._headers()
         url = self._url(path)
 
-        data = json.dumps(data)
+        data = json.dumps(data) if data is not None else None
         headers['Content-Type'] = 'application/json'
 
         response = requests.post(url, data=data, headers=headers, params=params, verify=self.verify)
@@ -143,7 +143,7 @@ class ServiceBase(object):
         headers = self._headers()
         url = self._url(path)
 
-        data = json.dumps(data)
+        data = json.dumps(data) if data is not None else None
         headers['Content-Type'] = 'application/json'
 
         response = requests.put(url, data=data, headers=headers, params=params, verify=self.verify)
