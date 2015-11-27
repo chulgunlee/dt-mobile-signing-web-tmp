@@ -388,7 +388,6 @@ class DocTypeListView(APIView):
         result = {
             'docTypes': [{'code': t[0], 'name': t[1]} for t in doctypes]
         }
-        result = json.load(open(os.path.dirname(__file__) + '/doc_type_list_response.json'))
 
         return Response(result)
 
