@@ -18,7 +18,7 @@ env:
 	env/bin/pip install -r requires_install.txt $(PIP_INDEX)
 
 build/$(PKGFILE): env
-	mkdir build && tar czf build/$(PKGFILE) --exclude-vcs --transform="s|^\./|$(PKGNAME)/|" --exclude-from=.buildignore .
+	mkdir build && tar czf build/$(PKGFILE) --exclude-vcs --transform="s|^\./|$(PKGNAME)/|" --transform="s|^\.$$|$(PKGNAME)/|" --exclude-from=.buildignore .
 
 build: build/$(PKGFILE)
 
