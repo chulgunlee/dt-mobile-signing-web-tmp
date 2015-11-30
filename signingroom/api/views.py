@@ -151,7 +151,7 @@ class DocListView(APIView):
 
 
 def _convert_doc(doc):
-    sign_status = r('sig_status_cd', doc.get('sig_status_cd', ()))
+    sign_status = r('sig_status_cd', doc.get('sig_status_cd', 'ALLNS'), ())
 
     return {
         'id': doc['document_index_id'],
@@ -198,12 +198,12 @@ class DocDetailView(APIView):
 
     API endpoints:
 
-    - GET /dealjackets/<dealjacket_id>/deals/<deal_id>/docs/<doc_id>/
+    - GET /dealjackets/<dealjacket_id>/deals/<deal_id>/docs/<doc_id>/<version_cd>/
     - PUT /dealjackets/<dealjacket_id>/deals/<deal_id>/docs/<doc_id>/
     - DELETE /dealjackets/<dealjacket_id>/deals/<deal_id>/docs/<doc_id>/
     """
 
-    def get(self, request, pkg_id, doc_id):
+    def get(self, request, dealjacket_id, deal_id, doc_id, version_cd):
         """Get the detail of the doc.
 
         Parameters:
@@ -216,24 +216,6 @@ class DocDetailView(APIView):
         ```json
         {
             "id": <doc id>,
-            "packageId": <doc package id>,
-            "docType": <doc type>,
-            "templateName": <doc template naem>,
-            "requiredForFunding": <true|false>,     // whether this document is required for funding
-            "requiredFullReview": <true|false>,     // whether the signer has to review the whole doc before he can sign
-            "signable": <true|false>,
-            "requiredSigners": [ "buyer", "cobuyer" ],      // a list of buyer|cobuyer|dealer indicating who is required to sign this doc
-            "signStatus": {                     // whether each signer has signed the doc or not
-                "buyer": <true|false>,
-                "cobuyer": <true|false>,
-                "dealer": <true|false>,
-            },
-            "isExternal": <true|false>,
-            "sigBlocks": [
-                { "type": "buyer", "style": "" },
-                { "type": "cobuyer", "style": "" },
-            ],
-
             "pages": [              // all the pages for this doc, ordered in page order
                 <base64 encoded image>,
                 ...
@@ -249,8 +231,24 @@ class DocDetailView(APIView):
 
         doc_id = int(doc_id)
 
-        result = json.load(open(os.path.dirname(__file__) + '/doc_detail_response.json'))
-        result['id'] = doc_id
+        context_data = {
+            'dealer_code': '1089761',
+            'tenant_code': 'DTCOM',
+            'fusion_prod_code': 'DTCOM',
+        }
+
+        dc = get_doccenter_api(context_data)
+        response = dc.background_images(doc_id, version_cd)
+        pages = response.get('results', [])
+
+
+        pages = [ page.get('Value') for page in pages ]
+
+        result = {
+            'id': doc_id,
+            'version': version_cd,
+            'pages': pages,
+        }
 
         return Response(result)
 
