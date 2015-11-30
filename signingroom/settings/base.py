@@ -140,7 +140,7 @@ LOGGING = {
                 ' "%(app_id)s", "%(lender_app_id)s",'
                 ' "%(message)s", "%(full_form)s", "%(form)s"'
             ),
-            'datefmt': '%Y-%m-%d %H:%M:%S'
+            'datefmt': '%Y-%m-%d %H:%M:%S',
         }
     },
 
@@ -148,7 +148,7 @@ LOGGING = {
         'default': {
             'level': 'NOTSET',
             'class': 'logging.handlers.RotatingFileHandler',
-            'filename': '/var/log/dt-mobile-signing-web/dt-mobile-signing-web.log',
+            'filename': '/var/log/dt-api/dt-mobile-signing-web.log',
             'maxBytes': 1024 * 1024 * 5,  # 5 MB
             'backupCount': 5,
             'formatter': 'signingweb',
@@ -161,7 +161,7 @@ LOGGING = {
         'syslog': {
             'level': 'NOTSET',
             'class': 'logging.handlers.SysLogHandler',
-            'address': '/dev/dt-mobile-signing-web-log',
+            'address': '/dev/dtapi-log',
             'facility': 'local5',
             'formatter': 'signingweb',
         },
