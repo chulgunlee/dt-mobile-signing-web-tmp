@@ -60,7 +60,7 @@ class DocCenterService(ServiceBase):
         """Get document images
         """
         
-        return self.get('/docs/%s/background_images/' % doc_id, params={ 'version_cd': version_cd })
+        return self.get('/docs/%s/background-images/' % doc_id, params={ 'version_cd': version_cd })
         
 
 
