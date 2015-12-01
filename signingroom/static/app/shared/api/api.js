@@ -83,7 +83,7 @@ provider('$api', function() {
             },
 
             getDocPreview: function(docId, version) {
-                return request('GET', '/docs/' + docId + '/' + version + '/');
+                return request('GET', '/docs/' + docId + '/?version=' + version);
             },
 
         };

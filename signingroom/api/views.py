@@ -198,12 +198,12 @@ class DocDetailView(APIView):
 
     API endpoints:
 
-    - GET /dealjackets/<dealjacket_id>/deals/<deal_id>/docs/<doc_id>/<version_cd>/
+    - GET /dealjackets/<dealjacket_id>/deals/<deal_id>/docs/<doc_id>/
     - PUT /dealjackets/<dealjacket_id>/deals/<deal_id>/docs/<doc_id>/
     - DELETE /dealjackets/<dealjacket_id>/deals/<deal_id>/docs/<doc_id>/
     """
 
-    def get(self, request, dealjacket_id, deal_id, doc_id, version_cd):
+    def get(self, request, dealjacket_id, deal_id, doc_id):
         """Get the detail of the doc.
 
         Parameters:
@@ -228,8 +228,10 @@ class DocDetailView(APIView):
 
         - consider using incremental loading for pages, if this will gain performance improvement (require profiling)
         """
-
+        dealjacket_id = int(dealjacket_id)
+        deal_id = int(deal_id)
         doc_id = int(doc_id)
+        version_cd = request.GET.get('version')
 
         context_data = {
             'dealer_code': '1089761',
@@ -238,6 +240,16 @@ class DocDetailView(APIView):
         }
 
         dc = get_doccenter_api(context_data)
+
+        # try get latest version cd if None
+        if version_cd is None:
+            docs = dc.get_docs_by_dj_id(dealjacket_id)
+            for doc in docs:
+                if int(doc['document_index_id']) == doc_id:
+                    version_cd = doc.get('latest_doc_version_cd')
+                    break
+
+
         response = dc.background_images(doc_id, version_cd)
         pages = response.get('results', [])
 
