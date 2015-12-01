@@ -53,13 +53,15 @@ provider('webViewBridge', function() {
                 this.call('logEvent', { msg: msg });
             },
 
-            startPreview: function(docId, docProps) {
+            startPreview: function(docId, version, docProps) {
                 this.call('startPreview', {
                     method: 'GET',
                     url: this._absUrl('/dealjackets/' + encodeURIComponent($rootScope.dealJacketId) + 
                                       '/deals/' + encodeURIComponent($rootScope.dealId) + 
-                                      '/#/docs/' + encodeURIComponent(docId) + '/preview/'),
+                                      '/#/docs/' + encodeURIComponent(docId) + 
+                                      '/' + encodeURIComponent(version) + '/preview/'),
                     docId: docId,
+                    version: version,
                     docProps: docProps
                 });
             },

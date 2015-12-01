@@ -56,11 +56,11 @@ class DocCenterService(ServiceBase):
         """
         return self.get('/templates/type-choices/')
 
-    def background_images(doc_id, version_cd):
+    def background_images(self, doc_id, version_cd):
         """Get document images
         """
         
-        return self.get('/docs/%s/background_iages/', params={ 'version_cd': version_cd })
+        return self.get('/docs/%s/background_images/' % doc_id, params={ 'version_cd': version_cd })
         
 
 

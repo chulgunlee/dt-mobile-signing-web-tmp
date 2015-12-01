@@ -106,7 +106,7 @@ directive('doc', function() {
                         applicantType: doc.scanApplicant,
                         applicantTypeName: doc.scanApplicant ? SIGNER_TYPE_MAPPING[doc.scanApplicant] : undefined,
                     };
-                    webViewBridge.startPreview(doc.id, docProps);
+                    webViewBridge.startPreview(doc.id, doc.version, docProps);
                 }
             };
 

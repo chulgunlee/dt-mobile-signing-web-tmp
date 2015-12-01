@@ -79,11 +79,11 @@ provider('$api', function() {
             },
 
             updateDoc: function(docId, data) {
-                return request('PUT', '/docs/' + docId, data);
+                return request('PUT', '/docs/' + docId + '/', data);
             },
 
-            getDocPreview: function(docId) {
-                return request('GET', '/docs/' + docId);
+            getDocPreview: function(docId, version) {
+                return request('GET', '/docs/' + docId + '/' + version + '/');
             },
 
         };
