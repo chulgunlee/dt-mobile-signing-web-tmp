@@ -1,6 +1,7 @@
 #!/bin/sh
 # daemontools service run file for doc_center_api
 . /etc/profile.d/dtweb.sh
+. /etc/profile.d/oracle.sh
 . /etc/profile.d/redis.sh
 
 
