@@ -1,10 +1,11 @@
 #!/bin/sh
 # daemontools service run file for doc_center_api
 . /etc/profile.d/dtweb.sh
+. /etc/profile.d/oracle.sh
 . /etc/profile.d/redis.sh
 
 
 exec 2>&1
 
-exec setuidgid dtweb /opt/www/dt-mobile-signingweb/env/bin/uwsgi \
---ini /opt/www/dt-mobile-signingweb/uwsgi.ini --die-on-term
+exec setuidgid dtweb /opt/www/dt-mobile-signing-web/env/bin/uwsgi \
+--ini /opt/www/dt-mobile-signing-web/uwsgi.ini --die-on-term
