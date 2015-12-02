@@ -10,7 +10,7 @@ angular.module('dc.components.preview.previewCtrl', [
  */
 controller('DocPreviewCtrl', function($scope, $routeParams, $api) {
 
-    $api.getDocPreview($routeParams.docId).then(function(response) {
+    $api.getDocPreview($routeParams.docId, $routeParams.version).then(function(response) {
 
         if (response.status == 302) {
             // TODO: session timeout
@@ -21,6 +21,7 @@ controller('DocPreviewCtrl', function($scope, $routeParams, $api) {
 
         $scope.title = data.title;
         $scope.id = data.id;
+        $scope.version = data.version;
         $scope.pages = data.pages;
     });
 

@@ -1,6 +1,0 @@
-{
-    "docTypes": [
-        { "code": "driver-license", "name": "Driver License" },
-        { "code": "insurance", "name": "Insurance" }
-    ]
-}

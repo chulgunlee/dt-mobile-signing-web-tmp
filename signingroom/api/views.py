@@ -4,15 +4,15 @@ import os
 from django.http import HttpResponse
 from django.views.generic.base import View
 from dt_django_base.api.viewsets import BaseAPIView
-from rest_framework.exceptions import APIException, ValidationError
+from rest_framework.exceptions import ValidationError
 from rest_framework.response import Response
-from rest_framework.status import HTTP_400_BAD_REQUEST
 from rest_framework.views import APIView
 from signingroom.lib.doccenter_api import get_doccenter_api
 from signingroom.lib.doccenter_ref import r
 from signingroom.lib.dtmobile import get_dtmobile
 from signingroom.api.serializers import DocSerializer
 from signingroom.lib.common import underscore_to_camelCase
+from signingroom.lib.service_base import InternalServerError
 
 
 class DealJacketView(BaseAPIView):
@@ -151,7 +151,7 @@ class DocListView(APIView):
 
 
 def _convert_doc(doc):
-    sign_status = r('sig_status_cd', doc.get('sig_status_cd', ()))
+    sign_status = r('sig_status_cd', doc.get('sig_status_cd', 'ALLNS'), ())
 
     return {
         'id': doc['document_index_id'],
@@ -183,7 +183,7 @@ def get_applicant_info(deal, applicant):
     Returns:
         A dictionary that contains all the available values for specified appliant from the deal data
     """
-    
+
     result = {}
     for k in ('first_name', 'last_name', 'line_1_address', 'city', 'state_code', 'zip_code', 'phone_number'):
         v = deal.get('%s_%s' % (applicant, k))
@@ -191,7 +191,6 @@ def get_applicant_info(deal, applicant):
             result[underscore_to_camelCase(k)] = v
     return result
 
-    
 
 class DocDetailView(APIView):
     """Get the detail for specified doc, or update its properties.
@@ -203,7 +202,7 @@ class DocDetailView(APIView):
     - DELETE /dealjackets/<dealjacket_id>/deals/<deal_id>/docs/<doc_id>/
     """
 
-    def get(self, request, pkg_id, doc_id):
+    def get(self, request, dealjacket_id, deal_id, doc_id):
         """Get the detail of the doc.
 
         Parameters:
@@ -216,24 +215,6 @@ class DocDetailView(APIView):
         ```json
         {
             "id": <doc id>,
-            "packageId": <doc package id>,
-            "docType": <doc type>,
-            "templateName": <doc template naem>,
-            "requiredForFunding": <true|false>,     // whether this document is required for funding
-            "requiredFullReview": <true|false>,     // whether the signer has to review the whole doc before he can sign
-            "signable": <true|false>,
-            "requiredSigners": [ "buyer", "cobuyer" ],      // a list of buyer|cobuyer|dealer indicating who is required to sign this doc
-            "signStatus": {                     // whether each signer has signed the doc or not
-                "buyer": <true|false>,
-                "cobuyer": <true|false>,
-                "dealer": <true|false>,
-            },
-            "isExternal": <true|false>,
-            "sigBlocks": [
-                { "type": "buyer", "style": "" },
-                { "type": "cobuyer", "style": "" },
-            ],
-
             "pages": [              // all the pages for this doc, ordered in page order
                 <base64 encoded image>,
                 ...
@@ -246,11 +227,40 @@ class DocDetailView(APIView):
 
         - consider using incremental loading for pages, if this will gain performance improvement (require profiling)
         """
-
+        dealjacket_id = int(dealjacket_id)
+        deal_id = int(deal_id)
         doc_id = int(doc_id)
+        version_cd = request.GET.get('version')
 
-        result = json.load(open(os.path.dirname(__file__) + '/doc_detail_response.json'))
-        result['id'] = doc_id
+        # TODO: temporarily hardcode dealer code
+        # need to confirm with dt-mobile team about how to retrieve these info via smsession
+        context_data = {
+            'dealer_code': '1089761',
+            'tenant_code': 'DTCOM',
+            'fusion_prod_code': 'DTCOM',
+        }
+
+        dc = get_doccenter_api(context_data)
+
+        # if version_cd is not defined, get the latest version cd from doclist
+        # Yes this is not efficient - need backend to provide single doc retrieval to improve
+        if version_cd is None:
+            try:
+                docs = dc.get_docs_by_dj_id(dealjacket_id)
+                version_cd = next(doc for doc in docs if int(doc['document_index_id']) == doc_id)['latest_doc_version_cd']
+            except (TypeError, StopIteration, KeyError):
+                raise InternalServerError('Cannot decide latest version for doc_index_id=%s, please specify version code with `version` parameter' % doc_id)
+
+        response = dc.background_images(doc_id, version_cd)
+        pages = response.get('results', [])
+
+        pages = [page.get('Value') for page in pages]
+
+        result = {
+            'id': doc_id,
+            'version': version_cd,
+            'pages': pages,
+        }
 
         return Response(result)
 
@@ -306,7 +316,6 @@ class DocDetailView(APIView):
         if 'pdf' in data:
             base64_pdf = data.get('pdf')
             doc_type = data.get('docType')
-            scan_applicant = data.get('applicant')
             dc.store(base64_pdf, doc_id, dealjacket_id, doc_type)
 
         return HttpResponse(status=204)

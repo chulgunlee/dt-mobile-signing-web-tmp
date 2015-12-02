@@ -39,3 +39,12 @@ class TestDocCenterService(SigningWebUnitTest):
 
         result = self.test_service.update_funding_in(2, False)
         mock_put.assert_called_with('/docs/2/funding-in/', data={'needed_for_funding':False})
+
+    @mock.patch.object(DocCenterService, 'get')
+    def test_type_choices(self, mock_get):
+        ret = [{'drivers_license': "Drivers License"}, {'w2': 'W2'}]
+        mock_get.return_value = ret
+
+        result = self.test_service.type_choices()
+        mock_get.assert_called_with('/templates/type-choices/')
+        self.assertListEqual(ret, result)
