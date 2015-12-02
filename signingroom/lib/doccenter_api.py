@@ -1,4 +1,3 @@
-import json
 from rest_framework.exceptions import APIException
 from signingroom.lib.service_base import ServiceBase
 
@@ -59,9 +58,7 @@ class DocCenterService(ServiceBase):
     def background_images(self, doc_id, version_cd):
         """Get document images
         """
-        
-        return self.get('/docs/%s/background-images/' % doc_id, params={ 'version_cd': version_cd })
-        
+        return self.get('/docs/%s/background-images/' % doc_id, params={'version_cd': version_cd})
 
 
 def get_doccenter_api(context):

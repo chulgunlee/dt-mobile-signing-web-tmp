@@ -4,9 +4,8 @@ import os
 from django.http import HttpResponse
 from django.views.generic.base import View
 from dt_django_base.api.viewsets import BaseAPIView
-from rest_framework.exceptions import APIException, ValidationError
+from rest_framework.exceptions import ValidationError
 from rest_framework.response import Response
-from rest_framework.status import HTTP_400_BAD_REQUEST
 from rest_framework.views import APIView
 from signingroom.lib.doccenter_api import get_doccenter_api
 from signingroom.lib.doccenter_ref import r
@@ -184,7 +183,7 @@ def get_applicant_info(deal, applicant):
     Returns:
         A dictionary that contains all the available values for specified appliant from the deal data
     """
-    
+
     result = {}
     for k in ('first_name', 'last_name', 'line_1_address', 'city', 'state_code', 'zip_code', 'phone_number'):
         v = deal.get('%s_%s' % (applicant, k))
@@ -192,7 +191,6 @@ def get_applicant_info(deal, applicant):
             result[underscore_to_camelCase(k)] = v
     return result
 
-    
 
 class DocDetailView(APIView):
     """Get the detail for specified doc, or update its properties.
@@ -256,7 +254,7 @@ class DocDetailView(APIView):
         response = dc.background_images(doc_id, version_cd)
         pages = response.get('results', [])
 
-        pages = [ page.get('Value') for page in pages ]
+        pages = [page.get('Value') for page in pages]
 
         result = {
             'id': doc_id,
@@ -318,7 +316,6 @@ class DocDetailView(APIView):
         if 'pdf' in data:
             base64_pdf = data.get('pdf')
             doc_type = data.get('docType')
-            scan_applicant = data.get('applicant')
             dc.store(base64_pdf, doc_id, dealjacket_id, doc_type)
 
         return HttpResponse(status=204)
