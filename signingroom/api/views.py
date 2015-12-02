@@ -13,6 +13,7 @@ from signingroom.lib.doccenter_ref import r
 from signingroom.lib.dtmobile import get_dtmobile
 from signingroom.api.serializers import DocSerializer
 from signingroom.lib.common import underscore_to_camelCase
+from signingroom.lib.service_base import InternalServerError
 
 
 class DealJacketView(BaseAPIView):
@@ -246,11 +247,11 @@ class DocDetailView(APIView):
         # if version_cd is not defined, get the latest version cd from doclist
         # Yes this is not efficient - need backend to provide single doc retrieval to improve
         if version_cd is None:
-            docs = dc.get_docs_by_dj_id(dealjacket_id)
-            for doc in docs:
-                if int(doc['document_index_id']) == doc_id:
-                    version_cd = doc.get('latest_doc_version_cd')
-                    break
+            try:
+                docs = dc.get_docs_by_dj_id(dealjacket_id)
+                version_cd = next(doc for doc in docs if int(doc['document_index_id']) == doc_id)['latest_doc_version_cd']
+            except (TypeError, StopIteration, KeyError):
+                raise InternalServerError('Cannot decide latest version for doc_index_id=%s, please specify version code with `version` parameter' % doc_id)
 
         response = dc.background_images(doc_id, version_cd)
         pages = response.get('results', [])

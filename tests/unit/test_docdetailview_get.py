@@ -91,3 +91,11 @@ class TestDocDetailViewGet(DRFApiMixin, SigningWebUnitTest):
 
         self.assertDictEqual(result, {'id': self.doc_id, 'version': 'F', 'pages': ['a', 'b']})
         
+    def test_get_preview_no_version_cd(self, mock_get_doccenter_api):
+        mock_get_doccenter_api.return_value.get_docs_by_dj_id = self.mock_get_docs_by_dj_id
+        mock_get_doccenter_api.return_value.background_images = self.mock_background_images
+        
+        request = self._make_get_request()
+        response = self.view(request, self.dealjacket_id, self.deal_id, 100)
+
+        self.assertEqual(response.status_code, 500)
