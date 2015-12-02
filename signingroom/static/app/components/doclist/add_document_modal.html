@@ -1,10 +1,11 @@
 <div class="add-document-body">
 
   <button type="button" class="btn btn-default doc-type-selector" bs-select
-      ng-model="selectedDocTypeId"
+      ng-model="selectedDocType"
       bs-options="docType.code as docType.name for docType in docTypeService.externalDocTypes"
       data-placeholder="Select Document Type"
-      ng-change="onDocTypeSelect(selectedDocTypeId)">
+      ng-change="onDocTypeSelect(selectedDocType)"
+      ng-disabled="docTypeDisabled">
     Action <span class="caret"></span>
   </button>
 
@@ -12,7 +13,8 @@
       ng-model="selectedApplicantType"
       bs-options="applicant.id as applicant.name for applicant in applicantChoices" 
       data-placeholder="Select Person"
-      ng-change="onApplicantTypeSelect(selectedApplicantType)">
+      ng-change="onApplicantTypeSelect(selectedApplicantType)"
+      ng-disabled="applicantTypeDisabled">
     Action <span class="caret"></span>
   </button>
 
