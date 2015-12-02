@@ -233,6 +233,8 @@ class DocDetailView(APIView):
         doc_id = int(doc_id)
         version_cd = request.GET.get('version')
 
+        # TODO: temporarily hardcode dealer code
+        # need to confirm with dt-mobile team about how to retrieve these info via smsession
         context_data = {
             'dealer_code': '1089761',
             'tenant_code': 'DTCOM',
