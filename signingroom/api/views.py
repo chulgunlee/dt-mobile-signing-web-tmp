@@ -241,7 +241,8 @@ class DocDetailView(APIView):
 
         dc = get_doccenter_api(context_data)
 
-        # try get latest version cd if None
+        # if version_cd is not defined, get the latest version cd from doclist
+        # Yes this is not efficient - need backend to provide single doc retrieval to improve
         if version_cd is None:
             docs = dc.get_docs_by_dj_id(dealjacket_id)
             for doc in docs:
@@ -249,10 +250,8 @@ class DocDetailView(APIView):
                     version_cd = doc.get('latest_doc_version_cd')
                     break
 
-
         response = dc.background_images(doc_id, version_cd)
         pages = response.get('results', [])
-
 
         pages = [ page.get('Value') for page in pages ]
 
