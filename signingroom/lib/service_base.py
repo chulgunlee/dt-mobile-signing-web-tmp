@@ -1,9 +1,12 @@
 import requests
+import logging
 import json
 from django.conf import settings
 from django.core.exceptions import ImproperlyConfigured
 from rest_framework.exceptions import APIException
 
+
+logger = logging.getLogger('dt_mobile_signing_web')
 
 class BadRequest(APIException):
     status_code = 400
@@ -104,6 +107,9 @@ class ServiceBase(object):
 
         headers = self._headers()
         url = self._url(path)
+
+        logger.info('GET %s, params=%s' % (url, params), extra=dict(short_event_name='service_base.get'))
+
         response = requests.get(url, headers=headers, params=params, verify=self.verify)
         return self.process_response(response)
 
@@ -124,6 +130,8 @@ class ServiceBase(object):
 
         data = json.dumps(data) if data is not None else None
         headers['Content-Type'] = 'application/json'
+
+        logger.info('POST %s' % url, extra=dict(short_event_name='service_base.post'))
 
         response = requests.post(url, data=data, headers=headers, params=params, verify=self.verify)
         return self.process_response(response)
@@ -146,6 +154,8 @@ class ServiceBase(object):
         data = json.dumps(data) if data is not None else None
         headers['Content-Type'] = 'application/json'
 
+        logger.info('PUT %s' % url, extra=dict(short_event_name='service_base.put'))
+
         response = requests.put(url, data=data, headers=headers, params=params, verify=self.verify)
         return self.process_response(response)
 
@@ -162,6 +172,9 @@ class ServiceBase(object):
 
         headers = self._headers()
         url = self._url(path)
+
+        logger.info('DELETE %s, params=%s' % (url, params), extra=dict(short_event_name='service_base.delete'))
+
         response = requests.delete(url, headers=headers, params=params, verify=self.verify)
         return self.process_response(response)
 

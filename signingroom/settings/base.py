@@ -118,6 +118,9 @@ LOGGING = {
         'require_debug_false': {
             '()': 'django.utils.log.RequireDebugFalse',
         },
+        'inject_extra_data': {
+            '()': 'signingroom.lib.dt_logging.SigningWebLoggingFilter',
+        },
     },
     'formatters': {
         'standard': {
@@ -173,7 +176,8 @@ LOGGING = {
             'propagate': True,
         },
         'dt_mobile_signing_web': {
-            'handlers': ['syslog'],
+            'handlers': ['syslog', 'default'],
+            'filters': ['inject_extra_data'],
             'level': 'INFO',
             'propagate': True,
         },
