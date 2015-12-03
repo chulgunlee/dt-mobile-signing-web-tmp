@@ -8,7 +8,7 @@ angular.module('dc.components.doclist.docCtrl', [
 /**
  * Controller for document list
  */
-controller('DocListCtrl', function($scope, $api, docService, signerService, docTypeService) {
+controller('DocListCtrl', function($scope, $api, docService, signerService, docTypeService, webViewBridge) {
 
     $scope.data = docService;
 
@@ -22,6 +22,10 @@ controller('DocListCtrl', function($scope, $api, docService, signerService, docT
         signerService.init($scope.signers);
     });
 
+    // provide API for native client to reload the doclust
+    webViewBridge.registerFunction('reload', function() {
+        docService.refresh();
+    });
 
 });
 
