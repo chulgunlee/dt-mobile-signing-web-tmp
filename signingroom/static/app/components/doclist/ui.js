@@ -17,7 +17,7 @@ angular.module('dc.components.doclist.ui', [
 
 /**
  * Doc type selection dialog ("Add Document / Update Document")
- * @param {object} options: title -> dialog title, docTypeId, applicantType
+ * @param {object} options: title -> dialog title, docType, docTypeDisabled, applicantType, applicantTypeDisabled
  */
 factory('docTypeDialog', function($commonDialog, $q, $rootScope, docTypeService) {
 
@@ -29,17 +29,19 @@ factory('docTypeDialog', function($commonDialog, $q, $rootScope, docTypeService)
         scope.docTypeService = docTypeService;
 
         scope.applicantChoices = [
-            { id: 'both', name: 'Both' },
             { id: 'buyer', name: 'Applicant' },
             { id: 'cobuyer', name: 'Co-Applicant' },
         ];
 
         // initial values
-        scope.selectedDocTypeId = options.docTypeId;
+        scope.selectedDocType = options.docType;
         scope.selectedApplicantType = options.applicantType;
 
+        scope.docTypeDisabled = options.docTypeDisabled || false;
+        scope.applicantTypeDisabled = options.applicantTypeDisabled || false;
+
         scope.onDocTypeSelect = function(id) {
-            scope.selectedDocTypeId = id;
+            scope.selectedDocType = id;
             scope.selectedApplicantType = null;
         };
 
@@ -56,11 +58,11 @@ factory('docTypeDialog', function($commonDialog, $q, $rootScope, docTypeService)
             scope: scope,
 
             okEnabled: function() {
-                return !!scope.selectedDocTypeId && (docTypeService.getApplicantsByDocTypeId(scope.selectedDocTypeId) == null || scope.selectedApplicantType);
+                return scope.selectedDocType && scope.selectedApplicantType;
             },
         }).then(function() {
             deferred.resolve({
-                docTypeId: scope.selectedDocTypeId,
+                docType: scope.selectedDocType,
                 applicantType: scope.selectedApplicantType,
             });
         });
@@ -115,7 +117,16 @@ directive('doc', function() {
              */
             $scope.addDoc = function(doc) {
                 if (doc.isPlaceholder) {
-                    webViewBridge.startPOSCapture(doc.id, doc.docType, doc.scanApplicant);
+                    // show 'Add Document' dialog for selecting applicant
+                    // TODO: [MCI-1583] need to check if co-applicant exists
+                    docTypeDialog({
+                        title: 'Add Document',
+                        docType: doc.docType,
+                        docTypeDisabled: true,
+                    }).then(function(result) {
+                        webViewBridge.startPOSCapture(doc.id, doc.docType, result.applicantType);
+                    });
+
                 }
             };
 
@@ -138,7 +149,7 @@ directive('doc', function() {
                 docTypeDialog({
                     title: 'Update Properties',
                     ok: 'Save',
-                    docTypeId: $scope.doc.docTypeId,
+                    docType: $scope.doc.docType,
                     applicantType: $scope.doc.scanApplicant
                 }).then(function(result) {
                     console.log(result);
@@ -253,9 +264,7 @@ directive('bottomBar', function() {
 
                 // show doc type selection dialog
                 docTypeDialog({ title: 'Add Document' }).then(function(result) {
-                    console.log(result.docTypeId + ',' + result.applicantType);
-
-                    webViewBridge.startPOSCapture(null, result.docTypeId, result.applicantType);
+                    webViewBridge.startPOSCapture(null, result.docType, result.applicantType);
                 });
             };
         },

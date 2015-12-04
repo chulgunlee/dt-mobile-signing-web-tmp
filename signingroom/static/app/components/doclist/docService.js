@@ -204,7 +204,6 @@ factory('docService', function($q, $api, Doc, signerService, docTypeService, DOC
 
 factory('docTypeService', function($api) {
     var service = {
-        
         init: function() {
             
             $api.getDocTypes().then(function(response) {
@@ -216,18 +215,6 @@ factory('docTypeService', function($api) {
             return _.filter(service.docTypes, 'isExternal');
         },
 
-        /**
-         * Returns the applicants of specified docType
-         * TODO: this function won't be useful as per applicant type req change
-         */
-        getApplicantsByDocTypeId: function(id) {
-            var docType = _.find(service.docTypes, function(docType) {
-                return docType.id == id;
-            });
-
-            if (docType && docType.applicants) return docType.applicants;
-            else return null;
-        },
     }; 
 
     return service;
