@@ -52,12 +52,7 @@ class TestDocTypeListView(DRFApiMixin, SigningWebUnitTest):
         self.assertTrue('docTypes' in result)
 
         doctypes = result.get('docTypes')
-        self.assertDictEqual(doctypes[0], {u'code': u'contract', u'name': u'Contract'})
-        self.assertDictEqual(doctypes[1], {u'code': u'contract_addendum', u'name': u'Contract Addendum'}),
-        self.assertDictEqual(doctypes[2], {u'code': u'cosignor_notice', u'name': u'CoSignor Notice'}),
-        self.assertDictEqual(doctypes[3], {u'code': u'credit_application', u'name': u'Credit Application'}),
-        self.assertDictEqual(doctypes[4], {u'code': u'gps_form', u'name': u'GPS Form'}),
-        self.assertDictEqual(doctypes[5], {u'code': u'tire_wheel', u'name': u'Tire Wheel'}),
-        self.assertDictEqual(doctypes[6], {u'code': u'auto_pay_form', u'name': u'Auto-Pay Form'}),
-        self.assertDictEqual(doctypes[7], {u'code': u'unknown', u'name': u'Unknown'})
+        self.assertDictEqual(doctypes[0], {u'code': u'contract', u'name': u'Contract', u'isExternal': True})
+        self.assertDictEqual(doctypes[1], {u'code': u'contract_addendum', u'name': u'Contract Addendum', u'isExternal': True}),
+        self.assertDictEqual(doctypes[2], {u'code': u'cosignor_notice', u'name': u'CoSignor Notice', u'isExternal': False}),
 

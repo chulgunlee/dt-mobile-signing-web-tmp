@@ -42,7 +42,7 @@ class TestDocCenterService(SigningWebUnitTest):
 
     @mock.patch.object(DocCenterService, 'get')
     def test_type_choices(self, mock_get):
-        ret = [{'drivers_license': "Drivers License"}, {'w2': 'W2'}]
+        ret = self.load_json('doccenter_type_choices.json')
         mock_get.return_value = ret
 
         result = self.test_service.type_choices()
