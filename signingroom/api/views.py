@@ -156,7 +156,7 @@ def _convert_doc(doc):
     return {
         'id': doc['document_index_id'],
         'docType': doc.get('template_doc_type'),
-        'templateName': doc.get('template_document_description'),
+        'customTemplateName': doc.get('template_document_description'),     # only valid if docType == 'other'
         'version': doc.get('latest_doc_version_cd'),
         'requiredForFunding': r('bool', doc.get('needed_for_funding')),
         'requireFullReview': False,             # TODO

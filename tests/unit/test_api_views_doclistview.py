@@ -57,7 +57,7 @@ class TestDocListViewGet(DRFApiMixin, SigningWebUnitTest):
         self.assertDictContainsSubset({
             'id': 161,
             'docType': 'contract',
-            'templateName': 'eContract',
+            'customTemplateName': 'eContract',
             'requiredForFunding': True,
             'signable': True,
             'status': 'signed',
