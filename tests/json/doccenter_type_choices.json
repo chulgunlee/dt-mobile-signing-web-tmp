@@ -1,10 +1,5 @@
 [
-    [ "contract", "Contract" ],
-    [ "contract_addendum", "Contract Addendum" ],
-    [ "cosignor_notice", "CoSignor Notice" ],
-    [ "credit_application", "Credit Application" ],
-    [ "gps_form", "GPS Form" ],
-    [ "tire_wheel", "Tire Wheel" ],
-    [ "auto_pay_form", "Auto-Pay Form" ],
-    [ "unknown", "Unknown" ]
+    { "templ_doc_type_code": "contract", "doc_type_name": "Contract", "external": "Y" },
+    { "templ_doc_type_code": "contract_addendum", "doc_type_name": "Contract Addendum", "external": "Y" },
+    { "templ_doc_type_code": "cosignor_notice", "doc_type_name": "CoSignor Notice", "external": "N" }
 ]

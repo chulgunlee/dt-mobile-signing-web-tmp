@@ -395,7 +395,11 @@ class DocTypeListView(APIView):
         doctypes = dc.type_choices()
 
         result = {
-            'docTypes': [{'code': t[0], 'name': t[1]} for t in doctypes]
+            'docTypes': [{
+                'code': t.get('templ_doc_type_code'),
+                'name': t.get('doc_type_name'),
+                'isExternal': (t.get('external') == 'Y'),
+            } for t in doctypes]
         }
 
         return Response(result)

@@ -212,6 +212,10 @@ factory('docTypeService', function($api) {
             });
         },
 
+        get externalDocTypes() {
+            return _.filter(service.docTypes, 'isExternal');
+        },
+
         /**
          * Returns the applicants of specified docType
          * TODO: this function won't be useful as per applicant type req change
