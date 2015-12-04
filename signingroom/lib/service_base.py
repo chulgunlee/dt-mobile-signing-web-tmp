@@ -1,9 +1,12 @@
 import requests
+import logging
 import json
 from django.conf import settings
 from django.core.exceptions import ImproperlyConfigured
 from rest_framework.exceptions import APIException
 
+
+logger = logging.getLogger('dt_mobile_signing_web')
 
 class BadRequest(APIException):
     status_code = 400
@@ -104,7 +107,12 @@ class ServiceBase(object):
 
         headers = self._headers()
         url = self._url(path)
+
+
         response = requests.get(url, headers=headers, params=params, verify=self.verify)
+
+        logger.info('GET %s, params=%s, status_code=%s, response_length=%s' % (url, params, response.status_code, len(response.text)), extra=dict(short_event_name='service_base.get'))
+
         return self.process_response(response)
 
     def post(self, path, data, params=None):
@@ -126,6 +134,9 @@ class ServiceBase(object):
         headers['Content-Type'] = 'application/json'
 
         response = requests.post(url, data=data, headers=headers, params=params, verify=self.verify)
+
+        logger.info('POST %s, status_code=%s, response_length=%s' % (url, response.status_code, len(response.text)), extra=dict(short_event_name='service_base.post'))
+
         return self.process_response(response)
 
     def put(self, path, data, params=None):
@@ -147,6 +158,9 @@ class ServiceBase(object):
         headers['Content-Type'] = 'application/json'
 
         response = requests.put(url, data=data, headers=headers, params=params, verify=self.verify)
+
+        logger.info('PUT %s, status_code=%s, response_length=%s' % (url, response.status_code, len(response.text)), extra=dict(short_event_name='service_base.put'))
+
         return self.process_response(response)
 
     def delete(self, path, params=None):
@@ -162,7 +176,11 @@ class ServiceBase(object):
 
         headers = self._headers()
         url = self._url(path)
+
         response = requests.delete(url, headers=headers, params=params, verify=self.verify)
+
+        logger.info('DELETE %s, params=%s, status_code=%s, response_length=%s' % (url, params, response.status_code, len(response.text)), extra=dict(short_event_name='service_base.delete'))
+
         return self.process_response(response)
 
     def process_response(self, response):
