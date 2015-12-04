@@ -12,13 +12,12 @@ controller('DocListCtrl', function($scope, $api, docService, signerService, docT
 
     $scope.data = docService;
 
-    $api.getDealJacketInfo().then(function(response) {
+    docTypeService.init().then($api.getDealJacketInfo).then(function(response) {
         var data = response.data;
 
         $scope.signers = data.signers;
 
         docService.refresh(response.data.docs);
-        docTypeService.init();
         signerService.init($scope.signers);
     });
 

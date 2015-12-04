@@ -6,7 +6,7 @@ angular.module('dc.components.doclist.docService', [
 /**
  * Define Doc class
  */
-factory('Doc', function(DOC_STATUS_MAPPING, SIGNER_TYPE_MAPPING, signerService) {
+factory('Doc', function(DOC_STATUS_MAPPING, SIGNER_TYPE_MAPPING, signerService, docTypeService) {
 
     function Doc(data) {
 
@@ -32,6 +32,15 @@ factory('Doc', function(DOC_STATUS_MAPPING, SIGNER_TYPE_MAPPING, signerService) 
 
         get isContract() {
             return this.docType == 'contract';
+        },
+
+        get templateName() {
+            if (this.docType == 'other') {
+                return this.customTemplateName;
+            } else {
+                var name = docTypeService.templateName(this.docType);
+                return name || this.customTemplateName;
+            }
         },
 
         /**
@@ -202,13 +211,28 @@ factory('docService', function($q, $api, Doc, signerService, docTypeService, DOC
 
 }).
 
-factory('docTypeService', function($api) {
+factory('docTypeService', function($q, $api) {
     var service = {
         init: function() {
             
+            var deferred = $q.defer();
+
             $api.getDocTypes().then(function(response) {
                 service.docTypes = response.data.docTypes;
+                service.docTypesLookup = {};
+
+                _.each(service.docTypes, function(t) {
+                    service.docTypesLookup[t.code] = t;
+                });
+
+                deferred.resolve();
             });
+
+            return deferred.promise;
+        },
+
+        templateName: function(docType) {
+            return (docType in service.docTypesLookup) ? service.docTypesLookup[docType].name : null;
         },
 
         get externalDocTypes() {
