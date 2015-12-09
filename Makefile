@@ -18,15 +18,15 @@ PKGFILE := $(PKGNAME)-deploy.tar.gz
 
 all: build
 
-env:
-	virtualenv env
-	env/bin/pip install -r requires_install.txt $(PIP_INDEX)
-	env/bin/dtconfig-data-local dev_local
+$(PKGNAME)/env:
+	virtualenv $(PKGNAME)/env
+	$(PKGNAME)/env/bin/pip install -r requires_install.txt $(PIP_INDEX)
+	$(PKGNAME)/env/bin/dtconfig-data-local dev_local
 
-build/$(PKGFILE): env
-	mkdir build && tar czf $(PKGFILE) --exclude-vcs --exclude-from=.buildignore $(PKGNAME)
+$(PKGFILE): $(PKGNAME)/env
+	tar czf $(PKGFILE) --exclude-vcs --exclude-from=.buildignore $(PKGNAME)
 
-build: build/$(PKGFILE)
+build: $(PKGFILE)
 
 clean:
 	rm -rf $(PKGFILE)
