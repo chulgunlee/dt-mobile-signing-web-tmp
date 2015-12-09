@@ -15,7 +15,7 @@ module.exports = {
     },
     module: {
         loaders: [
-            { test: /\.html$/, loader: 'ngtemplate?relativeTo=' + (path.resolve(__dirname, './signingroom/static/app')) + '/!html' },
+            { test: /\.html$/, loader: 'ngtemplate?relativeTo=' + (path.resolve(__dirname, './dt-mobile-signing-web/signingroom/static/app')) + '/!html' },
             {
                 test: /\.css$/,
                 loader: ExtractTextPlugin.extract('style', 'css')
