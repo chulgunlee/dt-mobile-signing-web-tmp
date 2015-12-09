@@ -6,9 +6,9 @@ var CompressionPlugin = require('compression-webpack-plugin');
 
 module.exports = {
     cache: true,
-    entry: './signingroom/static/app/app.module.js',
+    entry: './dt-mobile-signing-web/signingroom/static/app/app.module.js',
     output: {
-        path: 'signingroom/static',
+        path: 'dt-mobile-signing-web/signingroom/static',
         filename: 'bundle.js',
         sourceMapFilename: 'bundle.js.map',
         publicPath: 'static/',
