@@ -5,15 +5,7 @@ PIP_INDEX = -i http://10.134.8.12:8000/simple/
 PKGNAME = $(shell python -c "import json; print json.load(open('package.json'))['name']")
 VERSION = $(shell python -c "import json; print json.load(open('package.json'))['version']")
 
-# disable version numbers in the package name
-#ifdef BUILD_NUMBER
-#PKGFILE := $(PKGNAME)-$(VERSION)-$(BUILD_NUMBER).tar.gz
-#else
-#PKGFILE := $(PKGNAME)-$(VERSION).tar.gz
-#endif
-
-# use static package name instead
-
+# use static package name
 PKGFILE := $(PKGNAME)-deploy.tar.gz
 
 all: build
