@@ -7,5 +7,5 @@
 
 exec 2>&1
 
-exec setuidgid dtweb /opt/www/dt-mobile-signing-web/env/bin/uwsgi \
---ini /opt/www/dt-mobile-signing-web/uwsgi.ini --die-on-term
+exec setuidgid dtweb /opt/www/dt_mobile_signing_web/env/bin/uwsgi \
+--ini /opt/www/dt_mobile_signing_web/uwsgi.ini --die-on-term

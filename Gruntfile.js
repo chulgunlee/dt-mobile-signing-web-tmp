@@ -15,11 +15,11 @@ module.exports = function(grunt) {
 
         sprite: {
             all: {
-                src: ['dt_mobile_signing_room/signingroom/static/assets/img/icons/*.png'],
-                retinaSrcFilter: ['dt_mobile_signing_room/signingroom/static/assets/img/icons/*@2x.png'],
-                dest: 'dt_mobile_signing_room/signingroom/static/assets/img/icon-sprite.png',
-                retinaDest: 'dt_mobile_signing_room/signingroom/static/assets/img/icon-sprite@2x.png',
-                destCss: 'dt_mobile_signing_room/signingroom/static/assets/css/icon-sprite.css',
+                src: ['dt_mobile_signing_web/signingroom/static/assets/img/icons/*.png'],
+                retinaSrcFilter: ['dt_mobile_signing_web/signingroom/static/assets/img/icons/*@2x.png'],
+                dest: 'dt_mobile_signing_web/signingroom/static/assets/img/icon-sprite.png',
+                retinaDest: 'dt_mobile_signing_web/signingroom/static/assets/img/icon-sprite@2x.png',
+                destCss: 'dt_mobile_signing_web/signingroom/static/assets/css/icon-sprite.css',
                 padding: 2,
                 cssVarMap: function(sprite) {
                     var parts = sprite.name.split('.');
@@ -52,7 +52,7 @@ module.exports = function(grunt) {
         "webpack-dev-server": {
             options: {
                 webpack: webpackConfig,
-                contentBase: 'dt_mobile_signing_room/signingroom/',
+                contentBase: 'dt_mobile_signing_web/signingroom/',
                 proxy: {
                     "*": "http://localhost:8001",
                 },

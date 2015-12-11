@@ -2,11 +2,10 @@
 
 PIP_INDEX = -i http://10.134.8.12:8000/simple/
 
-PKGNAME = $(shell python -c "import json; print json.load(open('package.json'))['name']")
-VERSION = $(shell python -c "import json; print json.load(open('package.json'))['version']")
+PKGNAME = dt_mobile_signing_web
 
 # use static package name
-PKGFILE := $(PKGNAME)-deploy.tar.gz
+PKGFILE := dt-mobile-signing-web-deploy.tar.gz
 
 all: build
 
