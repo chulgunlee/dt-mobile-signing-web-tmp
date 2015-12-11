@@ -6,16 +6,16 @@ var CompressionPlugin = require('compression-webpack-plugin');
 
 module.exports = {
     cache: true,
-    entry: './dt-mobile-signing-web/signingroom/static/app/app.module.js',
+    entry: './dt_mobile_signing_web/signingroom/static/app/app.module.js',
     output: {
-        path: 'dt-mobile-signing-web/signingroom/static',
+        path: 'dt_mobile_signing_web/signingroom/static',
         filename: 'bundle.js',
         sourceMapFilename: 'bundle.js.map',
         publicPath: 'static/',
     },
     module: {
         loaders: [
-            { test: /\.html$/, loader: 'ngtemplate?relativeTo=' + (path.resolve(__dirname, './dt-mobile-signing-web/signingroom/static/app')) + '/!html' },
+            { test: /\.html$/, loader: 'ngtemplate?relativeTo=' + (path.resolve(__dirname, './dt_mobile_signing_web/signingroom/static/app')) + '/!html' },
             {
                 test: /\.css$/,
                 loader: ExtractTextPlugin.extract('style', 'css')
