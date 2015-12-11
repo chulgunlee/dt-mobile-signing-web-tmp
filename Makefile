@@ -1,4 +1,4 @@
-.PHONY: all build
+.PHONY: all build install
 
 PIP_INDEX = -i http://10.134.8.12:8000/simple/
 
@@ -18,6 +18,8 @@ $(PKGFILE): $(PKGNAME)/env
 	tar czf $(PKGFILE) --exclude-vcs --exclude-from=.buildignore $(PKGNAME)
 
 build: $(PKGFILE)
+
+install: $(PKGNAME)/env
 
 clean:
 	rm -rf $(PKGFILE)
