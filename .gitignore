@@ -61,3 +61,5 @@ env/
 
 bundle.js.map
 main.css.map
+
+*.tar.gz
