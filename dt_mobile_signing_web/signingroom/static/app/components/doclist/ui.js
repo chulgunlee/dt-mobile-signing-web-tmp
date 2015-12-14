@@ -108,6 +108,7 @@ directive('doc', function() {
                         applicantType: doc.scanApplicant,
                         applicantTypeName: doc.scanApplicant ? SIGNER_TYPE_MAPPING[doc.scanApplicant] : undefined,
                     };
+                    webViewBridge.logEvent('show document preview, document id=' + doc.id);
                     webViewBridge.startPreview(doc.id, doc.version, docProps);
                 }
             };
@@ -124,6 +125,7 @@ directive('doc', function() {
                         docType: doc.docType,
                         docTypeDisabled: true,
                     }).then(function(result) {
+                        webViewBridge.logEvent('start POS capture on placeholder, document id=' + doc.id);
                         webViewBridge.startPOSCapture(doc.id, doc.docType, result.applicantType);
                     });
 
@@ -137,7 +139,7 @@ directive('doc', function() {
                 var data = { requiredForFunding: !$scope.doc.requiredForFunding };
 
                 $api.updateDoc($scope.doc.id, data).then(function(response) {
-                    // TODO: add update data
+                    webViewBridge.logEvent('document id=' + $scope.doc.id + ' was moved to ' + ($scope.doc.requiredForFunding ? 'Other' : 'Funding Package'));
                     docService.refresh();
                 });
             };
@@ -152,10 +154,11 @@ directive('doc', function() {
                     docType: $scope.doc.docType,
                     applicantType: $scope.doc.scanApplicant
                 }).then(function(result) {
-                    console.log(result);
 
                     // TODO: set update data
                     $api.updateDoc($scope.doc.id, {}).then(function(response) {
+                        
+                        webViewBridge.logEvent('document id=' + $scope.doc.id + ' properties was updated.');
 
                         // TODO: add update data
                         docService.refresh();
@@ -256,6 +259,7 @@ directive('bottomBar', function() {
                 var docIds = _.pluck(docService.selectedDocs, 'id'),
                     data = JSON.stringify({ docIds: docIds });
                 
+                webViewBridge.logEvent('start printing document ids=' + docIds.join(','));
                 webViewBridge.print(_.pluck(docService.selectedDocs, 'id'));
             };
 
@@ -264,6 +268,7 @@ directive('bottomBar', function() {
 
                 // show doc type selection dialog
                 docTypeDialog({ title: 'Add Document' }).then(function(result) {
+                    webViewBridge.logEvent('start POS capture: new document');
                     webViewBridge.startPOSCapture(null, result.docType, result.applicantType);
                 });
             };
