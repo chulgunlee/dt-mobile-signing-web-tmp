@@ -55,6 +55,15 @@ factory('Doc', function(DOC_STATUS_MAPPING, SIGNER_TYPE_MAPPING, signerService, 
             return this.signStatus[signerType];
         },
 
+        /**
+         * == requiredSigners - signerService
+         * requiredSigners is the server requirement for specified document
+         * actualRequiredSigners removes unavailable signers from it
+         */
+        get actualRequiredSigners() {
+            return _.filter(this.requiredSigners, function(signerType) { return !!signerService[signerType] });
+        },
+
 
     };
 
@@ -190,7 +199,7 @@ factory('docService', function($q, $api, Doc, signerService, docTypeService, DOC
          */
         get requiredSignersInSelectedDocs() {
             return _.union.apply(_, _.map(this.selectedDocs, function(doc) {
-                return _.filter(doc.requiredSigners, function(signerType) { return !doc.signStatus[signerType] });
+                return _.filter(doc.actualRequiredSigners, function(signerType) { return !doc.signStatus[signerType] });
             }));
         },
 
@@ -271,9 +280,20 @@ factory('signerService', function(Signer) {
          * @param {Object} signers An object with k-v = type:name
          */
         init: function(signers) {
-            this.buyer = new Signer(signers.buyer, 'buyer');
-            this.cobuyer = new Signer(signers.cobuyer, 'cobuyer');
+            this.buyer = this.makeSigner(signers.buyer, 'buyer');
+            this.cobuyer = this.makeSigner(signers.cobuyer, 'cobuyer');
             this.dealer = new Signer({ firstName: 'Dealer', lastName: 'dealer' }, 'dealer');
+        },
+
+        /**
+         * return Signer object or null, depends on the availiblity of the data
+         */
+        makeSigner: function(data, type) {
+            if (data && (data.firstName != null || data.lastName != null)) {
+                return new Signer(data, type);
+            } else {
+                return null;
+            }
         },
 
         /**
@@ -282,7 +302,7 @@ factory('signerService', function(Signer) {
         get selectedSigners() {
             var selected = [];
             _.each(['buyer', 'cobuyer', 'dealer'], function(signerType) {
-                if (service[signerType].selected) {
+                if (service[signerType] && service[signerType].selected) {
                     selected.push(signerType);
                 }
             });

@@ -42,7 +42,6 @@ factory('docTypeDialog', function($commonDialog, $q, $rootScope, docTypeService)
 
         scope.onDocTypeSelect = function(id) {
             scope.selectedDocType = id;
-            scope.selectedApplicantType = null;
         };
 
         scope.onApplicantTypeSelect = function(type) {
@@ -82,7 +81,7 @@ directive('doc', function() {
             doc: '=',
         },
 
-        controller: function($scope, $api, docService, webViewBridge, SIGNER_TYPE_MAPPING, docTypeDialog, $msgbox) {
+        controller: function($scope, $api, docService, webViewBridge, SIGNER_TYPE_MAPPING, docTypeDialog, $msgbox, signerService) {
             // used for caching a document preview
             $scope.preview = null;
 
@@ -118,17 +117,21 @@ directive('doc', function() {
              */
             $scope.addDoc = function(doc) {
                 if (doc.isPlaceholder) {
-                    // show 'Add Document' dialog for selecting applicant
-                    // TODO: [MCI-1583] need to check if co-applicant exists
-                    docTypeDialog({
-                        title: 'Add Document',
-                        docType: doc.docType,
-                        docTypeDisabled: true,
-                    }).then(function(result) {
+                    // check if co-applicant exists
+                    if (signerService.cobuyer === null) {
                         webViewBridge.logEvent('start POS capture on placeholder, document id=' + doc.id);
-                        webViewBridge.startPOSCapture(doc.id, doc.docType, result.applicantType);
-                    });
-
+                        webViewBridge.startPOSCapture(doc.id, doc.docType, 'buyer');
+                    } else {
+                        // show 'Add Document' dialog for selecting applicant
+                        docTypeDialog({
+                            title: 'Add Document',
+                            docType: doc.docType,
+                            docTypeDisabled: true,
+                        }).then(function(result) {
+                            webViewBridge.logEvent('start POS capture on placeholder, document id=' + doc.id);
+                            webViewBridge.startPOSCapture(doc.id, doc.docType, result.applicantType);
+                        });
+                    }
                 }
             };
 
@@ -221,11 +224,13 @@ directive('bottomBar', function() {
              * Open sign dialog
              */
             $scope.selectSigner = function() {
+                // only show available signers
+                $scope.signers = _.filter(['buyer', 'cobuyer', 'dealer'], function(signerType) { return !!signerService[signerType]; });
                 $commonDialog({
                     title: 'Select Signer(s)',
                     ok: 'Continue',
                     cancel: 'Cancel',
-                    width: 526,
+                    width: ($scope.signers.length == 3) ? 526 : 361,            // if cobuyer is not available then we show a smaller dialog
                     templateUrl: templates['select_signer_modal.html'],
                     scope: $scope,
                     okEnabled: function() {
@@ -266,8 +271,16 @@ directive('bottomBar', function() {
 
             $scope.addDocument = function() {
 
+                var options = { title: 'Add Document' };
+
+                // check if co-applicant exists
+                if (signerService.cobuyer === null) {
+                    options.applicantType = 'buyer';
+                    options.applicantTypeDisabled = true;
+                }
+
                 // show doc type selection dialog
-                docTypeDialog({ title: 'Add Document' }).then(function(result) {
+                docTypeDialog(options).then(function(result) {
                     webViewBridge.logEvent('start POS capture: new document');
                     webViewBridge.startPOSCapture(null, result.docType, result.applicantType);
                 });

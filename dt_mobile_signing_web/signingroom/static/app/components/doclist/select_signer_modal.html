@@ -1,6 +1,6 @@
 <div class="signer-modal-body">
     <ul class="row signers-list" ng-class="'room-for-'+signers.length">
-        <li ng-repeat="signerType in ['buyer', 'cobuyer', 'dealer']" class="modal-body-wrapper signers-list-item signer-{{signer.Type.toLowerCase()}}">
+        <li ng-repeat="signerType in signers" class="modal-body-wrapper signers-list-item signer-{{signer.Type.toLowerCase()}}">
             <div class="signer">
                 <button icon-button="icn-checkbox" class="signer-selector" width="30" height="30" ng-checked="signerService[signerType].selected" ng-show="docService.isSignerRequiredBySelectedDocs(signerType)" ng-click="onSignerSelected(signerType)"></button>
                 <div class="signer-caption">
