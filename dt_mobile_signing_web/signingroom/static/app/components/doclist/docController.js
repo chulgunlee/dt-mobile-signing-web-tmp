@@ -19,6 +19,8 @@ controller('DocListCtrl', function($scope, $api, docService, signerService, docT
 
         docService.refresh(response.data.docs);
         signerService.init($scope.signers);
+
+        webViewBridge.logEvent('doclist initialized')
     });
 
     // provide API for native client to reload the doclust
