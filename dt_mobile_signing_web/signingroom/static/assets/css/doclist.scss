@@ -5,7 +5,7 @@
     .doclist-header {
         margin: 30px 15px 0 15px;
         min-height: 34px;
-        border-bottom: solid 1px #dee6ea;
+        border-bottom: $ui-border;
         box-shadow: 0 1px 0 #f2f6f7;
         font-size: 13px;
         font-weight: 500;
@@ -20,7 +20,7 @@
 .document {
     position: relative;
     background: #fff;
-    border: solid 1px #dee6ea;
+    border: $ui-border;
     border-radius: 3px;
     width: 180px;
     height: 185px;
@@ -43,19 +43,19 @@
         left: -75px;
 
         &.signed {
-            background: $badge-color-signed;
+            background: $status-badge-color-signed;
         }
 
         &.not-signed {
-            background: $badge-color-not-signed;
+            background: $status-badge-color-not-signed;
         }
 
         &.partially-signed {
-            background: $badge-color-partially-signed;
+            background: $status-badge-color-partially-signed;
         }
 
         &.submitted {
-            background: $badge-color-submitted;
+            background: $status-badge-color-submitted;
         }
 
         .status {
@@ -84,7 +84,7 @@
             margin-bottom: 2px;
             font-size: 13px;
             line-height: 15px;
-            color: #2e95d2;
+            color: $ui-link-color;
             max-height: 72px;
             overflow: hidden;
             /* webkit only text-overflow */
@@ -98,7 +98,7 @@
             margin-top: 12px;
             margin-bottom: 2px;
             font-size: 13px;
-            color: #231f20;
+            color: $ui-text-color;
             line-height: 15px;
             max-height: 72px;
             overflow: hidden;
@@ -215,11 +215,11 @@
 }
 
 .signstatus-signed {
-    color: #3FB265;
+    color: $sign-status-text-color-signed;
 }
 
 .signstatus-notsigned {
-    color: #FFB200;
+    color: $sign-status-text-color-not-signed;
 }
 
 .signstatus-row {
@@ -239,7 +239,7 @@
 .more-popover {
     width: 200px !important;
     padding: 0 !important;
-    border: 1px solid #dee6ea;          /* menu border */
+    border: $ui-border;          /* menu border */
     margin-left: 60px !important;       /* move the arrow to left side; use with (".more-popover .arrow").margin-left */
 
     .popover-content {
@@ -247,7 +247,7 @@
     }
 
     .arrow {
-        border-top-color: #dee6ea !important;       /* hack the border color of the arrow */
+        border-top-color: $ui-border-color !important;       /* hack the border color of the arrow */
         margin-left: -70px !important;              /* move the arrow to left side of the menu; use with (".more-popover").margin-left */
     }
 
@@ -257,20 +257,20 @@
         &>li.more-menu-item {
             height: 45px;
             padding: 15px 20px;
-            border-bottom: solid 1px #dee6ea;       /* menu item separater */
+            border-bottom: $ui-border;       /* menu item separater */
             cursor: pointer;
             font-size: 13px;
-            color: #2e95d2;
+            color: $ui-link-color;
 
             &:last-child {
                 border-bottom: 0;
             }
 
             >a {
-                color: #2e95d2;
+                color: $ui-link-color;
 
                 &:hover {
-                    color: #2e95d2;
+                    color: $ui-link-color;
                     text-decoration: none;
                 }
             }
@@ -338,7 +338,7 @@
                 .signer-name {
                     font-weight: 400;
                     font-size: 13px;
-                    color: #231f20;
+                    color: $ui-text-color;
                 }
 
                 .signer-type {
@@ -370,10 +370,10 @@
         width: 430px;       /* enlarge selector */
         background: #fff;
         text-align: left;
-        color: #231f20;
+        color: $ui-text-color;
         padding: 6px 20px;
         margin-bottom: 15px;
-        border: solid 1px #dee6ea;
+        border: $ui-border;
         border-radius: 3px;
 
         &:active {
@@ -399,14 +399,14 @@
 
         >li>a {
             height: 45px;
-            color: #231f20;
+            color: $ui-text-color;
             padding-top: 12px;
             padding-left: 40px;                 /* leave space for checkmark */
-            border-bottom: solid 1px #dee6ea;
+            border-bottom: $ui-border;
         }
 
         >li.active>a {
-            color: #231f20;                     /* remove default active color */
+            color: $ui-text-color;                     /* remove default active color */
             background: #fff url(/static/assets/img/icn-check-sm.png) no-repeat 15px 15px ;
         }
     }
