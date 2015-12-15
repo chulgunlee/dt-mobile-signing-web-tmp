@@ -42,7 +42,6 @@ factory('docTypeDialog', function($commonDialog, $q, $rootScope, docTypeService)
 
         scope.onDocTypeSelect = function(id) {
             scope.selectedDocType = id;
-            scope.selectedApplicantType = null;
         };
 
         scope.onApplicantTypeSelect = function(type) {
