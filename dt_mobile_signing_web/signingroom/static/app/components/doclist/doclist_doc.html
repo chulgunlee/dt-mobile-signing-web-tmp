@@ -1,5 +1,5 @@
 <div class="document" ng-click="doc.isPlaceholder ? addDoc(doc) : showPreview(doc)">
-    <signer-popover ng-if="doc.signable" class="status-badge {{doc.status}}" id="signing-status-for-{{doc.id}}" ng-click="$event.stopPropagation()">
+    <signer-popover ng-if="doc.signable && doc.requiredSigners.length > 0" class="status-badge {{doc.status}}" id="signing-status-for-{{doc.id}}" ng-click="$event.stopPropagation()">
         <div class="status">
             {{doc.status | docStatusName}}
         </div>
