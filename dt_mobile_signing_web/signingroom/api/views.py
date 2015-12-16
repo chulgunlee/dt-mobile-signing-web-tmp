@@ -81,6 +81,10 @@ class DealJacketView(BaseAPIView):
         dc = get_doccenter_api(context_data)
         docs = dc.get_docs_by_dj_id(dealjacket_id)
 
+        # get the required signers for each doc
+        for doc in docs:
+            doc['required_signers'] = dc.signers(doc['document_index_id'], doc['latest_doc_version_cd'])
+
         result = {
             'id': str(deal_id),
             'dealJacketId': str(dealjacket_id),
@@ -167,7 +171,7 @@ def _convert_doc(doc):
             'cobuyer': 'cobuyer' in sign_status,
             'dealer': 'dealer' in sign_status,
         },
-        'requiredSigners': ['buyer', 'cobuyer', 'dealer'],
+        'requiredSigners': doc.get('required_signers'),
 
         'isExternal': r('bool', doc.get('external')),
     }

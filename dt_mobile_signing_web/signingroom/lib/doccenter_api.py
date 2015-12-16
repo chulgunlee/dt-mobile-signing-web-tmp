@@ -1,5 +1,5 @@
 from rest_framework.exceptions import APIException
-from signingroom.lib.service_base import ServiceBase
+from signingroom.lib.service_base import ServiceBase, NotFound, InternalServerError
 
 
 class DocCenterService(ServiceBase):
@@ -49,6 +49,12 @@ class DocCenterService(ServiceBase):
         }
 
         return self.put('/docs/store/', data=data)
+
+    def signers(self, doc_id, version_cd):
+        try:
+            return self.get('/docs/%s/signers/?version_cd=%s' % (doc_id, version_cd))
+        except (NotFound, InternalServerError):
+            return []
 
     def type_choices(self):
         """Get document template types
