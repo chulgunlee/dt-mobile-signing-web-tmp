@@ -44,9 +44,12 @@ class TestDealJacketViewGet(DRFApiMixin, SigningWebUnitTest):
         # generate test request
         request = self._make_request()
 
+        signers = ['buyer', 'dealer']
+
         # mock backend services
         mock_get_dtmobile.return_value.get_dealjacket_summary.return_value = self.load_json('dtmobile_get_dealjacket.json')
         mock_get_doccenter_api.return_value.get_docs_by_dj_id.return_value = self.load_json('doccenter_get_docs_by_dj_id.json')
+        mock_get_doccenter_api.return_value.signers.return_value = signers
 
         # call view function
         response = self.view(request, self.dealjacket_id, self.deal_id)
@@ -67,6 +70,7 @@ class TestDealJacketViewGet(DRFApiMixin, SigningWebUnitTest):
         self.assertDictContainsSubset({
             'id': 161,
             'docType': 'contract',
+            'requiredSigners': signers,
             'customTemplateName': 'eContract',
             'requiredForFunding': True,
             'signable': True,
