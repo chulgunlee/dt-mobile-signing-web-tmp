@@ -11,13 +11,10 @@ require('../assets/libs/js/angular-strap.tpl.js');
 require('../assets/libs/js/webviewbridge');
 
 // app components
-require('./app.route.js');
-require('./components/doclist/constants.js');
-require('./components/doclist/docController.js');
-require('./components/doclist/docService.js');
-require('./components/doclist/filters.js');
-require('./components/doclist/ui.js');
-require('./components/preview/previewController.js');
+require('./signingroom.route.js');
+//require('./components/doclist/constants.js')
+require('./components/signingroom/signingRoomController.js');
+require('./components/signingroom/ui.js');
 require('./shared/api/api.js');
 require('./shared/loading/loadingDirective.js');
 require('./shared/loading/loadingService.js');
@@ -33,19 +30,19 @@ require('../assets/css/icon-sprite.css');
 
 
 // define main app
-angular.module('dc.app', [
+angular.module('dc.signingroom', [
     'ngTouch',
     'ngAnimate',
     'mgcrea.ngStrap',
 
-    'dc.route',
-    'dc.shared.webviewbridge.webviewbridge',
+    'dc.signingroom.route',
+    'dc.shared.webviewbridge.webviewbridge'
 ]).
 
 config(function($apiProvider, webViewBridgeProvider) {
     // config the mashup API base uri, default='/api/'
     // $apiProvider.setApiUri('/api/');
-    
+
     // config webviewbridge debug, default=false
     // webViewBridgeProvider.enableWebViewBridgeDebug(true);
 
