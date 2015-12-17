@@ -5,6 +5,7 @@ from mock import Mock
 from tests.test_bases import SigningWebUnitTest
 
 from signingroom.lib.doccenter_api import *
+from signingroom.lib.service_base import *
 from rest_framework.exceptions import APIException
 
 
@@ -48,3 +49,27 @@ class TestDocCenterService(SigningWebUnitTest):
         result = self.test_service.type_choices()
         mock_get.assert_called_with('/templates/type-choices/')
         self.assertListEqual(ret, result)
+
+    @mock.patch.object(DocCenterService, 'get')
+    def test_signers_200(self, mock_get):
+        ret = ['buyer', 'cobuyer']
+        mock_get.return_value = ret
+
+        result = self.test_service.signers(1, 'F')
+        mock_get.assert_called_with('/docs/1/signers/?version_cd=F')
+        self.assertListEqual(result, ret)
+
+    @mock.patch.object(DocCenterService, 'get')
+    def test_signers_404(self, mock_get):
+        mock_get.side_effect = NotFound
+
+        result = self.test_service.signers(1, 'F')
+        self.assertListEqual(result, [])
+
+    @mock.patch.object(DocCenterService, 'get')
+    def test_signers_500(self, mock_get):
+        mock_get.side_effect = InternalServerError
+
+        result = self.test_service.signers(1, 'F')
+        self.assertListEqual(result, [])
+
