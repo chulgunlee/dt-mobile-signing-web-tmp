@@ -49,6 +49,6 @@ module.exports = {
 
         new CompressionPlugin({ }),
 
-        new CommonsChunkPlugin('common.js')
+        new CommonsChunkPlugin({ name: 'common', filename: 'common.js' })
     ]
 };
