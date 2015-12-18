@@ -1,6 +1,16 @@
 /* doc status badge color definition */
-$badge-color-signed: #2cab56;
-$badge-color-not-signed: #d3dae0;
-$badge-color-partially-signed: #fccf12;
-$badge-color-submitted: #3f3f40;
+$status-badge-color-signed: #2cab56;
+$status-badge-color-not-signed: #d3dae0;
+$status-badge-color-partially-signed: #fccf12;
+$status-badge-color-submitted: #3f3f40;
 
+/* sign status text color definition */
+$sign-status-text-color-signed: #3FB265;
+$sign-status-text-color-not-signed: #FFB200;
+
+
+/* UI definitions */
+$ui-border-color: #dee6ea;
+$ui-border: 1px solid $ui-border-color;
+$ui-link-color: #2e95d2;            // for all the 'link' like texts
+$ui-text-color: #231f20;            // for all the other textx
