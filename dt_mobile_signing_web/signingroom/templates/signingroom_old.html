@@ -1,0 +1,397 @@
+﻿<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+
+    <meta http-equiv="Content-Type" content="text/html; charset=us-ascii" />
+    <title>eCon Document List</title>
+    <!--
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    -->
+    <meta name="viewport" content="user-scalable=yes,  initial-scale=1.0,maximum-scale=1.5, width=device-width"  />
+
+    <!-- Bootstrap 3.2  CSS-->
+    <link href="/static/css/bootstrap/bootstrap.min.css" rel="stylesheet" />
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet" />
+    <link href="/static/css/awesome-bootstrap-checkbox.css" rel="stylesheet" />
+    <!-- Custom  CSS-->
+
+    <link href="/static/css/jquery.signaturepad.css" rel="stylesheet" type="text/css" />
+    <link href="/static/css/checkbox.css" rel="stylesheet" />
+    <link href="/static/css/swap-style.css" rel="stylesheet" />
+    <link href="/static/css/styles.css" rel="stylesheet" />
+
+</head>
+<body>
+    <form id="form1" style="display: none;">
+
+        <nav class="navbar navbar-default navbar-fixed-top  navbar-header-style" role="navigation">
+
+            <p class="navbar-brand" id="id_doc_name"></p>
+
+        </nav>
+
+        <!-- navbar container -->
+
+        <!--  navbar-brand name center align -->
+        <div class="col-md-2 text-center">
+            <p class="navbar-brand" id="SigTemplateName"></p>
+        </div>
+        <div class="container  signing-room-container">
+            <div class="row clearfix">
+                <div class="col-md-12 column" id="document-img-container">
+                    <div class="signer-info">
+                        <h5><b id="id_signing_as">You are signing</b></h5>
+                        <ul>
+                            <li>Review the document
+                            </li>
+                            <li>You need to sign in
+                            <a href="#" id="id_location1"></a>
+                            </li>
+                        </ul>
+                        <hr>
+                    </div>
+                    <!-- Signer Info -->
+                    <div class="document-img-container" id="cont1">
+                    </div>
+
+                </div>
+                <!-- column  -->
+            </div>
+            <!-- Row  -->
+        </div>
+        
+        <div id="footer_popover_content" style="display: none">
+                <ul class="footer_popover_content">
+                    <li>
+                        <a href="#" onclick="SaveAndExit();" id="id_saveexit" data-target="#id_saveexit_model">
+                            <p>Save and Exit</p>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" id="id_withdrawAnchor" data-toggle="modal" data-target="#id_withdraw_model" onclick="WithdrawConsent();">
+                            <p>Withdraw Consent</p>
+                        </a>
+                    </li>
+                </ul>
+       </div>
+
+        <nav class="navbar navbar-inverse navbar-fixed-bottom navbar-footer-style">
+            <div class="footer_link_container">
+                <div class="ellipsis-style">Options</div>
+                <button class="btn btn-success navbar-right-link pull-right" role="button" id="id_start" data-placement="left" data-trigger="manual" data-toggle="tooltip" data-title="Please review the entire document in order to start signing.">Start</button>
+            </div>
+        </nav>
+
+        <div id="DocsView" runat="server" style="position: relative;" class="document-img">
+        </div>
+
+        <!-- sign modal pop up-->
+        <div class="modal" data-keyboard="false" data-backdrop="static" id="id_signIn_modal" tabindex="-1" role="dialog" aria-labelledby="signIn_modal" aria-hidden="false" style="z-index: 10000">
+            <div class="modal-dialog modal-sm">
+                <div class="modal-content signIn-modal-content">
+                    <div class="modal-body text-center">
+                        <div class="thumbnail signIn-thumbnail">
+                            <div class="fa fa-user fa-5x user-icon"></div>
+                        </div>
+                        <div class="caption modal-text">
+                            <p id="id_signor_alert"></p>
+                        </div>
+                        <div class="caption btn-sign">
+                            <a href="#" onclick="CheckuserConsentAction();" class="btn btn-color" role="button" data-dismiss="modal">Sign</a>
+                        </div>
+                    </div>
+                    <!-- modal-body -->
+                </div>
+                <!-- modal-content -->
+            </div>
+            <!-- modal-dialog -->
+        </div>
+        <!-- end sign modal pop up-->
+
+        <!-- div for save and exit popup -->
+        <div class="modal" data-keyboard="false" data-backdrop="static" id="id_saveexit_model" tabindex="-1" role="dialog" aria-labelledby="signIn_modal" aria-hidden="false">
+            <div class="modal-dialog modal-sm">
+                <div class="modal-content signIn-modal-content-save-exit">
+                    <div class="modal-body text-center">
+                        <div class="caption modal-text">
+                            <p class="sig_save_exit">Are you sure you want to Exit? Signatures on this document will not be saved</p>
+                        </div>
+                        <div>
+                            <a class="btn btn-color pull-left saveexitok" role="button" id="id_saveok_link" data-dismiss="modal" href="#" onclick="SaveAndExitOK()">Ok</a>
+                        </div>
+                        <div>
+                            <a class="btn btn-color full-right" role="button" style="float: right;" href="#" data-dismiss="modal">Cancel</a>
+                        </div>
+                    </div>
+                    <!-- modal-body -->
+                </div>
+                <!-- modal-content -->
+            </div>
+            <!-- modal-dialog -->
+        </div>
+        
+        <!-- div for withdrw consent popup -->
+        <div class="modal" data-keyboard="false" data-backdrop="static" id="id_withdraw_model" tabindex="-1" role="dialog" aria-labelledby="signIn_modal" aria-hidden="false">
+            <div class="modal-dialog modal-sm">
+                <div class="modal-content signIn-modal-content-withdraw">
+                    <div class="modal-body text-center">
+                        <div class="caption modal-text">
+                            <p class="sig_save_exit">Are you sure you want to withdraw consent? All signatures on the current document will not be saved.</p>
+                        </div>
+                        <div>
+                            <a class="btn btn-color pull-left" role="button" id="id_withdrwa_link" data-dismiss="modal" href="#" onclick="ButtonUserConsent('Withdraw');">Ok</a>
+                        </div>
+                        <div>
+                            <a class="btn btn-color full-right" role="button" style="float: right;" href="#" data-dismiss="modal">Cancel</a>
+                        </div>
+                    </div>
+                    <!-- modal-body -->
+                </div>
+                <!-- modal-content -->
+            </div>
+            <!-- modal-dialog -->
+        </div>
+
+        <!-- div for save and exit popup from side panel document click-->
+        <div class="modal" data-keyboard="false" data-backdrop="static" id="id_saveexit_model_side_panel" tabindex="-1" role="dialog" aria-labelledby="signIn_modal" aria-hidden="false">
+            <div class="modal-dialog modal-sm">
+                <div class="modal-content signIn-modal-content-save-exit">
+                    <div class="modal-body text-center">
+                        <div class="caption modal-text">
+                            <p class="sig_save_exit">Are you sure you want to Exit? Signatures on this document will not be saved</p>
+                        </div>
+                        <div>
+                            <a class="btn btn-color pull-left" role="button" data-dismiss="modal" href="#" onclick="fnLoadNewSelectionDoc()">Ok</a>
+                        </div>
+                        <div>
+                            <a class="btn btn-color full-right" role="button" style="float: right;" href="#" data-dismiss="modal">Cancel</a>
+                        </div>
+                    </div>
+                    <!-- modal-body -->
+                </div>
+                <!-- modal-content -->
+            </div>
+            <!-- modal-dialog -->
+        </div>
+
+        <div class="modal" data-keyboard="false" data-backdrop="static" id="id_signature_initials_modalPopup"
+            tabindex="-1" role="dialog" aria-labelledby="signature_modal" aria-hidden="true" style="top: 20%">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header signature-modal-style">
+                        <div class="row">
+                            <div class="col-md-12 modal-header-wrapper">
+                                <p class="modal-title signature-user-header" id="id_signee_inital"></p>
+                            </div>
+                            <div class="col-md-12 modal-header-wrapper">
+                                <p class="modal-title modal-text">Please sign your name and initial below.</p>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="modal-body signature-modal-style">
+                        <div class="signature-canvas-container">
+                            <div class="col-md-12 sign-initial-container">
+                                <div class="signature-container Signature-sigPad">
+                                    <p class="modal-title pull-left canvas-header">Signature</p>
+                                    <p class="modal-title pull-right canvas-clear" id="id_clearSig1">Clear</p>
+                                    <div class="sigPad" id="sigPad1">
+                                        <div class="sig sigWrapper current" style="display: block; width: 300px; height: auto" align="left">
+                                            <canvas class="signature-canvas-style" width="300px"></canvas>
+                                            <input type="hidden" name="output-1" class="output">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="initials-container Initials-sigPad">
+                                    <p class="modal-title pull-left canvas-header" id="id_clear2">Initials</p>
+                                    <p class="modal-title pull-right canvas-clear" id="id_clearInitial">Clear</p>
+                                    <div class="sigPad" id="sigPad2">
+                                        <div class="sig sigWrapper current" style="display: block; width: 160px; height: auto" align="left">
+                                            <canvas class="signature-canvas-style" width="160px"></canvas>
+                                            <input type="hidden" name="output-2" class="output">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <button class="btn btn-primary pull-right signature-apply-btn" id="id_apply">Apply</button>
+                            </div>
+                            <!-- row-->
+                        </div>
+                        <!-- canvas-container -->
+                    </div>
+                    <!-- modal body -->
+                </div>
+                <!-- modal content -->
+            </div>
+            <!-- modal dialog -->
+        </div>
+
+        <!-- signature-modal -->
+        <div class="modal" data-keyboard="false" data-backdrop="static" id="id_signature_modal"
+            tabindex="-1" role="dialog" aria-labelledby="signature_modal" aria-hidden="true">
+            <div class="modal-dialog signature-modal">
+                <div class="modal-content">
+                    <div class="modal-header signature-modal-style">
+                        <div class="row">
+                            <div class="col-md-12 modal-header-wrapper">
+                                <p class="modal-title signature-user-header" id="id_signee_sig"></p>
+                            </div>
+                            <div class="col-md-12 modal-header-wrapper">
+                                <p class="modal-title modal-text">Please sign your name below.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-body signature-modal-style">
+                        <div class="signature-canvas-container">
+                            <div class="col-md-12 sign-initial-container">
+                                <div class="signature-container Signature-sigPad">
+                                    <p class="modal-title pull-left canvas-header ">Signature</p>
+                                    <p class="modal-title pull-right canvas-clear" id="id_clearSig">Clear</p>
+                                    <div class="sigPad" id="sigPad3">
+                                        <div class="sig sigWrapper current" style="display: block; width: 360; height: auto" align="left">
+                                            <canvas class="signature-canvas-style"></canvas>
+                                            <input type="hidden" name="output-1"
+                                                class="output">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <button class="btn btn-primary pull-right signature-apply-btn" id="id_applySignOnly">Apply</button>
+                            </div>
+                            <!-- row-->
+                        </div>
+                        <!-- canvas-container -->
+                    </div>
+                    <!-- modal body -->
+                </div>
+                <!-- modal content -->
+            </div>
+            <!-- modal dialog -->
+        </div>
+
+        <div class="modal" data-keyboard="false" data-backdrop="static" id="id_terms_and_conditions" tabindex="-1" role="dialog" aria-labelledby="terms_and_conditions" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content tnc-modal-content">
+                    <div class="modal-header tnc-modal-header">
+                        <div class="row">
+                            <div class="col-md-12 modal-header-wrapper">
+                                <a href="#" class="cancel-link pull-left" data-dismiss="modal" onclick="ButtonUserConsent('Withdraw');">Disagree</a>
+                                <p class="modal-title modal-text">Terms and Conditions</p>
+                                <a href="#" class="pull-right continue-link" data-dismiss="modal" onclick="ButtonUserConsent('Accept');">Agree</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-body tnc-modal-body">
+                        <div class="row">
+                            <div class="col-sm-12 tnc-body-wrapper">
+                                <div class="tncload"></div>
+                            </div>
+                            <!-- col-->
+                        </div>
+                        <!-- row-->
+                    </div>
+                    <!-- modal body -->
+                </div>
+                <!-- modal content -->
+            </div>
+            <!-- modal dialog -->
+        </div>
+
+        <!-- modal -->
+        <!-- end signature-modal -->
+
+
+        <input type="hidden" id="BUYER_SIG" runat="server" />
+        <input type="hidden" id="COBUYER_SIG" runat="server" />
+        <input type="hidden" id="DEALER_SIG" runat="server" />
+        <input type="hidden" id="BUYER_INITIAL" runat="server" />
+        <input type="hidden" id="COBUYER_INITIAL" runat="server" />
+        <input type="hidden" id="DEALER_INITIAL" runat="server" />
+        <input type="hidden" id="CurrentSignor" runat="server" />
+
+    </form>
+    <!-- Loading splash panel -->
+    <div class="modal" tabindex="-1" role="dialog" data-backdrop="static" aria-labelledby="mySmallModalLabel" aria-hidden="true" id="loading-splash">
+        <div class="panel panel-default" style="margin-left: auto; margin-right: auto; width: 300px; margin-top: 120px; min-height: 20px; max-height: 100px;">
+            <div class="panel-body text-center">
+                <p>
+                    <img src="/static/images/loading-tr.gif" alt="Loading..." />
+                    Loading data. One moment...
+                </p>
+            </div>
+        </div>
+
+    </div>
+    <!-- /Loading splash panel -->
+    <div class="slide-out-div" style="display:none;">
+        <div id="id_slider_handle" class="handle">
+            <div class="panel-handle-bar"></div>
+        </div>
+        <!-- Handle -->
+        <div id="id_document_wrapper">
+            <div class="panel-document-container">
+                <ul id="id_sign_status_docs">
+                </ul>
+            </div>
+            <!-- Document Container-->
+        </div>
+        <!-- Document wrapper -->
+    </div>
+
+    <!-- pop up for alert for Signature made very too short  -->
+    <div class="modal lesssign" data-keyboard="false" data-backdrop="static" id="id_less_sign"
+        tabindex="-1" role="dialog" aria-labelledby="id_less_sign" aria-hidden="true" ctrl="1">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content signIn-modal-content-save-exit">
+                <div class="modal-body text-center">
+                    <div class="caption modal-text">
+                        <p class="sig_save_exit"></p>
+                    </div>
+                    <div>
+                        <a href="#" class="btn btn-color" role="button" data-dismiss="modal">Ok</a>
+                    </div>
+                </div>
+                <!-- modal-body -->
+            </div>
+            <!-- modal-content -->
+        </div>
+        <!-- modal-dialog -->
+    </div>
+
+</body>
+<script>
+var masterIndxId = {{ master_index_id }};
+var userCode = {{ user_code }};
+var apiUri = '/api/doccenter/';
+</script>
+<script src="/static/js/custom/webviewbridge.js"></script>
+<script src="/static/js/jquery/jquery.min.js"></script>
+<script src="/static/js/bootstrap/bootstrap.min.js"></script>
+<script src="/static/js/plugins/zepto.js"></script>
+<script src="/static/js/plugins/event.js"></script>
+<script src="/static/js/plugins/touch.js"></script>
+<script src="/static/js/plugins/hammer.js"></script>
+<script src="/static/js/plugins/jquery.tabSlideOut.v1.3.js"></script>
+
+<!-- Signature pad -->
+<!--[if lt IE 9]>
+        <script src="static/js/plugins/flashcanvas.js"></script>
+    <![endif]-->
+<script src="/static/js/plugins/jquery.signaturepad.min.js"></script>
+<script src="/static/js/plugins/json2.min.js"></script>
+<script src="/static/js/plugins/iscroll-lite.js"></script>
+<script src="/static/js/custom/app.js"></script>
+<script src="/static/js/custom/signingroom.js"></script>
+<script src="/static/js/custom/jquery.pluralize.js"></script>
+<script src="//static.thomasjbradley.ca/signature-pad/flashcanvas.js"></script>
+<script src="/static/js/jquery/jquery.lazyload.min.js"></script>
+</html>
+
+
+
+ 
+
+

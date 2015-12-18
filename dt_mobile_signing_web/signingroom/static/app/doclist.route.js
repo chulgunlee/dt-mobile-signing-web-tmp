@@ -3,7 +3,7 @@ var templates = {
     'doc_preview.html': require('./components/preview/doc_preview.html'),
 };
 
-angular.module('dc.route', [
+angular.module('dc.doclist.route', [
     'ngRoute',
 
     'dc.components.doclist.docCtrl',

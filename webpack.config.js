@@ -3,14 +3,19 @@ var webpack = require('webpack');
 var ExtractTextPlugin = require('extract-text-webpack-plugin');
 var ngAnnotatePlugin = require('ng-annotate-webpack-plugin');
 var CompressionPlugin = require('compression-webpack-plugin');
+var CommonsChunkPlugin = require("webpack/lib/optimize/CommonsChunkPlugin");
 
 module.exports = {
     cache: true,
-    entry: './dt_mobile_signing_web/signingroom/static/app/app.module.js',
+    // entry: './dt_mobile_signing_web/signingroom/static/app/app.module.js',
+    entry: {
+        doclist: './dt_mobile_signing_web/signingroom/static/app/doclist.module.js',
+        signingroom: './dt_mobile_signing_web/signingroom/static/app/signingroom.module.js',
+    },
     output: {
         path: 'dt_mobile_signing_web/signingroom/static',
-        filename: 'bundle.js',
-        sourceMapFilename: 'bundle.js.map',
+        filename: '[name].bundle.js',
+        sourceMapFilename: '[name].bundle.js.map',
         publicPath: 'static/',
     },
     module: {
@@ -43,5 +48,7 @@ module.exports = {
         new ngAnnotatePlugin({ add: true }),
 
         new CompressionPlugin({ }),
+
+        new CommonsChunkPlugin({ name: 'common', filename: 'common.js' })
     ]
 };
