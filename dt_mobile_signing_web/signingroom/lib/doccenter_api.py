@@ -66,6 +66,14 @@ class DocCenterService(ServiceBase):
         """
         return self.get('/docs/%s/background-images/' % doc_id, params={'version_cd': version_cd})
 
+    def merged_pdf(self, dj_id, doc_ids):
+        data = {
+            'external_txn_id': dj_id,
+            'document_ids': doc_ids,
+        }
+
+        return self.post('/docs/merged-pdf/', data=data, headers={'Accept': 'application/pdf'})
+
 
 def get_doccenter_api(context):
     """Factory method

@@ -79,7 +79,7 @@ class ServiceBase(object):
         """
         return self.server_uri + path % args
 
-    def _headers(self):
+    def _headers(self, custom_headers=None):
         """Generate headers from client API call for web service
         """
         headers = {
@@ -92,9 +92,12 @@ class ServiceBase(object):
         if 'user_code' in self.context:
             headers['USER-CODE'] = self.context.get('user_code')
 
+        if custom_headers:
+            headers.update(custom_headers)
+
         return headers
 
-    def get(self, path, params=None):
+    def get(self, path, params=None, headers=None):
         """Wrapper for sending GET request through dt_requests.
 
         Args:
@@ -105,9 +108,8 @@ class ServiceBase(object):
             json object (in python representive); or raise exception if server fails
         """
 
-        headers = self._headers()
+        headers = self._headers(headers)
         url = self._url(path)
-
 
         response = requests.get(url, headers=headers, params=params, verify=self.verify)
 
@@ -115,7 +117,7 @@ class ServiceBase(object):
 
         return self.process_response(response)
 
-    def post(self, path, data, params=None):
+    def post(self, path, data, params=None, headers=None):
         """Wrapper for sending POST request through dt_requests.
 
         Args:
@@ -127,7 +129,7 @@ class ServiceBase(object):
             json object (in python representive); or raise exception if server fails
         """
 
-        headers = self._headers()
+        headers = self._headers(headers)
         url = self._url(path)
 
         data = json.dumps(data) if data is not None else None
@@ -139,7 +141,7 @@ class ServiceBase(object):
 
         return self.process_response(response)
 
-    def put(self, path, data, params=None):
+    def put(self, path, data, params=None, headers=None):
         """Wrapper for sending PUT request through dt_requests.
 
         Args:
@@ -151,7 +153,7 @@ class ServiceBase(object):
             json object (in python representive); or raise exception if server fails
         """
 
-        headers = self._headers()
+        headers = self._headers(headers)
         url = self._url(path)
 
         data = json.dumps(data) if data is not None else None
@@ -163,7 +165,7 @@ class ServiceBase(object):
 
         return self.process_response(response)
 
-    def delete(self, path, params=None):
+    def delete(self, path, params=None, headers=None):
         """Wrapper for sending DELETE request through dt_requests.
 
         Args:
@@ -174,7 +176,7 @@ class ServiceBase(object):
             json object (in python representive); or raise exception if server fails
         """
 
-        headers = self._headers()
+        headers = self._headers(headers)
         url = self._url(path)
 
         response = requests.delete(url, headers=headers, params=params, verify=self.verify)
@@ -242,8 +244,8 @@ class ServiceBase(object):
         elif response.status_code == 204:
             return
 
-        elif content_type != 'application/json':
-            raise BadContentType('Server did not return a JSON response: ' + response.text)
+        elif content_type == 'application/json':
+            return response.json()
 
         else:
-            return response.json()
+            return response

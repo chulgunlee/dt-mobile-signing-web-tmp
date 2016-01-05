@@ -1,6 +1,10 @@
 import json
 import os
+import re
 
+from .renderers import PDFRenderer
+from drf_pdf.response import PDFResponse
+from drf_pdf.renderer import PDFRenderer
 from django.http import HttpResponse
 from django.views.generic.base import View
 from dt_django_base.api.viewsets import BaseAPIView
@@ -12,7 +16,7 @@ from signingroom.lib.doccenter_ref import r
 from signingroom.lib.dtmobile import get_dtmobile
 from signingroom.api.serializers import DocSerializer
 from signingroom.lib.common import underscore_to_camelCase
-from signingroom.lib.service_base import InternalServerError
+from signingroom.lib.service_base import InternalServerError, BadRequest
 
 
 class DealJacketView(BaseAPIView):
@@ -342,27 +346,47 @@ class DocDetailView(APIView):
         return HttpResponse(status=204)
 
 
-class DocPrintView(View):
+class DocPrintView(APIView):
     """Get printable pdf document.
 
     API endpoints:
 
-    - GET /dealjackets/<dealjacket_id>/deals/<deal_id>/docs/<doc_id>/printable?docids=1,2,3
+    - GET /dealjackets/<dealjacket_id>/deals/<deal_id>/printable?docids=1,2,3
     """
 
-    def get(self, request, pkg_id):
+    renderer_classes = (PDFRenderer,)
+
+    def get(self, request, dealjacket_id, deal_id):
         """Get printable pdf. The server will merge specified docs into one pdf and return it to caller.
 
         Parameters:
 
-        - `pkg_id`: The package id
+        - `dealjacket_id`: dealjacket id
         - [QS] `docids`: a comma-delimited list which specifies the docs that needs to be merged and printed.
 
         Return value:
 
-        An `application/x-pdf` with binary PDF data.
+        An `application/pdf` with binary PDF data.
         """
-        pass
+        doc_ids = [int(doc_id) for doc_id in request.GET.get('docids', '').split(',') 
+                    if doc_id is not None and doc_id.isdigit()]
+        dc = get_doccenter_api(request.context_data)
+
+        response = dc.merged_pdf(dealjacket_id, doc_ids)
+
+        # pdf file content
+        pdf = response.content
+
+        # find out pdf file name
+        content_disposition = response.headers.get('content-disposition', '')
+        m = re.search(r'filename="(.*)\.pdf"', content_disposition)
+        if m:
+            filename = m.group(1)
+        else:
+            filename = '%s_documents' % '_'.join(str(doc_id) for doc_id in doc_ids)
+
+        return PDFResponse(pdf=pdf, file_name=filename)
+        
 
 
 class DocTypeListView(APIView):

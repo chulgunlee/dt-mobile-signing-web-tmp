@@ -4,3 +4,4 @@ dt-django-base==2.0.7
 dtplatform==2.18.0-838
 django-tenant-templates==0.5
 uWSGI==2.0.10
+drf-pdf==0.2.0
