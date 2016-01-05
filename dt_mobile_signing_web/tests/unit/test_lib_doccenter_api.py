@@ -73,3 +73,11 @@ class TestDocCenterService(SigningWebUnitTest):
         result = self.test_service.signers(1, 'F')
         self.assertListEqual(result, [])
 
+
+    @mock.patch.object(DocCenterService, 'post')
+    def test_merged_pdf_200(self, mock_post):
+        ret = Mock()
+        mock_post.return_value = ret
+
+        result = self.test_service.merged_pdf(1, [2,3])
+        mock_post.assert_called_with('/docs/merged-pdf/', data={ "external_txn_id": 1, "document_ids": [2,3]}, headers={'Accept': 'application/pdf'})

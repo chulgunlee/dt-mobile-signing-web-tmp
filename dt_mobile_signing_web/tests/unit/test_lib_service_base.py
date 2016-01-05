@@ -168,13 +168,6 @@ class TestLibServiceBase(SigningWebUnitTest):
         self.assertEqual(cm.exception.status_code, 504)
         self.assertEqual(cm.exception.detail, '504 error')
         
-    def test_process_response_invalid_content_type(self):
-        response = self._make_response(200)
-        del response.headers['content-type']
-
-        with self.assertRaises(BadContentType):
-            self.test_service.process_response(response)
-
     def test_process_response_ok(self):
         test_data = {'test': 'result'}
         response = self._make_response(200, test_data)
