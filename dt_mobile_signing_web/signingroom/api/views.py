@@ -368,8 +368,8 @@ class DocPrintView(APIView):
 
         An `application/pdf` with binary PDF data.
         """
-        doc_ids = [int(doc_id) for doc_id in request.GET.get('docids', '').split(',') 
-                    if doc_id is not None and doc_id.isdigit()]
+        doc_ids = [int(doc_id) for doc_id in request.GET.get('docids', '').split(',')
+            if doc_id is not None and doc_id.isdigit()]
         dc = get_doccenter_api(request.context_data)
 
         response = dc.merged_pdf(dealjacket_id, doc_ids)
@@ -386,7 +386,6 @@ class DocPrintView(APIView):
             filename = '%s_documents' % '_'.join(str(doc_id) for doc_id in doc_ids)
 
         return PDFResponse(pdf=pdf, file_name=filename)
-        
 
 
 class DocTypeListView(APIView):
