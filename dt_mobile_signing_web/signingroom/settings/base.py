@@ -165,7 +165,6 @@ LOGGING = {
             'level': 'NOTSET',
             'class': 'logging.handlers.SysLogHandler',
             'address': '/dev/dtapi-log',
-            'facility': 'local5',
             'formatter': 'signingweb',
         },
     },
@@ -176,9 +175,9 @@ LOGGING = {
             'propagate': True,
         },
         'dt_mobile_signing_web': {
-            'handlers': ['syslog', 'default'],
+            'handlers': ['syslog'],
             'filters': ['inject_extra_data'],
-            'level': 'INFO',
+            'level': 'DEBUG',  # you can override this in settings/prod.py
             'propagate': True,
         },
     },
