@@ -8,6 +8,7 @@ from rest_framework.exceptions import APIException
 
 logger = logging.getLogger('dt_mobile_signing_web')
 
+
 class BadRequest(APIException):
     status_code = 400
     default_detail = 'Bad Request'
@@ -72,7 +73,7 @@ class ServiceBase(object):
             self.verify = getattr(settings, 'VERIFY_WS_CERT', True)
 
         except Exception as e:
-            raise ImproperlyConfigured('%s not specified: %s' % (self.SETTING_KEY,  e))
+            raise ImproperlyConfigured('%s not specified: %s' % (self.SETTING_KEY, e))
 
     def _url(self, path, *args):
         """Generate service URL

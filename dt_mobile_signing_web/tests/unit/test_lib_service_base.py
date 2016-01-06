@@ -9,7 +9,7 @@ from mock import Mock
 from tests.test_bases import SigningWebUnitTest
 from django.core.exceptions import ImproperlyConfigured
 
-from signingroom.lib.service_base import *
+from signingroom.lib.service_base import *      # noqa
 
 
 class TestLibServiceBaseInit(SigningWebUnitTest):
@@ -22,8 +22,8 @@ class TestLibServiceBaseInit(SigningWebUnitTest):
 
     @mock.patch('signingroom.lib.service_base.settings')
     def test_init_success(self, mock_settings):
-    
-        test_context = { 'context': 'test-context' }
+
+        test_context = {'context': 'test-context'}
         test_uri = 'test_uri'
         test_verify = False
 
@@ -38,27 +38,25 @@ class TestLibServiceBaseInit(SigningWebUnitTest):
         self.assertEqual(test_service.server_uri, test_uri)
         self.assertEqual(test_service.verify, test_verify)
         self.assertDictEqual(test_service.context, test_context)
-        
 
     @mock.patch('signingroom.lib.service_base.settings')
     def test_init_improperly_configured(self, mock_settings):
 
-        test_context = { 'context': 'test-context' }
+        test_context = {'context': 'test-context'}
         del mock_settings.TEST_URI
 
         class TestService(ServiceBase):
             SETTING_KEY = 'TEST_URI'
 
         with self.assertRaises(ImproperlyConfigured):
-            test_servcie = TestService(test_context)
-            
+            TestService(test_context)
 
 
 class TestLibServiceBase(SigningWebUnitTest):
-    
+
     def setUp(self):
         super(TestLibServiceBase, self).setUp()
-        self.context = { 
+        self.context = {
             'dealer_code': 12345,
             'tenant_code': 'DTCOM',
             'fusion_prod_code': 'DTCOM',
@@ -89,8 +87,7 @@ class TestLibServiceBase(SigningWebUnitTest):
         response.json.return_value = obj
 
         return response
-        
-    
+
     def test_url(self):
         self.assertEqual(self.test_service._url('/path'), 'http://test_uri/path')
         self.assertEqual(self.test_service._url('/resources/%d/', 123), 'http://test_uri/resources/123/')
@@ -119,7 +116,7 @@ class TestLibServiceBase(SigningWebUnitTest):
 
         self.assertEqual(cm.exception.status_code, 401)
         self.assertEqual(cm.exception.detail, '401 error')
-        
+
     def test_process_response_403(self):
         response = self._make_response(403)
         with self.assertRaises(Forbidden) as cm:
@@ -127,7 +124,7 @@ class TestLibServiceBase(SigningWebUnitTest):
 
         self.assertEqual(cm.exception.status_code, 403)
         self.assertEqual(cm.exception.detail, '403 error')
-        
+
     def test_process_response_404(self):
         response = self._make_response(404)
         with self.assertRaises(NotFound) as cm:
@@ -143,7 +140,7 @@ class TestLibServiceBase(SigningWebUnitTest):
 
         self.assertEqual(cm.exception.status_code, 405)
         self.assertEqual(cm.exception.detail, '405 error')
-        
+
     def test_process_response_500(self):
         response = self._make_response(500)
         with self.assertRaises(InternalServerError) as cm:
@@ -151,7 +148,7 @@ class TestLibServiceBase(SigningWebUnitTest):
 
         self.assertEqual(cm.exception.status_code, 500)
         self.assertEqual(cm.exception.detail, '500 error')
-        
+
     def test_process_response_502(self):
         response = self._make_response(502)
         with self.assertRaises(BadGateway) as cm:
@@ -159,7 +156,7 @@ class TestLibServiceBase(SigningWebUnitTest):
 
         self.assertEqual(cm.exception.status_code, 502)
         self.assertEqual(cm.exception.detail, '502 error')
-        
+
     def test_process_response_504(self):
         response = self._make_response(504)
         with self.assertRaises(GatewayTimeout) as cm:
@@ -167,7 +164,7 @@ class TestLibServiceBase(SigningWebUnitTest):
 
         self.assertEqual(cm.exception.status_code, 504)
         self.assertEqual(cm.exception.detail, '504 error')
-        
+
     def test_process_response_ok(self):
         test_data = {'test': 'result'}
         response = self._make_response(200, test_data)
@@ -178,10 +175,10 @@ class TestLibServiceBase(SigningWebUnitTest):
 
 @mock.patch('signingroom.lib.service_base.requests')
 class TestLibServiceBaseHttpMethods(SigningWebUnitTest):
-    
+
     def setUp(self):
         super(TestLibServiceBaseHttpMethods, self).setUp()
-        self.context = { 
+        self.context = {
             'dealer_code': 12345,
             'tenant_code': 'DTCOM',
             'fusion_prod_code': 'DTCOM',
@@ -193,7 +190,7 @@ class TestLibServiceBaseHttpMethods(SigningWebUnitTest):
         with mock.patch('signingroom.lib.service_base.settings', TEST_URI='http://test_uri', VERIFY_WS_CERT=False):
             self.test_service = TestService(self.context)
 
-        self.headers = {'header':'value'}
+        self.headers = {'header': 'value'}
         self.url = 'http://base_url'
 
         self.test_service._url = Mock(return_value=self.url)
@@ -207,7 +204,7 @@ class TestLibServiceBaseHttpMethods(SigningWebUnitTest):
         self.test_service.get('/url/')
         mock_requests.get.assert_called_with(self.url, headers=self.headers, params=None, verify=False)
 
-        params = {'arg1':'value1'}
+        params = {'arg1': 'value1'}
         self.test_service.get('/url/', params=params)
         mock_requests.get.assert_called_with(self.url, headers=self.headers, params=params, verify=False)
 
@@ -218,7 +215,7 @@ class TestLibServiceBaseHttpMethods(SigningWebUnitTest):
         self.test_service.post('/url/', data='abc')
         mock_requests.post.assert_called_with(self.url, data='"abc"', headers=self.headers, params=None, verify=False)
 
-        params = {'arg1':'value1'}
+        params = {'arg1': 'value1'}
         self.test_service.post('/url/', data='abc', params=params)
         mock_requests.post.assert_called_with(self.url, data='"abc"', headers=self.headers, params=params, verify=False)
 
@@ -229,7 +226,7 @@ class TestLibServiceBaseHttpMethods(SigningWebUnitTest):
         self.test_service.put('/url/', data='abc')
         mock_requests.put.assert_called_with(self.url, data='"abc"', headers=self.headers, params=None, verify=False)
 
-        params = {'arg1':'value1'}
+        params = {'arg1': 'value1'}
         self.test_service.put('/url/', data='abc', params=params)
         mock_requests.put.assert_called_with(self.url, data='"abc"', headers=self.headers, params=params, verify=False)
 
@@ -237,6 +234,6 @@ class TestLibServiceBaseHttpMethods(SigningWebUnitTest):
         self.test_service.delete('/url/')
         mock_requests.delete.assert_called_with(self.url, headers=self.headers, params=None, verify=False)
 
-        params = {'arg1':'value1'}
+        params = {'arg1': 'value1'}
         self.test_service.delete('/url/', params=params)
         mock_requests.delete.assert_called_with(self.url, headers=self.headers, params=params, verify=False)

@@ -2,11 +2,9 @@ import json
 import os
 import re
 
-from .renderers import PDFRenderer
 from drf_pdf.response import PDFResponse
 from drf_pdf.renderer import PDFRenderer
 from django.http import HttpResponse
-from django.views.generic.base import View
 from dt_django_base.api.viewsets import BaseAPIView
 from rest_framework.exceptions import ValidationError
 from rest_framework.response import Response
@@ -16,7 +14,7 @@ from signingroom.lib.doccenter_ref import r
 from signingroom.lib.dtmobile import get_dtmobile
 from signingroom.api.serializers import DocSerializer
 from signingroom.lib.common import underscore_to_camelCase
-from signingroom.lib.service_base import InternalServerError, BadRequest
+from signingroom.lib.service_base import InternalServerError
 
 
 class DealJacketView(BaseAPIView):

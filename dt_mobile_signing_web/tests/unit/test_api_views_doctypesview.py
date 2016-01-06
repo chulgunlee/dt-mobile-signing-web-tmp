@@ -1,6 +1,5 @@
 import mock
 
-from mock import MagicMock, Mock
 from rest_framework import status
 from rest_framework.reverse import reverse
 from tests.test_bases import SigningWebUnitTest
@@ -43,7 +42,7 @@ class TestDocTypeListView(DRFApiMixin, SigningWebUnitTest):
 
         # call view function
         response = self.view(request, self.dealjacket_id, self.deal_id)
-        
+
         # assert http status
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
@@ -55,4 +54,3 @@ class TestDocTypeListView(DRFApiMixin, SigningWebUnitTest):
         self.assertDictEqual(doctypes[0], {u'code': u'contract', u'name': u'Contract', u'isExternal': True})
         self.assertDictEqual(doctypes[1], {u'code': u'contract_addendum', u'name': u'Contract Addendum', u'isExternal': True}),
         self.assertDictEqual(doctypes[2], {u'code': u'cosignor_notice', u'name': u'CoSignor Notice', u'isExternal': False}),
-

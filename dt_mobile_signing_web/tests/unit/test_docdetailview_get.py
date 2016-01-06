@@ -1,5 +1,4 @@
 import mock
-import json
 
 from mock import Mock
 from urllib import urlencode
@@ -9,9 +8,10 @@ from tests.test_bases import SigningWebUnitTest
 from signingroom.api.views import DocDetailView
 from signingroom.lib.service_base import *           # NOQA
 
+
 @mock.patch('signingroom.api.views.get_doccenter_api')
 class TestDocDetailViewGet(DRFApiMixin, SigningWebUnitTest):
-    
+
     def setUp(self):
         super(TestDocDetailViewGet, self).setUp()
         self.view = DocDetailView.as_view()
@@ -26,11 +26,10 @@ class TestDocDetailViewGet(DRFApiMixin, SigningWebUnitTest):
         self.ret = {
             'total_pages': 2,
             'results': [
-                { 'PageNo': 1, 'Value': 'a' },
-                { 'PageNo': 2, 'Value': 'b' },
+                {'PageNo': 1, 'Value': 'a'},
+                {'PageNo': 2, 'Value': 'b'},
             ]
         }
-
 
         # mock objects
         self.mock_get_docs_by_dj_id = Mock()
@@ -90,11 +89,11 @@ class TestDocDetailViewGet(DRFApiMixin, SigningWebUnitTest):
         self.mock_get_docs_by_dj_id.assert_called_with(self.dealjacket_id)
 
         self.assertDictEqual(result, {'id': self.doc_id, 'version': 'F', 'pages': ['a', 'b']})
-        
+
     def test_get_preview_no_version_cd(self, mock_get_doccenter_api):
         mock_get_doccenter_api.return_value.get_docs_by_dj_id = self.mock_get_docs_by_dj_id
         mock_get_doccenter_api.return_value.background_images = self.mock_background_images
-        
+
         request = self._make_get_request()
         response = self.view(request, self.dealjacket_id, self.deal_id, 100)
 

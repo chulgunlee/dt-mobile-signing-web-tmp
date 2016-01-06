@@ -1,10 +1,7 @@
 import mock
-import json
 
-from mock import MagicMock, Mock
 from rest_framework import status
 from rest_framework.reverse import reverse
-from rest_framework.response import Response
 from tests.test_bases import SigningWebUnitTest
 from dt_django_base.core.test_bases import DRFApiMixin
 from signingroom.api.views import DealJacketView
@@ -14,7 +11,7 @@ from signingroom.lib.service_base import *          # NOQA
 @mock.patch('signingroom.api.views.get_doccenter_api')
 @mock.patch('signingroom.api.views.get_dtmobile')
 class TestDealJacketViewGet(DRFApiMixin, SigningWebUnitTest):
-    
+
     def setUp(self):
         super(TestDealJacketViewGet, self).setUp()
         self.view = DealJacketView.as_view()
@@ -37,10 +34,8 @@ class TestDealJacketViewGet(DRFApiMixin, SigningWebUnitTest):
 
         return request
 
-
-    
     def test_dealjacket_get_success(self, mock_get_dtmobile, mock_get_doccenter_api):
-        
+
         # generate test request
         request = self._make_request()
 
@@ -53,7 +48,7 @@ class TestDealJacketViewGet(DRFApiMixin, SigningWebUnitTest):
 
         # call view function
         response = self.view(request, self.dealjacket_id, self.deal_id)
-        
+
         # assert http status
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
@@ -82,8 +77,6 @@ class TestDealJacketViewGet(DRFApiMixin, SigningWebUnitTest):
             },
             'isExternal': False,
         }, doc)
-
-
 
     def test_dealjacket_get_fail_summary_404(self, mock_get_dtmobile, mock_get_doccenter_api):
         "Test when the get dj summary failed"

@@ -8,6 +8,7 @@ from tests.test_bases import SigningWebUnitTest
 from signingroom.api.views import DocPrintView
 from requests.structures import CaseInsensitiveDict
 
+
 @mock.patch('signingroom.api.views.get_doccenter_api')
 class TestDocPrintView(DRFApiMixin, SigningWebUnitTest):
 
@@ -32,7 +33,6 @@ class TestDocPrintView(DRFApiMixin, SigningWebUnitTest):
 
         return request
 
-
     def test_printable_get_success(self, mock_get_doccenter_api):
 
         pdf = 'PDF_CONTENT'
@@ -45,7 +45,7 @@ class TestDocPrintView(DRFApiMixin, SigningWebUnitTest):
         resp.headers['Content-Disposition'] = 'filename="document.pdf"'
         resp.status_code = 200
 
-        resp.content= pdf
+        resp.content = pdf
 
         mock_get_doccenter_api.return_value.merged_pdf.return_value = resp
 
@@ -55,7 +55,6 @@ class TestDocPrintView(DRFApiMixin, SigningWebUnitTest):
         self.assertEqual(response.data, pdf)
 
         self.assertEqual(response.get('Content-Disposition'), 'filename="document.pdf"')
-
 
     def test_printable_get_filename_failsafe(self, mock_get_doccenter_api):
 
@@ -68,7 +67,7 @@ class TestDocPrintView(DRFApiMixin, SigningWebUnitTest):
         resp.headers = CaseInsensitiveDict()
         resp.status_code = 200
 
-        resp.content= pdf
+        resp.content = pdf
 
         mock_get_doccenter_api.return_value.merged_pdf.return_value = resp
 
@@ -80,4 +79,3 @@ class TestDocPrintView(DRFApiMixin, SigningWebUnitTest):
         self.assertEqual(response.data, pdf)
 
         self.assertEqual(response.get('Content-Disposition'), 'filename="1_2_3_documents.pdf"')
-
