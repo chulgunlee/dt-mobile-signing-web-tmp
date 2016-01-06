@@ -2,6 +2,7 @@ import unittest
 
 from signingroom.lib.common import underscore_to_camelCase
 
+
 class UnderscoreToCamelCaseTeseCase(unittest.TestCase):
 
     def test_name_single_word(self):
@@ -15,4 +16,3 @@ class UnderscoreToCamelCaseTeseCase(unittest.TestCase):
     def test_name_multiple_words(self):
         result = underscore_to_camelCase('multiple_words_test')
         self.assertEqual(result, 'multipleWordsTest')
-

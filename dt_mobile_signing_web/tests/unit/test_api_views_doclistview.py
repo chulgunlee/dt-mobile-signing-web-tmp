@@ -1,10 +1,7 @@
 import mock
-import json
 
-from mock import MagicMock, Mock
 from rest_framework import status
 from rest_framework.reverse import reverse
-from rest_framework.response import Response
 from tests.test_bases import SigningWebUnitTest
 from dt_django_base.core.test_bases import DRFApiMixin
 from signingroom.api.views import DocListView
@@ -45,7 +42,7 @@ class TestDocListViewGet(DRFApiMixin, SigningWebUnitTest):
 
         # call view function
         response = self.view(request, self.dealjacket_id, self.deal_id)
-        
+
         # assert http status
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
