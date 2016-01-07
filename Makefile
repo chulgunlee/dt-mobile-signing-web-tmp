@@ -2,7 +2,7 @@
 
 PIP_INDEX = -i http://10.134.8.12:8000/simple/
 
-PKGNAME = dt_mobile_signing_web
+PKGNAME = dt-mobile-signing-web
 
 # use static package name
 PKGFILE := dt-mobile-signing-web-deploy.tar.gz
