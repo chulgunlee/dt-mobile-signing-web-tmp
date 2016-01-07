@@ -8,7 +8,9 @@ from django.conf.urls.static import static
 from .doclist.views import DocListView
 
 
-urlpatterns = patterns('',
+urlpatterns = patterns(
+    '',
+    url(r'^', include('dt_django_base.healthcheck.urls', namespace='healthcheck', app_name='dt-mobile-signing-web')),
     url(r'^signingroom/', include('signingroom.signingroom.urls')),
     url(r'^dealjackets/(?P<dealjacket_id>\d+)/deals/(?P<deal_id>\d+)/$', DocListView.as_view()),
     url(r'^api/', include('signingroom.api.urls')),

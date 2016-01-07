@@ -1,3 +1,9 @@
-from doc_center_api.settings.base import *  # noqa
+from .base import *
 
-# add your settings here
+DEBUG = True
+VERIFY_WS_CERT = False
+
+MOBILE_SERVER_URI = 'http://localhost:6110/api/mobile'
+DOCCENTER_URI = 'http://localhost:6112/api/doccenter'
+
+DOCCENTER_SERVER_URI = ''
