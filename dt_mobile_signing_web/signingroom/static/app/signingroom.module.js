@@ -16,6 +16,7 @@ require('./signingroom.route.js');
 require('./components/signingroom/signingRoomController.js');
 require('./components/signingroom/ui.js');
 require('./shared/api/api.js');
+require('./shared/api/api_mock.js');
 require('./shared/loading/loadingDirective.js');
 require('./shared/loading/loadingService.js');
 require('./shared/ui/uiDirective.js');
