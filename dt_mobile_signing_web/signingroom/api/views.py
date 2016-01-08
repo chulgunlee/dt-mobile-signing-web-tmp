@@ -349,15 +349,8 @@ class DocDetailView(APIView):
 
         """
 
-        pkg_id = request.GET.get('pkgid')
-
-        if not pkg_id:
-            raise BadRequest('pkgid is required')
-
         dc = get_doccenter_api(request.context_data)
-        user_code = 1133294          # TODO: remove temporary hardcoding after auth implemented
-        
-        dc.remove_document(user_code, pkg_id, doc_id)
+        dc.destroy_document(doc_id)
 
         return HttpResponse(status=204)
 
