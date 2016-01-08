@@ -74,6 +74,16 @@ class DocCenterService(ServiceBase):
 
         return self.post('/docs/merged-pdf/', data=data, headers={'Accept': 'application/pdf'})
 
+    def remove_document(self, user_code, package_id, doc_id):
+        data = {
+            'doc_index_ids': [doc_id],
+            'user_code': user_code,
+        }
+
+        print data
+
+        return self.post('/document-packages/%s/remove-documents/' % package_id, data=data)
+
 
 def get_doccenter_api(context):
     """Factory method

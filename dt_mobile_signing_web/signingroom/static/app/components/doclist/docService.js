@@ -84,9 +84,11 @@ factory('docService', function($q, $api, Doc, signerService, docTypeService, DOC
             // docs are retrieved from /dealjacket/<>/deales/<>/
             // so no need to call getDocList() again
             if (docs) {
-                service.docs = docs.map(function(docData) {
+                service.docs = _.chain(docs).filter(function(doc) {
+                    return doc.status != 'removed';
+                }).map(function(docData) {
                     return new Doc(docData);
-                });
+                }).value();
             } else {
                 $api.getDocList().then(function(response) {
                     if (response.status == 302) {
@@ -96,9 +98,11 @@ factory('docService', function($q, $api, Doc, signerService, docTypeService, DOC
 
                     var data = response.data;
                     service.id = data.id;
-                    service.docs = data.docs.map(function(docData) {
+                    service.docs = _.chain(data.docs).filter(function(doc) {
+                        return doc.status != 'removed';
+                    }).map(function(docData) {
                         return new Doc(docData);
-                    });
+                    }).value();
                 });
             }
 

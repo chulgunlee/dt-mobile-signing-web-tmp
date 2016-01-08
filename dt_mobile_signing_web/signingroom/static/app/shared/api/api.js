@@ -86,6 +86,10 @@ provider('$api', function() {
                 return request('GET', '/docs/' + docId + '/?version=' + version);
             },
 
+            deleteDoc: function(docId, packageId) {
+                return request('DELETE', '/docs/' + docId + '/?pkgid=' + packageId);
+            },
+
         };
 
         return service;

@@ -14,7 +14,7 @@ from signingroom.lib.doccenter_ref import r
 from signingroom.lib.dtmobile import get_dtmobile
 from signingroom.api.serializers import DocSerializer
 from signingroom.lib.common import underscore_to_camelCase
-from signingroom.lib.service_base import InternalServerError
+from signingroom.lib.service_base import InternalServerError, BadRequest
 
 
 class DealJacketView(BaseAPIView):
@@ -49,6 +49,7 @@ class DealJacketView(BaseAPIView):
             },
             "docs": [
                 "id": <doc id>,
+                "packageId": <package id>,
                 "docType": <document template type>,
                 "requiredForFunding": true|false,
                 "signable": true|false,
@@ -159,8 +160,11 @@ class DocListView(APIView):
 def _convert_doc(doc):
     sign_status = r('sig_status_cd', doc.get('sig_status_cd', 'ALLNS'), ())
 
+    print doc
+
     return {
         'id': doc['document_index_id'],
+        'packageId': doc['master_index_id'],
         'docType': doc.get('template_doc_type'),
         'customTemplateName': doc.get('template_document_description'),     # only valid if docType == 'other'
         'version': doc.get('latest_doc_version_cd'),
@@ -301,8 +305,17 @@ class DocDetailView(APIView):
         - Only external docs can be updated with "pdf" property.
 
         """
+        # TODO: temporarily hardcode dealer code
+        # need to confirm with dt-mobile team about how to retrieve these info via smsession
+        context_data = {
+            'dealer_code': '1089761',
+            'tenant_code': 'DTCOM',
+            'fusion_prod_code': 'DTCOM',
+            'user_code': '1133294',
+        }
+
         doc_id = int(doc_id)
-        dc = get_doccenter_api(request.context_data)
+        dc = get_doccenter_api(context_data)
 
         serializer = DocSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
@@ -318,15 +331,9 @@ class DocDetailView(APIView):
             # update through doccenter API
             dc.update_funding_in(doc_id, required_for_funding)
 
-        # upload PDF file
-        if 'pdf' in data:
-            base64_pdf = data.get('pdf')
-            doc_type = data.get('docType')
-            dc.store(base64_pdf, doc_id, dealjacket_id, doc_type)
-
         return HttpResponse(status=204)
 
-    def delete(self, request, pkg_id, doc_id):
+    def delete(self, request, dealjacket_id, deal_id, doc_id):
         """
         Delete uploaded document.
 
@@ -341,6 +348,17 @@ class DocDetailView(APIView):
         - Returns http 400 if error happened.
 
         """
+
+        pkg_id = request.GET.get('pkgid')
+
+        if not pkg_id:
+            raise BadRequest('pkgid is required')
+
+        dc = get_doccenter_api(request.context_data)
+        user_code = 1133294          # TODO: remove temporary hardcoding after auth implemented
+        
+        dc.remove_document(user_code, pkg_id, doc_id)
+
         return HttpResponse(status=204)
 
 
