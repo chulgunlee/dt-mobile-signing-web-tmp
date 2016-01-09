@@ -14,7 +14,7 @@ from signingroom.lib.doccenter_ref import r
 from signingroom.lib.dtmobile import get_dtmobile
 from signingroom.api.serializers import DocSerializer
 from signingroom.lib.common import underscore_to_camelCase
-from signingroom.lib.service_base import InternalServerError, BadRequest
+from signingroom.lib.service_base import InternalServerError
 
 
 class DealJacketView(BaseAPIView):
@@ -159,8 +159,6 @@ class DocListView(APIView):
 
 def _convert_doc(doc):
     sign_status = r('sig_status_cd', doc.get('sig_status_cd', 'ALLNS'), ())
-
-    print doc
 
     return {
         'id': doc['document_index_id'],

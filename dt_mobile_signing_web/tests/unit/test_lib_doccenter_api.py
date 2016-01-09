@@ -78,3 +78,8 @@ class TestDocCenterService(SigningWebUnitTest):
 
         self.test_service.merged_pdf(1, [2, 3])
         mock_post.assert_called_with('/docs/merged-pdf/', data={"external_txn_id": 1, "document_ids": [2, 3]}, headers={'Accept': 'application/pdf'})
+
+    @mock.patch.object(DocCenterService, 'delete')
+    def test_destroy_document(self, mock_delete):
+        self.test_service.destroy_document(1)
+        mock_delete.assert_called_with('/docs/1/')
