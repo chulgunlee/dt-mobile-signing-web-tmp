@@ -173,7 +173,10 @@ directive('doc', function() {
              * Delete doc (delete scanned pdf, not delete doc from dealjacket)
              */
             $scope.deleteDoc = function() {
-                console.log('delete doc:' + $scope.doc.id);
+                $api.deleteDoc($scope.doc.id).then(function() {
+                    webViewBridge.logEvent('document id=' + $scope.doc.id + ' was deleted.');
+                    docService.refresh();
+                });
             };
 
             /**

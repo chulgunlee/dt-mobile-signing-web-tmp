@@ -74,6 +74,9 @@ class DocCenterService(ServiceBase):
 
         return self.post('/docs/merged-pdf/', data=data, headers={'Accept': 'application/pdf'})
 
+    def destroy_document(self, doc_id):
+        return self.delete('/docs/%s/' % doc_id)
+
 
 def get_doccenter_api(context):
     """Factory method
