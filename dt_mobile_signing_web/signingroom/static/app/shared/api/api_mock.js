@@ -80,7 +80,7 @@ provider('$api_mock', function() {
 
             // this will be used to render signatures and date blocks on  a document
             // also data from will give information about who need to sign this document.
-            get_sig_string: function(document_id){
+            getSigString: function(document_id){
                 return_data = {
                     "signature_block": [
                         {
@@ -117,27 +117,23 @@ provider('$api_mock', function() {
             },
 
             // this will be used to save collected signatures for document. fully and parcially
-            save_signing_info: function(signatures){
+            saveSigningInfo: function(master_index_id, signatures){
                 alert('saved');
             },
 
             // this is to set signer consent
-            set_consent: function(master_index_id, segue_type){
+            setConsent: function(master_index_id, signee_type){
              alert('consent set')
             },
 
             // to check if user has consent to sign the document
-            get_consent: function(master_index_id, segue_type){
+            getConsent: function(master_index_id, signee_type){
              alert('consent set');
             },
 
             // this is to withdrow consent
-            remove_consent: function(master_index, segue_type){
+            removeConsent: function(master_index, signee_type){
                 alert('removed consent')
-            },
-
-            bind: function(){
-                console.log('bind')
             }
         };
 
