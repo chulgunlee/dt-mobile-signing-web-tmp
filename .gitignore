@@ -63,3 +63,4 @@ bundle.js.map
 main.css.map
 
 *.tar.gz
+flake8.out
