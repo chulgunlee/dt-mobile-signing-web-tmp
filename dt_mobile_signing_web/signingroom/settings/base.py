@@ -87,6 +87,18 @@ USE_L10N = True
 
 USE_TZ = True
 
+# Environment Settings
+
+# Subpath for the url of this website. Set this to corresponding path if served under a subpath (e.g. http://host.com/subpath/<actual api url>/)
+URI_ROOT = '/'
+
+# DT-Mobile API server uri
+MOBILE_SERVER_URI = 'http://10.135.0.112:6110/api/mobile'
+
+# DocCenter API server uri
+DOCCENTER_URI = 'http://10.135.0.112:6112/api/doccenter'
+
+
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.8/howto/static-files/

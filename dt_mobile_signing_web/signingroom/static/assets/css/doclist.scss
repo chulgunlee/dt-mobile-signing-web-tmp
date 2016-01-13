@@ -324,7 +324,7 @@
         .signer {
             display: block;
             position: relative;
-            background: #fff url(/static/assets/img/avatar.png) no-repeat center 48px;
+            background: #fff url(./assets/img/avatar.png) no-repeat center 48px;
             width: 143px;
             height: 191px;
             border-radius: 2px;
@@ -407,7 +407,7 @@
 
         >li.active>a {
             color: $ui-text-color;                     /* remove default active color */
-            background: #fff url(/static/assets/img/icn-check-sm.png) no-repeat 15px 15px ;
+            background: #fff url(./assets/img/icn-check-sm.png) no-repeat 15px 15px ;
         }
     }
 
@@ -417,7 +417,7 @@
 /* TODO: fix this media */
 @media (-webkit-min-device-pixel-ratio: 2),
        (min-resolution: 192dpi) {
-    background: #fff url(/static/assets/img/icn-check-sm@2x.png) no-repeat 15px 15px ;
+    background: #fff url(./assets/img/icn-check-sm@2x.png) no-repeat 15px 15px ;
 }
 
 

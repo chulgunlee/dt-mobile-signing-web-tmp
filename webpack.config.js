@@ -23,15 +23,14 @@ module.exports = {
             { test: /\.html$/, loader: 'ngtemplate?relativeTo=' + (path.resolve(__dirname, './dt_mobile_signing_web/signingroom/static/app')) + '/!html' },
             {
                 test: /\.css$/,
-                loader: ExtractTextPlugin.extract('style', 'css')
+                loader: ExtractTextPlugin.extract('style', 'raw')           // use raw-loader to prevent the `url()` in the css files being processed
             },
             {
                 test: /\.scss$/,
                  loader: ExtractTextPlugin.extract(
                     'style',            // backup loader when not generating a .css file
-                    'css!sass')         // loaders used to generate css from sass
+                    'raw!sass')         // loaders used to generate css from sass
             },
-            //{ test: /\.scss$/, loader: 'style!css!sass' },
             { test: /\.png*/, loader: 'file' },
             { test: /\.gif*/, loader: 'file' },
         ]
