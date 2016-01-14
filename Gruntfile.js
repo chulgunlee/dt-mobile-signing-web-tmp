@@ -1,15 +1,9 @@
 'use strict';
 
-
-
 module.exports = function(grunt) {
-
-    require('matchdep').filterAll('grunt-*').forEach(grunt.loadNpmTasks);
 
     var webpack = require('webpack'),
         webpackConfig = require('./webpack.config.js');
-
-    
 
     grunt.initConfig({
 
@@ -20,6 +14,8 @@ module.exports = function(grunt) {
                 dest: 'dt_mobile_signing_web/signingroom/static/assets/img/icon-sprite.png',
                 retinaDest: 'dt_mobile_signing_web/signingroom/static/assets/img/icon-sprite@2x.png',
                 destCss: 'dt_mobile_signing_web/signingroom/static/assets/css/icon-sprite.css',
+                imgPath: './assets/img/icon-sprite.png',            // image path used in `url()`
+                retinaImgPath: './assets/img/icon-sprite@2x.png',  // image path used in `url()`
                 padding: 2,
                 cssVarMap: function(sprite) {
                     var parts = sprite.name.split('.');
@@ -71,7 +67,11 @@ module.exports = function(grunt) {
 
     });
 
-    grunt.registerTask('sprite', [ 'sprite' ]);
+    grunt.loadNpmTasks('grunt-webpack');
+    grunt.loadNpmTasks('grunt-spritesmith');
+
+    // NOTE do not add task for grunt-spritesmith; it has already provided 'sprite' task
+    
     grunt.registerTask('build', [ 'webpack:build' ]);
     grunt.registerTask('dev', [ 'webpack:build-dev' ]);
     grunt.registerTask('default', [ 'webpack-dev-server:start' ]);

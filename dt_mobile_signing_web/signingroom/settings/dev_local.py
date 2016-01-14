@@ -10,5 +10,3 @@ VERIFY_WS_CERT = False
 MOBILE_SERVER_URI = 'http://10.135.0.112:6110/api/mobile'
 DOCCENTER_URI = 'http://10.135.0.112:6112/api/doccenter'
 
-# doc center api uri
-DOCCENTER_SERVER_URI = ''

@@ -1,6 +1,7 @@
 import json
 import os
 
+from django.conf import settings
 from django.http import HttpResponse
 from django.shortcuts import render_to_response
 from django.views.generic.base import View
@@ -14,6 +15,7 @@ class DocListView(View):
             'dealjacket_id': dealjacket_id,
             'deal_id': deal_id,
             'user_code': 100502,
+            'uri_root': settings.URI_ROOT,
         }
         return render_to_response('doclist.html', context)
 

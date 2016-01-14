@@ -17,9 +17,9 @@
     "grunt-webpack": "^1.0.11",
     "html-loader": "^0.3.0",
     "lodash": "^3.10.1",
-    "matchdep": "^0.3.0",
     "ng-annotate-webpack-plugin": "^0.1.2",
     "ngtemplate-loader": "^1.3.1",
+    "raw-loader": "^0.5.1",
     "scss-loader": "0.0.1",
     "style-loader": "^0.12.4",
     "url-loader": "^0.5.6",
@@ -35,5 +35,5 @@
   "license": "Commercial",
   "name": "dt-mobile-signing-web",
   "repository": "https://github.dev.dealertrack.com/DT2-CommonFramework/dt-mobile-signing-web-demo",
-  "version": "0.2.1"
+  "version": "0.3.0"
 }
