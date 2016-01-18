@@ -20,8 +20,14 @@
         angular.module('dc.doclist').config(function($apiProvider) {
             $apiProvider.setApiUri('{{ uri_root }}api/');
         }).run(function($rootScope) {
-            $rootScope.dealJacketId = '{{ dealjacket_id }}';
-            $rootScope.dealId = '{{ deal_id }}';
+            _.assign($rootScope, {
+                dealJacketId: '{{ dealjacket_id }}',
+                dealId: '{{ deal_id }}',
+                dealerCode: '{{ dealer_code }}',
+                userCode: '{{ user_code }}',
+                tenantCode: '{{ tenant_code }}',
+                fusionProdCode: '{{ fusion_prod_code }}',
+            });
         });
 
         angular.bootstrap(document, ['dc.doclist']);

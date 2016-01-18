@@ -70,18 +70,12 @@ class DealJacketView(BaseAPIView):
         dealjacket_id = int(dealjacket_id)
         deal_id = int(deal_id)
 
-        context_data = {
-            'dealer_code': '1089761',
-            'tenant_code': 'DTCOM',
-            'fusion_prod_code': 'DTCOM',
-        }
-
         # call dtmobile service
-        dm = get_dtmobile(context_data)         # TODO: should generate context from smsession
+        dm = get_dtmobile(request.context_data)
         deal = dm.get_dealjacket_summary(dealjacket_id, deal_id)
 
         # call doccenter api to get docs
-        dc = get_doccenter_api(context_data)
+        dc = get_doccenter_api(request.context_data)
         docs = dc.get_docs_by_dj_id(dealjacket_id)
 
         # get the required signers for each doc
@@ -170,7 +164,7 @@ def _convert_doc(doc):
         'requireFullReview': False,             # TODO
         'signable': r('bool', doc.get('electronic_sig')),
         'status': r('document_status', doc.get('document_status_cd')),
-        'signStatus': {                         # TODO
+        'signStatus': {
             'buyer': 'buyer' in sign_status,
             'cobuyer': 'cobuyer' in sign_status,
             'dealer': 'dealer' in sign_status,
@@ -240,15 +234,7 @@ class DocDetailView(APIView):
         doc_id = int(doc_id)
         version_cd = request.GET.get('version')
 
-        # TODO: temporarily hardcode dealer code
-        # need to confirm with dt-mobile team about how to retrieve these info via smsession
-        context_data = {
-            'dealer_code': '1089761',
-            'tenant_code': 'DTCOM',
-            'fusion_prod_code': 'DTCOM',
-        }
-
-        dc = get_doccenter_api(context_data)
+        dc = get_doccenter_api(request.context_data)
 
         # if version_cd is not defined, get the latest version cd from doclist
         # Yes this is not efficient - need backend to provide single doc retrieval to improve
@@ -303,17 +289,9 @@ class DocDetailView(APIView):
         - Only external docs can be updated with "pdf" property.
 
         """
-        # TODO: temporarily hardcode dealer code
-        # need to confirm with dt-mobile team about how to retrieve these info via smsession
-        context_data = {
-            'dealer_code': '1089761',
-            'tenant_code': 'DTCOM',
-            'fusion_prod_code': 'DTCOM',
-            'user_code': '1133294',
-        }
 
         doc_id = int(doc_id)
-        dc = get_doccenter_api(context_data)
+        dc = get_doccenter_api(request.context_data)
 
         serializer = DocSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)

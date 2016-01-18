@@ -40,6 +40,12 @@ provider('$api', function() {
                 method: method.toUpperCase(),
                 url: getUrl(uri),
                 data: data,
+                headers: {
+                    'User-Code': $rootScope.userCode,
+                    'Dealer-Code': $rootScope.dealerCode,
+                    'Tenant-Code': $rootScope.tenantCode,
+                    'Fusion-Prod-Code': $rootScope.fusionProdCode,
+                },
             }).then(function(response) {
 
                 loadingIndicatorService.hide();
