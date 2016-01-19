@@ -17,7 +17,9 @@
     <script src="{{ uri_root }}static/doclist.bundle.js"></script>
 
     <script>
-        angular.module('dc.doclist').run(function($rootScope) {
+        angular.module('dc.doclist').config(function($apiProvider) {
+            $apiProvider.setApiUri('{{ uri_root }}api/');
+        }).run(function($rootScope) {
             $rootScope.dealJacketId = '{{ dealjacket_id }}';
             $rootScope.dealId = '{{ deal_id }}';
         });
