@@ -98,8 +98,6 @@ MOBILE_SERVER_URI = 'http://10.135.0.112:6110/api/mobile'
 # DocCenter API server uri
 DOCCENTER_URI = 'http://10.135.0.112:6112/api/doccenter'
 
-
-
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.8/howto/static-files/
 

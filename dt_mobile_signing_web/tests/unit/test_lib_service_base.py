@@ -202,38 +202,38 @@ class TestLibServiceBaseHttpMethods(SigningWebUnitTest):
 
     def test_get(self, mock_requests):
         self.test_service.get('/url/')
-        mock_requests.get.assert_called_with(self.url, headers=self.headers, params=None, verify=False)
+        mock_requests.request.assert_called_with('GET', self.url, headers=self.headers, params=None, data=None, verify=False)
 
         params = {'arg1': 'value1'}
         self.test_service.get('/url/', params=params)
-        mock_requests.get.assert_called_with(self.url, headers=self.headers, params=params, verify=False)
+        mock_requests.request.assert_called_with('GET', self.url, headers=self.headers, params=params, data=None, verify=False)
 
     def test_post(self, mock_requests):
         self.test_service.post('/url/', data=None)
-        mock_requests.post.assert_called_with(self.url, data=None, headers=self.headers, params=None, verify=False)
+        mock_requests.request.assert_called_with('POST', self.url, data=None, headers=self.headers, params=None, verify=False)
 
         self.test_service.post('/url/', data='abc')
-        mock_requests.post.assert_called_with(self.url, data='"abc"', headers=self.headers, params=None, verify=False)
+        mock_requests.request.assert_called_with('POST', self.url, data='"abc"', headers=self.headers, params=None, verify=False)
 
         params = {'arg1': 'value1'}
         self.test_service.post('/url/', data='abc', params=params)
-        mock_requests.post.assert_called_with(self.url, data='"abc"', headers=self.headers, params=params, verify=False)
+        mock_requests.request.assert_called_with('POST', self.url, data='"abc"', headers=self.headers, params=params, verify=False)
 
     def test_put(self, mock_requests):
         self.test_service.put('/url/', data=None)
-        mock_requests.put.assert_called_with(self.url, data=None, headers=self.headers, params=None, verify=False)
+        mock_requests.request.assert_called_with('PUT', self.url, data=None, headers=self.headers, params=None, verify=False)
 
         self.test_service.put('/url/', data='abc')
-        mock_requests.put.assert_called_with(self.url, data='"abc"', headers=self.headers, params=None, verify=False)
+        mock_requests.request.assert_called_with('PUT', self.url, data='"abc"', headers=self.headers, params=None, verify=False)
 
         params = {'arg1': 'value1'}
         self.test_service.put('/url/', data='abc', params=params)
-        mock_requests.put.assert_called_with(self.url, data='"abc"', headers=self.headers, params=params, verify=False)
+        mock_requests.request.assert_called_with('PUT', self.url, data='"abc"', headers=self.headers, params=params, verify=False)
 
     def test_delete(self, mock_requests):
         self.test_service.delete('/url/')
-        mock_requests.delete.assert_called_with(self.url, headers=self.headers, params=None, verify=False)
+        mock_requests.request.assert_called_with('DELETE', self.url, headers=self.headers, params=None, data=None, verify=False)
 
         params = {'arg1': 'value1'}
         self.test_service.delete('/url/', params=params)
-        mock_requests.delete.assert_called_with(self.url, headers=self.headers, params=params, verify=False)
+        mock_requests.request.assert_called_with('DELETE', self.url, headers=self.headers, params=params, data=None, verify=False)
