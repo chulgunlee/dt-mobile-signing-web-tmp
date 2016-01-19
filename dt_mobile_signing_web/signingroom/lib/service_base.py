@@ -1,13 +1,14 @@
 import requests
 import logging
 import json
+from urllib import urlencode
 from django.conf import settings
 from django.core.exceptions import ImproperlyConfigured
 from rest_framework.exceptions import APIException
 
 
-logger = logging.getLogger('dt_mobile_signing_web')
 
+logger = logging.getLogger('dt_mobile_signing_web')
 
 class BadRequest(APIException):
     status_code = 400
@@ -98,52 +99,9 @@ class ServiceBase(object):
 
         return headers
 
-    def get(self, path, params=None, headers=None):
-        """Wrapper for sending GET request through dt_requests.
-
-        Args:
-            path: API path
-            params: query params dict
-
-        Returns:
-            json object (in python representive); or raise exception if server fails
+    def request(self, method, path, params=None, headers=None, data=None):
         """
-
-        headers = self._headers(headers)
-        url = self._url(path)
-
-        response = requests.get(url, headers=headers, params=params, verify=self.verify)
-
-        logger.info('GET %s, params=%s, status_code=%s, response_length=%s' % (url, params, response.status_code, len(response.text)), extra=dict(short_event_name='service_base.get'))
-
-        return self.process_response(response)
-
-    def post(self, path, data, params=None, headers=None):
-        """Wrapper for sending POST request through dt_requests.
-
-        Args:
-            path: API path
-            data: post data object; will be sent as 'application/json'
-            params: query params dict
-
-        Returns:
-            json object (in python representive); or raise exception if server fails
-        """
-
-        headers = self._headers(headers)
-        url = self._url(path)
-
-        data = json.dumps(data) if data is not None else None
-        headers['Content-Type'] = 'application/json'
-
-        response = requests.post(url, data=data, headers=headers, params=params, verify=self.verify)
-
-        logger.info('POST %s, status_code=%s, response_length=%s' % (url, response.status_code, len(response.text)), extra=dict(short_event_name='service_base.post'))
-
-        return self.process_response(response)
-
-    def put(self, path, data, params=None, headers=None):
-        """Wrapper for sending PUT request through dt_requests.
+        Wrapper for sending request through requests.
 
         Args:
             path: API path
@@ -157,14 +115,58 @@ class ServiceBase(object):
         headers = self._headers(headers)
         url = self._url(path)
 
-        data = json.dumps(data) if data is not None else None
-        headers['Content-Type'] = 'application/json'
+        if data is not None:
+            data = json.dumps(data)
+            headers['Content-Type'] = 'application/json'
 
-        response = requests.put(url, data=data, headers=headers, params=params, verify=self.verify)
+        resp = requests.request(method, url, params=params, headers=headers, data=data, verify=self.verify)
 
-        logger.info('PUT %s, status_code=%s, response_length=%s' % (url, response.status_code, len(response.text)), extra=dict(short_event_name='service_base.put'))
+        if params:
+            url = '%s?%s' % (url, urlencode(params))
+        logger.info('%s %s, headers=%s, status=%s, response_lenght=%s' % (method, url, headers, resp.status_code, len(resp.text)), extra=dict(short_event_name='service_base.%s' % method.lower()))
 
-        return self.process_response(response)
+        return self.process_response(resp)
+
+    def get(self, path, params=None, headers=None):
+        """Wrapper for sending GET request.
+
+        Args:
+            path: API path
+            params: query params dict
+
+        Returns:
+            json object (in python representive); or raise exception if server fails
+        """
+
+        return self.request('GET', path, params=params, headers=headers)
+
+    def post(self, path, data, params=None, headers=None):
+        """Wrapper for sending POST request through.
+
+        Args:
+            path: API path
+            data: post data object; will be sent as 'application/json'
+            params: query params dict
+
+        Returns:
+            json object (in python representive); or raise exception if server fails
+        """
+
+        return self.request('POST', path, params=params, headers=headers, data=data)
+
+    def put(self, path, data, params=None, headers=None):
+        """Wrapper for sending PUT request.
+
+        Args:
+            path: API path
+            data: put data object; will be sent as 'application/json'
+            params: query params dict
+
+        Returns:
+            json object (in python representive); or raise exception if server fails
+        """
+
+        return self.request('PUT', path, params=params, headers=headers, data=data)
 
     def delete(self, path, params=None, headers=None):
         """Wrapper for sending DELETE request through dt_requests.
@@ -177,14 +179,7 @@ class ServiceBase(object):
             json object (in python representive); or raise exception if server fails
         """
 
-        headers = self._headers(headers)
-        url = self._url(path)
-
-        response = requests.delete(url, headers=headers, params=params, verify=self.verify)
-
-        logger.info('DELETE %s, params=%s, status_code=%s, response_length=%s' % (url, params, response.status_code, len(response.text)), extra=dict(short_event_name='service_base.delete'))
-
-        return self.process_response(response)
+        return self.request('DELETE', path, params=params, headers=headers)
 
     def process_response(self, response):
         """Process http response
