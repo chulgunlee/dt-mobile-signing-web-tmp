@@ -3,11 +3,11 @@
 var FastClick = require('fastclick');
 require('lodash');
 require('angular');
-require('angular-touch');
 require('angular-animate');
 require('angular-route');
-require('../assets/libs/js/angular-strap.js');
-require('../assets/libs/js/angular-strap.tpl.js');
+require('angular-aria');
+require('angular-material');
+
 require('../assets/libs/js/webviewbridge');
 
 // app components
@@ -25,28 +25,31 @@ require('./shared/webviewbridge/webviewbridge.js');
 
 // include stylesheets
 require('../assets/libs/css/angular-motion.css');
-require('../assets/css/reset.css');
-require('../assets/css/style.scss');
 require('../assets/css/icon-sprite.css');
 
 
 // define main app
 angular.module('dc.signingroom', [
-    'ngTouch',
     'ngAnimate',
-    'mgcrea.ngStrap',
+    'ngMaterial',
 
     'dc.signingroom.route',
     'dc.shared.webviewbridge.webviewbridge'
 ]).
 
-config(function($apiProvider, webViewBridgeProvider) {
+config(function($apiProvider, $mdIconProvider, $mdThemingProvider) {
     // config the mashup API base uri, default='/api/'
     // $apiProvider.setApiUri('/api/');
 
     // config webviewbridge debug, default=false
     // webViewBridgeProvider.enableWebViewBridgeDebug(true);
 
+    // figure out the a to load svg icons or use font awesome
+    // $mdIconProvider.icon("menu", require('../assets/img/icons/svg/menu.svg'), 24);
+
+    $mdThemingProvider.theme('default')
+        .primaryPalette('blue')
+        .accentPalette('red');
 }).
 
 

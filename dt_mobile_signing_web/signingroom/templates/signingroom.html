@@ -1,27 +1,21 @@
 <!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-    <meta http-equiv="Content-Type" content="text/html; charset=us-ascii" />
-    <title>Document List - Dealertrack</title>
-    <meta name="viewport" content="user-scalable=no, initial-scale=1.0, maximum-scale=1.0, width=device-width" />
-    <link rel="stylesheet" href="/static/assets/libs/css/bootstrap.css" />
-    <link rel="stylesheet" href="/static/css/styles.css" />
-</head>
-<body>
-    <div web-view-bridge-debug></div>
-    <div id="content" ng-view></div>
-    <loading-indicator></loading-indicator>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=us-ascii" />
+        <title>Document List - Dealertrack</title>
+        <meta name="viewport" content="user-scalable=no, initial-scale=1.0, maximum-scale=1.0, width=device-width" />
+        <link rel="stylesheet" href="/static/assets/libs/css/angular-material.css" />
+        <link rel="stylesheet" href="/static/css/styles.css" />
+    </head>
+
+    <body  layout="row" ng-view>
+        <div web-view-bridge-debug></div>
+    </body>
 
     <script src="/static/common.js"></script>
     <script src="/static/signingroom.bundle.js"></script>
-
     <script>
-        angular.module('dc.signingroom').run(function($rootScope) {
-        });
-
-        angular.bootstrap(document, ['dc.signingroom']);
+           angular.bootstrap(document, ['dc.signingroom']);
     </script>
-
-</body>
 </html>
