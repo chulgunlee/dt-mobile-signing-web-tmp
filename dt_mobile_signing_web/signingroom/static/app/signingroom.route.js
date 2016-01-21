@@ -8,10 +8,15 @@ angular.module('dc.signingroom.route', [
 ]).
 
 /* route config */
-config(function($routeProvider) {
+config(function($routeProvider, $locationProvider) {
 
     $routeProvider.
         when('/', {
+            templateUrl: templates['signingroom.html'],
+            controller: 'SigningRoomCtrl'
+        }).
+
+        when('/document/:documentId/', {
             templateUrl: templates['signingroom.html'],
             controller: 'SigningRoomCtrl'
         }).

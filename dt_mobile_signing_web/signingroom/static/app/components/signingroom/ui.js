@@ -4,14 +4,10 @@ var templates = {
     'header.html': require('./header.html'),
     'control_panel.html': require('./control_panel.html'),
     'signer_modal.html': require('./signer_modal.html'),
-    'sig_cap_modal.html': require('./sig_cap_modal.html'),
+    'sig_cap_modal.html': require('./sig_cap_modal.html')
 };
 
-angular.module('dc.components.signingroom.ui', [
-    'dc.shared.ui.uiService',
-    'dc.shared.ui.uiDirective',
-    'dc.shared.webviewbridge.webviewbridge',
-])
+angular.module('dc.components.signingroom.ui', [])
 
 .directive('signingroomHeader', function() {
   return {

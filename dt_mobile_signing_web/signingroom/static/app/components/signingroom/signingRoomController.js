@@ -9,7 +9,13 @@ angular.module('dc.components.signingroom.SigningRoomCtrl', [
  * Controller for signing room
  */
 
-controller('SigningRoomCtrl', function($scope, $routeParams, $api_mock) {
+controller('SigningRoomCtrl', function($scope, $routeParams, $api_mock, $mdSidenav, $routeParams) {
+
+        console.log($routeParams['documentId']);
+
+        $scope.toggle_side = function(){
+            $mdSidenav('left').toggle()
+        };
 
         // Here we are going to keep the state of currently loaded document
         // for now current document should have following fields: title, pages, id

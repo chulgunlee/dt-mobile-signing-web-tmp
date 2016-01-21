@@ -59,13 +59,22 @@ provider('$api_mock', function() {
                         'document_id': 12346
                     },
                     {
-                        'title': 'Test 2',
+                        'title': 'Test 1',
                         'document_id': 12347
                     },
                     {
                         'title': 'Test 2',
                         'document_id': 12347
-                    }
+                    },
+                    {
+                        'title': 'Test 3',
+                        'document_id': 12347
+                    },
+                    {
+                        'title': 'Test 4',
+                        'document_id': 12347
+                    },
+
                 ];
                 return request('GET', '/documents', return_data);
             },
