@@ -16,10 +16,25 @@ angular.module('dc.components.signingroom.ui', [])
   };
 })
 
-.directive('signingroomSideBar', function() {
+.directive('signingroomSideBar', function($apiMock) {
   return {
     restrict: 'E',
-    templateUrl: templates['sidebar.html']
+    templateUrl: templates['sidebar.html'],
+    scope: {
+        docIds: '=',
+        masterIndexId: '='
+    },
+
+    link: function(scope, element, attrs){
+
+        $apiMock.getDocuments(scope.masterIndexId, scope.docIds)
+            .then(function(documents){
+                scope.documents = documents;
+                console.log(documents);
+                // scope.currentDocument['title'] = documents[0]['title'];
+            });
+    }
+
   };
 })
 
