@@ -2,7 +2,7 @@
     <li ng-repeat="doc in documents">
         <a ng-href="#/document/{{doc.document_id}}">
             <!-- this src for document images should be replaced with proper thumnail -->
-            <img alt="{{ doc.title }}" data-ng-src="data:image/png;base64,{{ currentDocument.pages[0].Value }}">
+            <img alt="{{ doc.title }}" ng-src="/{{ doc.thumb }}">
         </a>
         <div>
             <p><span>{{ doc.title }}</span></p>

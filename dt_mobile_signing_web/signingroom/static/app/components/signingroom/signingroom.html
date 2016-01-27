@@ -1,48 +1,37 @@
-  <md-sidenav class="site-sidenav md-sidenav-left md-whiteframe-z2" md-component-id="left" md-is-locked-open="$mdMedia('gt-md')" layout-align="center center">
+<md-toolbar>
 
-    <md-content flex>
-      <signingroom-side-bar></signingroom-side-bar>
-    </md-content>
+  <div class="md-toolbar-tools md-whiteframe-z1">
+    <div layout="row" flex>
+      <button class="md-icon-button md-button md-ink-ripple" type="button" hide-gt-md ng-click="toggle_side()" aria-label="Settings">
+          <md-icon class="ng-scope ng-isolate-scope" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 18 18" fit="" preserveAspectRatio="xMidYMid meet" style="pointer-events: none; display: block;">
+              <path d="M0 0h18v18h-18z" fill="none"></path>
+              <path d="M2 13.5h14v-1.5h-14v1.5zm0-4h14v-1.5h-14v1.5zm0-5.5v1.5h14v-1.5h-14z"></path>
+            </svg>
+          </md-icon>
+          <div class="md-ripple-container"></div>
+      </button>
 
-  </md-sidenav>
+      <h2>{{ currentDocument.title }}</h2>
 
-  <div layout="column" tabIndex="-1" role="main" flex>
-
-    <md-toolbar>
-
-      <div class="md-toolbar-tools md-whiteframe-z1">
-        <div layout="row" flex>
-          <button class="md-icon-button md-button md-ink-ripple" type="button" hide-gt-md ng-click="toggle_side()" aria-label="Settings">
-              <md-icon class="ng-scope ng-isolate-scope" aria-hidden="true">
-                <svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 18 18" fit="" preserveAspectRatio="xMidYMid meet" style="pointer-events: none; display: block;">
-                  <path d="M0 0h18v18h-18z" fill="none"></path>
-                  <path d="M2 13.5h14v-1.5h-14v1.5zm0-4h14v-1.5h-14v1.5zm0-5.5v1.5h14v-1.5h-14z"></path>
-                </svg>
-              </md-icon>
-              <div class="md-ripple-container"></div>
-          </button>
-
-          <h2>{{ currentDocument.title }}</h2>
-
-        </div>
-      </div>
-
-    </md-toolbar>
-
-    <md-content md-scroll-y layout="column" flex>
-        <signingroom-display-document></signingroom-display-document>
-    </md-content>
-
-      <md-toolbar clss="md-tall md-warn md-hue-3">
-
-        <div class="md-toolbar-tools md-toolbar-tools-bottom">
-          <div layout="row" flex>
-              <signingroom-control-panel></signingroom-control-panel>
-              <span flex></span>
-          </div>
-        </div>
-
-      </md-toolbar>
+    </div>
   </div>
+
+</md-toolbar>
+
+<md-content md-scroll-y layout="column" flex>
+    <signingroom-display-document></signingroom-display-document>
+</md-content>
+
+  <md-toolbar clss="md-tall md-warn md-hue-3">
+
+    <div class="md-toolbar-tools md-toolbar-tools-bottom">
+      <div layout="row" flex>
+          <signingroom-control-panel></signingroom-control-panel>
+          <span flex></span>
+      </div>
+    </div>
+
+  </md-toolbar>
 
 

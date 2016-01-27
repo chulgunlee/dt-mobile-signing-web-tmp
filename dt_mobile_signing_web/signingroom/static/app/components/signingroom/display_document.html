@@ -1,24 +1,22 @@
 <!-- use material conteiners here instead -->
- <div id="document-img-container">
-        <div class="signer-info">
-            <h5><b id="id_signing_as">You are signing as Test Coapp</b></h5>
-            <ul>
-                <li id="id_review_text">Review the document</li>
-                <li id="id_ask_paper" style="display: none;">
-                <u><b>IMPORTANT NOTICE:</b></u> You may ask us to print a paper copy of this contract for you to review before signing it (a “Review Copy”).  You may keep the Review Copy whether or you not you sign the contract.
-                </li>
-                <li>You need to sign in
-                <a href="#" id="id_location1">1 locations</a>
-                </li>
-            </ul>
-            <hr>
-        </div>
-        <!-- Signer Info -->
-        <div class="document-img-container" id="cont1" ng-repeat="page in currentDocument.pages">
-            <img class="document-img" data-ng-src="data:image/png;base64,{{ page.Value }}">
-            <div class="document-sign-holder" style="; position:absolute; left:534px; top:582px; width:121px; height:18pxopacity; filter:alpha(opacity=80)" onclick="imgCtrl('COBUYER_COS_NOTICE','sig');">
-                <span class="fa fa-pencil-square pull-left sign-holder-icon" id="sig_COBUYER_COS_NOTICE"></span> <a class="text-center sign-holder-text" id="label_sig_COBUYER_COS_NOTICE">Click to sign</a><img id="image_sig_COBUYER_COS_NOTICE" width="96px" height="30px" style="display:none">
-                <span class="fa fa-times-circle pull-right sign-holder-icon-close" style="display:none" id="delete_sig_COBUYER_COS_NOTICE"></span>
-            </div>
-        </div>
+<div class="signer-info">
+    <h5><b id="id_signing_as">You are signing as Test Coapp</b></h5>
+    <ul>
+        <li id="id_review_text">Review the document</li>
+        <li id="id_ask_paper" style="display: none;">
+        <u><b>IMPORTANT NOTICE:</b></u> You may ask us to print a paper copy of this contract for you to review before signing it (a “Review Copy”).  You may keep the Review Copy whether or you not you sign the contract.
+        </li>
+        <li>You need to sign in
+        <a href="#" id="id_location1">1 locations</a>
+        </li>
+    </ul>
+    <hr>
+</div>
+<!-- Signer Info -->
+<div class="document-img-container" id="cont1" ng-repeat="page in currentDocument.pages">
+    <img class="document-img" ng-src="/{{ page.Value }}">
+    <div class="document-sign-holder" style="; position:absolute; left:534px; top:582px; width:121px; height:18pxopacity; filter:alpha(opacity=80)" onclick="imgCtrl('COBUYER_COS_NOTICE','sig');">
+        <span class="fa fa-pencil-square pull-left sign-holder-icon" id="sig_COBUYER_COS_NOTICE"></span> <a class="text-center sign-holder-text" id="label_sig_COBUYER_COS_NOTICE">Click to sign</a><img id="image_sig_COBUYER_COS_NOTICE" width="96px" height="30px" style="display:none">
+        <span class="fa fa-times-circle pull-right sign-holder-icon-close" style="display:none" id="delete_sig_COBUYER_COS_NOTICE"></span>
+    </div>
 </div>

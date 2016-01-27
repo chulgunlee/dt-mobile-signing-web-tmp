@@ -14,6 +14,7 @@ require('../assets/libs/js/webviewbridge');
 require('./signingroom.route.js');
 //require('./components/doclist/constants.js')
 require('./components/signingroom/signingRoomController.js');
+require('./components/signingroom/signingService.js');
 require('./components/signingroom/ui.js');
 require('./shared/api/api.js');
 require('./shared/api/api_mock.js');
@@ -32,12 +33,12 @@ require('../assets/css/icon-sprite.css');
 angular.module('dc.signingroom', [
     'ngAnimate',
     'ngMaterial',
-
     'dc.signingroom.route',
+    'dc.components.signingroom.signingService',
     'dc.shared.webviewbridge.webviewbridge'
 ]).
 
-config(function($apiProvider, $mdIconProvider, $mdThemingProvider) {
+config(function($mdThemingProvider, $apiMockProvider) {
     // config the mashup API base uri, default='/api/'
     // $apiProvider.setApiUri('/api/');
 
@@ -45,7 +46,10 @@ config(function($apiProvider, $mdIconProvider, $mdThemingProvider) {
     // webViewBridgeProvider.enableWebViewBridgeDebug(true);
 
     // figure out the a to load svg icons or use font awesome
-    // $mdIconProvider.icon("menu", require('../assets/img/icons/svg/menu.svg'), 24);
+    // $mdIconProvider.icon("menu", require('../assets/img/icons/svg/menu.svg'), 24)
+
+    $apiMockProvider.setDocThumb(require('../images/document_thumb.png'));
+    $apiMockProvider.setDocPage(require('../images/doc_page.png'));
 
     $mdThemingProvider.theme('default')
         .primaryPalette('blue')
