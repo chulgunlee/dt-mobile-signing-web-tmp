@@ -123,7 +123,7 @@ class ServiceBase(object):
 
         if params:
             url = '%s?%s' % (url, urlencode(params))
-        logger.info('%s %s, headers=%s, status=%s, response_lenght=%s' % (method, url, headers, resp.status_code, len(resp.text)), extra=dict(short_event_name='service_base.%s' % method.lower()))
+        logger.info('%s %s, headers=%s, data=%s, status=%s, response_lenght=%s' % (method, url, headers, data, resp.status_code, len(resp.text)), extra=dict(short_event_name='service_base.%s' % method.lower()))
 
         return self.process_response(resp)
 
