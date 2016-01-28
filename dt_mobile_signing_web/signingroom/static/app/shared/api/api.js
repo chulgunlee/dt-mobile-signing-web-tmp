@@ -68,6 +68,11 @@ provider('$api', function() {
                 return getUrl(uri);
             },
 
+            // return absolute url with scheme and host name
+            absUrl: function(uri) {
+                return location.protocol + '//' + location.host + this.url(uri);
+            },
+
             getDealJacketInfo: function() {
                 return request('GET', '/');
             },

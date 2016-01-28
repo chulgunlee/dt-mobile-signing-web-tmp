@@ -6,10 +6,15 @@ angular.module('dc.shared.webviewbridge.webviewbridge', []).
 provider('webViewBridge', function() {
 
     var webViewBridgeDebugEnabled = false;
+    var uriRoot = '';
 
     this.enableWebViewBridgeDebug = function(value) {
         webViewBridgeDebugEnabled = !!value;
-    ;}
+    };
+
+    this.setUriRoot = function(value) {
+        uriRoot = value.replace(/\/*$/, '');
+    };
 
     this.$get = function($api, $rootScope) {
         var service = {
@@ -29,6 +34,7 @@ provider('webViewBridge', function() {
                 if (webViewBridgeDebugEnabled) {
                     this.logs.push(text);
                 }
+                console.log(text);              // always print on console
             },
 
             get debugEnabled() {
@@ -36,7 +42,7 @@ provider('webViewBridge', function() {
             },
 
             _absUrl: function(url) {
-                return location.protocol + '//' + location.host + url;
+                return location.protocol + '//' + location.host + uriRoot + url;
             },
 
             /* Native API wrappers */
@@ -44,7 +50,7 @@ provider('webViewBridge', function() {
             print: function(docIds, url) {
                 this.call('print', {
                     method: 'POST',
-                    url: this._absUrl($api.url('/printable/')) + '?docIds=' + encodeURIComponent(docIds.join(',')),         // TODO
+                    url: $api.absUrl('/printable/') + '?docids=' + encodeURIComponent(docIds.join(',')),         // TODO
                     docIds: docIds,         // for native reference only
                 });
             },
