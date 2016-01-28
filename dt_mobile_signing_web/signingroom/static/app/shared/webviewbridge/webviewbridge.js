@@ -50,7 +50,7 @@ provider('webViewBridge', function() {
             print: function(docIds, url) {
                 this.call('print', {
                     method: 'POST',
-                    url: $api.absUrl('/printable/') + '?docIds=' + encodeURIComponent(docIds.join(',')),         // TODO
+                    url: $api.absUrl('/printable/') + '?docids=' + encodeURIComponent(docIds.join(',')),         // TODO
                     docIds: docIds,         // for native reference only
                 });
             },
