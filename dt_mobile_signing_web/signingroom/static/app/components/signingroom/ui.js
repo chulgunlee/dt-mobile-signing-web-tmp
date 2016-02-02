@@ -16,7 +16,7 @@ angular.module('dc.components.signingroom.ui', [])
   };
 })
 
-.directive('signingroomSideBar', function($apiMock) {
+.directive('signingroomSideBar', function($apiMock, documentsCache) {
   return {
     restrict: 'E',
     templateUrl: templates['sidebar.html'],
@@ -30,8 +30,11 @@ angular.module('dc.components.signingroom.ui', [])
         $apiMock.getDocuments(scope.masterIndexId, scope.docIds)
             .then(function(documents){
                 scope.documents = documents;
-                console.log(documents);
-                // scope.currentDocument['title'] = documents[0]['title'];
+
+                // lets also put documents retrieved in to a cache
+                for (var i in documents){
+                    documentsCache.put(documents[i].document_id, documents[i])
+                }
             });
     }
 
@@ -49,6 +52,14 @@ angular.module('dc.components.signingroom.ui', [])
   return {
     restrict: 'E',
     templateUrl: templates['display_document.html']
+  };
+})
+
+.directive('dtLogo', function() {
+  return {
+    restrict: 'E',
+    transclude: true,
+    template: '<div class="sr-dt-logo"></div>'
   };
 });
 

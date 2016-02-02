@@ -1,12 +1,7 @@
- <ul>
-    <li ng-repeat="doc in documents">
-        <a ng-href="#/document/{{doc.document_id}}">
-            <!-- this src for document images should be replaced with proper thumnail -->
-            <img alt="{{ doc.title }}" ng-src="/{{ doc.thumb }}">
-        </a>
-        <div>
-            <p><span>{{ doc.title }}</span></p>
-            <p>{{ $index + 1 }}</p>
-        </div>
-    </li>
-</ul>
+<div class="sr-sidenav-document" ng-repeat="doc in documents">
+    <div class="status-badge sr-not-signed">
+        <div class="sr-sidenav-status">Not Signed</div>
+    </div>
+    <div class="sr-sidenav-document-text">{{ doc.title }}</div>
+    <!-- {{ $index + 1 }} </div> -->
+</div>

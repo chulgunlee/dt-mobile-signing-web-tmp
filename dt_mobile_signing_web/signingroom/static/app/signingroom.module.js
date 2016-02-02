@@ -26,7 +26,7 @@ require('./shared/webviewbridge/webviewbridge.js');
 
 // include stylesheets
 require('../assets/libs/css/angular-motion.css');
-require('../assets/css/icon-sprite.css');
+require('../assets/css/signingroom.scss');
 
 
 // define main app
@@ -45,15 +45,15 @@ config(function($mdThemingProvider, $apiMockProvider) {
     // config webviewbridge debug, default=false
     // webViewBridgeProvider.enableWebViewBridgeDebug(true);
 
-    // figure out the a to load svg icons or use font awesome
-    // $mdIconProvider.icon("menu", require('../assets/img/icons/svg/menu.svg'), 24)
-
-    $apiMockProvider.setDocThumb(require('../images/document_thumb.png'));
+    // this is temporary solution to fill document placeholder
     $apiMockProvider.setDocPage(require('../images/doc_page.png'));
 
+   var signingRoomTheme = $mdThemingProvider.extendPalette('grey', {});
+
+    $mdThemingProvider.definePalette('signingRoomTheme', signingRoomTheme);
+
     $mdThemingProvider.theme('default')
-        .primaryPalette('blue')
-        .accentPalette('red');
+        .primaryPalette('signingRoomTheme');
 }).
 
 

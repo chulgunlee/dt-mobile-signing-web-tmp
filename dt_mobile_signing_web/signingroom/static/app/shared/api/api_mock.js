@@ -23,7 +23,6 @@ provider('$apiMock', function() {
     };
 
     this.setDocPage = function(value) {
-        console.log(value)
         docPage = value;
     };
 
@@ -57,7 +56,7 @@ provider('$apiMock', function() {
                 var return_data = [
                     {
                         'title': 'eContract',
-                        'document_id': 12345,
+                        'document_id': 1,
                         'thumb': docThumb
                     },
                     {
