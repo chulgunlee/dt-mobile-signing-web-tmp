@@ -18,9 +18,13 @@ controller('SigningRoomCtrl', function($scope, $routeParams, $mdSidenav, signing
 
         // Here we are going to keep the state of currently loaded document
         // for now current document should have following fields: title, pages, id
-        $scope.currentDocument = {};
 
         console.log($routeParams.docId);
+
+        $scope.currentDocument = signingService.getDocument($routeParams.docId);
+
+        console.log($scope.currentDocument);
+
         signingService.getDocumentImages($routeParams.docId)
             .then(function(document_pages){
                 $scope.currentDocument['pages'] = document_pages;

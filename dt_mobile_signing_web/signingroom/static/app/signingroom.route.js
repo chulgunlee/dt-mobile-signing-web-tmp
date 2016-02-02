@@ -11,13 +11,6 @@ angular.module('dc.signingroom.route', [
 config(function($routeProvider, $locationProvider) {
 
     $routeProvider.
-        //when('/', {
-        //    template: 'Loading...',
-        //    controller: function($location, signingService){
-        //        $location.path('/');
-        //    }
-        //}).
-
         when('/document/:docId/', {
             templateUrl: templates['signingroom.html'],
             controller: 'SigningRoomCtrl'
