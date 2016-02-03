@@ -241,9 +241,10 @@ directive('bottomBar', function() {
                     },
                 }).then(function() {
                     var selectedDocIds = _.pluck(docService.selectedDocs, 'id'),
-                        selectedSigners = signerService.selectedSigners;
+                        selectedSigners = signerService.selectedSigners,
+                        packageId = docService.selectedDocs[0].packageId;
 
-                    webViewBridge.startSigningRoom(selectedDocIds, selectedSigners);
+                    webViewBridge.startSigningRoom(packageId, selectedDocIds, selectedSigners);
                 });
             };
 

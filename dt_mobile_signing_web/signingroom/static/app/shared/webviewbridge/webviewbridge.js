@@ -5,11 +5,16 @@ angular.module('dc.shared.webviewbridge.webviewbridge', []).
  */
 provider('webViewBridge', function() {
 
-    var webViewBridgeDebugEnabled = false;
-    var uriRoot = '';
+    var webViewBridgeDebugEnabled = false,
+        demoSigningRoomEnabled = false,
+        uriRoot = '';
 
     this.enableWebViewBridgeDebug = function(value) {
         webViewBridgeDebugEnabled = !!value;
+    };
+
+    this.enableDemoSigningRoom = function(value) {
+        demoSigningRoomEnabled = !!value;
     };
 
     this.setUriRoot = function(value) {
@@ -72,8 +77,17 @@ provider('webViewBridge', function() {
                 });
             },
             
-            startSigningRoom: function(pkgId, docIds, signers, url) {
-                this.call('startSigningRoom', { pkgId: pkgId, docIds: docIds, signers: signers, url: url });
+            startSigningRoom: function(pkgId, docIds, signers) {
+                var url = demoSigningRoomEnabled
+                    ? 'http://di2.hq.dealertrack.com/dc/signingroom/701'
+                    : 'http://true-url/';               // TODO: fill the real url here
+
+                this.call('startSigningRoom', {
+                    pkgId: pkgId,
+                    docIds: docIds,
+                    signers: signers,
+                    url: url
+                });
             },
 
             startPOSCapture: function(docId, docType, applicantType) {
