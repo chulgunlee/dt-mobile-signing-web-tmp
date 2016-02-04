@@ -80,7 +80,9 @@ provider('webViewBridge', function() {
             startSigningRoom: function(pkgId, docIds, signers) {
                 var url = demoSigningRoomEnabled
                     ? 'http://di2.hq.dealertrack.com/dc/signingroom/701'
-                    : 'http://true-url/';               // TODO: fill the real url here
+                    : this._absUrl('/dealjackets/' + encodeURIComponent($rootScope.dealJacketId) + 
+                                      '/deals/' + encodeURIComponent($rootScope.dealId) + 
+                                      '/#/signingroom/');
 
                 this.call('startSigningRoom', {
                     pkgId: pkgId,

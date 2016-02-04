@@ -51,7 +51,7 @@ config(function($apiProvider, webViewBridgeProvider) {
     // webViewBridgeProvider.enableWebViewBridgeDebug(true);
 
     // config demo signing room, default=false
-    webViewBridgeProvider.enableDemoSigningRoom(true);
+    webViewBridgeProvider.enableDemoSigningRoom(false);
 
 }).
 
