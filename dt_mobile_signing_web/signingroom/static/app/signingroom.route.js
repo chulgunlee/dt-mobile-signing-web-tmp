@@ -8,10 +8,10 @@ angular.module('dc.signingroom.route', [
 ]).
 
 /* route config */
-config(function($routeProvider) {
+config(function($routeProvider, $locationProvider) {
 
     $routeProvider.
-        when('/', {
+        when('/document/:docId/', {
             templateUrl: templates['signingroom.html'],
             controller: 'SigningRoomCtrl'
         }).

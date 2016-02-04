@@ -4,14 +4,10 @@ var templates = {
     'header.html': require('./header.html'),
     'control_panel.html': require('./control_panel.html'),
     'signer_modal.html': require('./signer_modal.html'),
-    'sig_cap_modal.html': require('./sig_cap_modal.html'),
+    'sig_cap_modal.html': require('./sig_cap_modal.html')
 };
 
-angular.module('dc.components.signingroom.ui', [
-    'dc.shared.ui.uiService',
-    'dc.shared.ui.uiDirective',
-    'dc.shared.webviewbridge.webviewbridge',
-])
+angular.module('dc.components.signingroom.ui', [])
 
 .directive('signingroomHeader', function() {
   return {
@@ -20,10 +16,28 @@ angular.module('dc.components.signingroom.ui', [
   };
 })
 
-.directive('signingroomSideBar', function() {
+.directive('signingroomSideBar', function($apiMock, documentsCache) {
   return {
     restrict: 'E',
-    templateUrl: templates['sidebar.html']
+    templateUrl: templates['sidebar.html'],
+    scope: {
+        docIds: '=',
+        masterIndexId: '='
+    },
+
+    link: function(scope, element, attrs){
+
+        $apiMock.getDocuments(scope.masterIndexId, scope.docIds)
+            .then(function(documents){
+                scope.documents = documents;
+
+                // lets also put documents retrieved in to a cache
+                for (var i in documents){
+                    documentsCache.put(documents[i].document_id, documents[i])
+                }
+            });
+    }
+
   };
 })
 
@@ -34,10 +48,11 @@ angular.module('dc.components.signingroom.ui', [
   };
 })
 
-.directive('signingroomDisplayDocument', function() {
+.directive('dtLogo', function() {
   return {
     restrict: 'E',
-    templateUrl: templates['display_document.html']
+    transclude: true,
+    template: '<div class="sr-dt-logo"></div>'
   };
 });
 

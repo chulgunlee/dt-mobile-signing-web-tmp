@@ -1,7 +1,65 @@
-<signingroom-header></signingroom-header>
+<md-toolbar class="sr-md-toolbar-top">
+  <div class="md-toolbar-tools md-whiteframe-z1 sr-md-toolbar-tools-top">
+      <button class="md-button md-icon-button md-ink-ripple" type="button" ng-click="toggleSide()" aria-label="Drawer">
+          <div class="drawer-button"></div>
+      </button>
+      <span class="sr-other-documents" ng-click="toggleSide()">Other Documents</span>
 
-<signingroom-display-document></signingroom-display-document>
+      <div layout="row" flex layout-align="end center">
+          <h2 md-toolbar-item>
+              <span class="sr-heading">{{ currentDocument.title }}</span>
+          </h2>
+      </div>
 
-<signingroom-control-panel></signingroom-control-panel>
+      <div layout="row" flex layout-align="end center">
+          <h2 md-toolbar-item>
+              <span class="sr-heading">Honda of Manhattan</span>
+          </h2>
+          <dt-logo></dt-logo>
+      </div>
+  </div>
+</md-toolbar>
 
-<signingroom-side-bar></signingroom-side-bar>
+<md-content flex>
+        <!-- use material conteiners here instead -->
+        <div layout="row" layout-align="center center">
+            <div class="sr-page-container" flex="none">
+                <div class="sr-top-text">
+                    <span class="sr-signed-in">You are signing as Roger Johnson </span>
+                    <ul class="sr-text-dimmed">
+                        <li>Review the document</li>
+                        <li>You need to sign in <a href="#">1 locations</a></li>
+                    </ul>
+                </div>
+
+                <md-divider class="sr-devider"></md-divider>
+
+                <!-- Signer Info -->
+                <div class="sr-documents-container">
+                    <div ng-repeat="page in currentDocument.pages" class="sr-document">
+                        <img class="sr-document-img" ng-src="/{{ page.Value }}">
+                    </div>
+
+                </div>
+            </div>
+        </div>
+</md-content>
+
+  <md-toolbar class="sr-md-toolbar-bottom">
+
+    <div class="md-toolbar-tools md-toolbar-tools-bottom sr-md-toolbar-tools-bottom">
+
+        <div layout="row" flex>
+            <md-button class="md-icon-button">
+              <div class="sr-more-button"></div>
+            </md-button>
+        </div>
+
+        <div layout="row" flex layout-align="end end">
+            <md-button class="sr-start-button">Start</md-button>
+        </div>
+    </div>
+
+  </md-toolbar>
+
+

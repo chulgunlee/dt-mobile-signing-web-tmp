@@ -3,17 +3,18 @@
 var FastClick = require('fastclick');
 require('lodash');
 require('angular');
-require('angular-touch');
 require('angular-animate');
 require('angular-route');
-require('../assets/libs/js/angular-strap.js');
-require('../assets/libs/js/angular-strap.tpl.js');
+require('angular-aria');
+require('angular-material');
+
 require('../assets/libs/js/webviewbridge');
 
 // app components
 require('./signingroom.route.js');
 //require('./components/doclist/constants.js')
 require('./components/signingroom/signingRoomController.js');
+require('./components/signingroom/signingService.js');
 require('./components/signingroom/ui.js');
 require('./shared/api/api.js');
 require('./shared/api/api_mock.js');
@@ -25,28 +26,34 @@ require('./shared/webviewbridge/webviewbridge.js');
 
 // include stylesheets
 require('../assets/libs/css/angular-motion.css');
-require('../assets/css/reset.css');
-require('../assets/css/style.scss');
-require('../assets/css/icon-sprite.css');
+require('../assets/css/signingroom.scss');
 
 
 // define main app
 angular.module('dc.signingroom', [
-    'ngTouch',
     'ngAnimate',
-    'mgcrea.ngStrap',
-
+    'ngMaterial',
     'dc.signingroom.route',
+    'dc.components.signingroom.signingService',
     'dc.shared.webviewbridge.webviewbridge'
 ]).
 
-config(function($apiProvider, webViewBridgeProvider) {
+config(function($mdThemingProvider, $apiMockProvider) {
     // config the mashup API base uri, default='/api/'
     // $apiProvider.setApiUri('/api/');
 
     // config webviewbridge debug, default=false
     // webViewBridgeProvider.enableWebViewBridgeDebug(true);
 
+    // this is temporary solution to fill document placeholder
+    $apiMockProvider.setDocPage(require('../images/doc_page.png'));
+
+   var signingRoomTheme = $mdThemingProvider.extendPalette('grey', {});
+
+    $mdThemingProvider.definePalette('signingRoomTheme', signingRoomTheme);
+
+    $mdThemingProvider.theme('default')
+        .primaryPalette('signingRoomTheme');
 }).
 
 

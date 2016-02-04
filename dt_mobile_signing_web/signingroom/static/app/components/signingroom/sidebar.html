@@ -1,18 +1,7 @@
-<div id="id_document_wrapper">
-    <div class="panel-document-container" style="transition-timing-function: cubic-bezier(0.1, 0.57, 0.1, 1); transition-duration: 0ms; transform: translate(0px, 0px) translateZ(0px);">
-        <ul id="id_sign_status_docs">
-            <li class="panel-document text-center doc_popup" ng-repeat="doc in documents">
-                <div class="doc-icon-wrapper">
-                    <img class="doc-icon-selected" alt="{{ doc.title }}" src="http://mobile.dev.dealertrack.com/Mobility20/SigningRoom/assets/images/doc_iconX2.png">
-                </div>
-                <div>
-                    <p class="text-center panel-document-title">
-                        <span>{{ doc.title }}</span>
-                    </p>
-                    <p class="panel-document-number">{{ $index + 1 }}</p>
-                </div>
-            </li>
-        </ul>
+<div class="sr-sidenav-document" ng-repeat="doc in documents">
+    <div class="status-badge sr-not-signed">
+        <div class="sr-sidenav-status">Not Signed</div>
     </div>
-    <!-- Document Container-->
+    <div class="sr-sidenav-document-text">{{ doc.title }}</div>
+    <!-- {{ $index + 1 }} </div> -->
 </div>
