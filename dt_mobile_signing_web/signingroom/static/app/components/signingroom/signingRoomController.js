@@ -12,7 +12,7 @@ angular.module('dc.components.signingroom.SigningRoomCtrl', [
 
 controller('SigningRoomCtrl', function($scope, $routeParams, $mdSidenav, signingService) {
 
-        $scope.toggle_side = function(){
+        $scope.toggleSide = function(){
             $mdSidenav('left').toggle()
         };
 
@@ -26,8 +26,8 @@ controller('SigningRoomCtrl', function($scope, $routeParams, $mdSidenav, signing
         console.log($scope.currentDocument);
 
         signingService.getDocumentImages($routeParams.docId)
-            .then(function(document_pages){
-                $scope.currentDocument['pages'] = document_pages;
+            .then(function(documentPages){
+                $scope.currentDocument['pages'] = documentPages;
         });
 
         $scope.checked = true;

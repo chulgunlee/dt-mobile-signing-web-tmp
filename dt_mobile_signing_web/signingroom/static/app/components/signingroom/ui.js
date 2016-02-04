@@ -48,13 +48,6 @@ angular.module('dc.components.signingroom.ui', [])
   };
 })
 
-.directive('signingroomDisplayDocument', function() {
-  return {
-    restrict: 'E',
-    templateUrl: templates['display_document.html']
-  };
-})
-
 .directive('dtLogo', function() {
   return {
     restrict: 'E',

@@ -41,15 +41,15 @@ provider('signingService', function() {
              * starting point for the application
              */
             start: function () {
-                $location.path('/document/' + this.docIds[0])
+                $location.path('/document/' + this.docIds[0]);
             },
 
             /**
-             * Will use reset api to retrieve background images for
+             * Will use REST api to retrieve background images for
              * document is provided.
              */
             getDocumentImages: function (docId) {
-                return $apiMock.getDocumentImages(docId)
+                return $apiMock.getDocumentImages(docId);
             },
 
             /**
@@ -60,7 +60,7 @@ provider('signingService', function() {
              * is already populated on initial load of the app)
              */
             getDocument: function(docId) {
-                return documentsCache.get(docId)
+                return documentsCache.get(docId);
             }
         };
 
