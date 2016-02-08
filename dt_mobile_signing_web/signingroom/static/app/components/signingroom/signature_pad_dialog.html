@@ -1,0 +1,27 @@
+<md-dialog class="sr-md-dialog">
+  <md-dialog-content class="sr-md-dialog-content">
+     <div layout="column" layout-align="center center">
+         <div class="sr-signer-name">{{ signer.name }}</div>
+         <div class="sr-info"  ng-if="!error">Please draw your signature and initial below:</div>
+         <div class="sr-error" ng-if="error">{{ error }}</div>
+         <div layout="row">
+              <div class="sr-signature-block sr-first">
+                  <span>Signature</span>
+                  <span flex></span>
+                  <a ng-click="clearSignature()" class="sr-pull-right">Clear</a>
+                  <md-divider class="sr-boundary"></md-divider>
+                  <signature-pad accept="acceptSignature" clear="clearSignature" height="155" width="425"></signature-pad>
+              </div>
+              <div class="sr-signature-block sr-second">
+                  <span>Initials</span>
+                  <a ng-click="clearInitials()" class="sr-pull-right">Clear</a>
+                  <md-divider class="sr-boundary"></md-divider>
+                  <signature-pad accept="acceptInitials" clear="clearInitials" height="155" width="155"></signature-pad>
+              </div>
+         </div>
+     </div>
+  </md-dialog-content>
+  <md-dialog-actions class="sr-md-dialog-actions">
+      <a ng-click="applyAction();">Apply</a>
+  </md-dialog-actions>
+</md-dialog>

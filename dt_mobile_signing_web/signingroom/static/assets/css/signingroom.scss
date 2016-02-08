@@ -7,6 +7,10 @@ html, body {
   font-family: "Helvetica Neue";
 }
 
+a {
+    color: $ui-link-color;
+}
+
 .sr-md-toolbar-top {
     background: #f3f6f8;
     color: #202020;
@@ -213,3 +217,77 @@ md-sidenav.md-closed.md-locked-open-add-active {
 .sr-document {
     border: $ui-border;
 }
+
+.sr-md-dialog {
+    border-radius: 0px;
+    background-color: rgb(255,255,255);
+}
+
+.sr-pull-right {
+  float: right;
+}
+
+.sr-signature-block {
+    margin: 0 35px 25px 35px;
+    font-size: 14px;
+
+    &.sr-first{
+        margin-right: 25px;
+    }
+
+    &.sr-second{
+        margin-left: 0;
+    }
+
+    .signature {
+        border: $ui-border;
+        cursor: crosshair;
+        margin-top: 5px;
+    }
+
+    a {
+        cursor: pointer;
+        color: $ui-link-color;
+    }
+
+    span {
+        color: #a1a1a1;
+    }
+}
+
+.sr-md-dialog-content {
+    padding-top: 45px;
+    padding-bottom: 52px;
+
+    .sr-signer-name {
+        font-size: 24px;
+        color: #231F20;
+        margin-bottom: 10px;
+    }
+
+    .sr-info {
+        margin-bottom: 45px;
+        font-size: 16px;
+        color: #a1a1a1;
+    }
+
+    .sr-error {
+        margin-bottom: 45px;
+        font-size: 16px;
+        color: #f93631;
+    }
+}
+
+.sr-boundary {
+    position: absolute;
+    top: 130px;
+    z-index: 99999;
+}
+
+.sr-md-dialog-actions {
+    margin-right: 37px;
+    font-size: 15px;
+    cursor: pointer;
+}
+
+
