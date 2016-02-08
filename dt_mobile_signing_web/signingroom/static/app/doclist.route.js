@@ -1,6 +1,7 @@
 var templates = {
     'doclist.html': require('./components/doclist/doclist.html'),
     'doc_preview.html': require('./components/preview/doc_preview.html'),
+    'dummy_signingroom.html': require('./components/dummysigningroom/dummy_signingroom.html'),
 };
 
 angular.module('dc.doclist.route', [
@@ -8,8 +9,8 @@ angular.module('dc.doclist.route', [
 
     'dc.components.doclist.docCtrl',
     'dc.components.preview.previewCtrl',
-]).
-
+    'dc.components.dummysigningroom.dummySigningRoomCtrl',
+]).  
 /* route config */
 config(function($routeProvider) {
 
@@ -22,6 +23,11 @@ config(function($routeProvider) {
         when('/docs/:docId/:version/preview/', {
             templateUrl: templates['doc_preview.html'],
             controller: 'DocPreviewCtrl'
+        }).
+
+        when('/signingroom/', {
+            templateUrl: templates['dummy_signingroom.html'],
+            controller: 'DummySigningRoomCtrl'
         }).
 
         otherwise({

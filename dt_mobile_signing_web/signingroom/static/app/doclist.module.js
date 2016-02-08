@@ -24,6 +24,7 @@ require('./shared/loading/loadingService.js');
 require('./shared/ui/uiDirective.js');
 require('./shared/ui/uiService.js');
 require('./shared/webviewbridge/webviewbridge.js');
+require('./components/dummysigningroom/dummySigningRoomController.js');
 
 // include stylesheets
 require('../assets/libs/css/angular-motion.css');
@@ -50,7 +51,7 @@ config(function($apiProvider, webViewBridgeProvider) {
     // webViewBridgeProvider.enableWebViewBridgeDebug(true);
 
     // config demo signing room, default=false
-    webViewBridgeProvider.enableDemoSigningRoom(true);
+    webViewBridgeProvider.enableDemoSigningRoom(false);
 
 }).
 
