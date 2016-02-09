@@ -28,9 +28,6 @@ angular.module('dc.components.signingroom.signature', [])
 
 .directive('signaturePad', ['$window', 'signaturePadConfig',
   function ($window, signaturePadConfig) {
-    'use strict';
-
-    var canvas, EMPTY_IMAGE = 'data:image/gif;base64,R0lGODlhAQABAAAAACwAAAAAAQABAAA=';
 
     return {
       restrict: 'EA',
@@ -51,7 +48,7 @@ angular.module('dc.components.signingroom.signature', [])
               signature.dataUrl = $scope.signaturePad.toDataURL();
               signature.isEmpty = false;
             } else {
-              signature.dataUrl = EMPTY_IMAGE;
+              signature.dataUrl = 'data:image/gif;base64,R0lGODlhAQABAAAAACwAAAAAAQABAAA=';
               signature.isEmpty = true;
             }
 
@@ -61,17 +58,11 @@ angular.module('dc.components.signingroom.signature', [])
           $scope.clear = function () {
             $scope.signaturePad.clear();
           };
-
-          $scope.$watch("dataurl", function (dataUrl) {
-            if (dataUrl) {
-              $scope.signaturePad.fromDataURL(dataUrl);
-            }
-          });
         }
       ],
 
       link: function (scope, element) {
-        canvas = element.find('canvas')[0];
+        var canvas = element.find('canvas')[0];
         scope.signaturePad = new signaturePadConfig.signaturePad(canvas);
 
         if (!scope.height) scope.height = 220;
