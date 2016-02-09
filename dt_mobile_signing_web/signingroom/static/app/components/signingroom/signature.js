@@ -71,20 +71,6 @@ angular.module('dc.components.signingroom.signature', [])
         if (scope.signature && !scope.signature.$isEmpty && scope.signature.dataUrl) {
           scope.signaturePad.fromDataURL(scope.signature.dataUrl);
         }
-
-        scope.onResize = function() {
-          var canvas = element.find('canvas')[0];
-          var ratio =  Math.max($window.devicePixelRatio || 1, 1);
-          canvas.width = canvas.offsetWidth * ratio;
-          canvas.height = canvas.offsetHeight * ratio;
-          canvas.getContext("2d").scale(ratio, ratio);
-        };
-
-        scope.onResize();
-
-        angular.element($window).bind('resize', function() {
-            scope.onResize();
-        });
       }
     };
   }
