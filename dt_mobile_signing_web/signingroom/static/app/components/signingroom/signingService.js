@@ -1,6 +1,64 @@
 angular.module('dc.components.signingroom.signingService', [
-    'dc.shared.api.api_mock'
+    'dc.shared.api.api_mock',
+    'dc.components.signingroom.signingRoomModals'
 ]).
+
+/**
+ * Define Signer class
+ */
+factory('Signer', function(signingRoomModals) {
+
+    function Signer(signerData) {
+
+        if(!signerData.name) {
+            throw "signerData should contain `name` attribute"
+        }
+
+        if(!signerData.type) {
+            throw "signerData should contain `type` attribute " +
+            "that is equal to one of the following values: buyer, cobuyer or dealer"
+        }
+
+        _.extend(this, signerData);
+
+        this.confirmed = false;
+    }
+
+    Signer.prototype = {
+
+        /**
+         * Will display modal window to prompt signer for signature and
+         * initials. After signer press sign button it will store collected
+         * base64 encoded data. Will return promise, that will resolve after
+         * user click "Apply" button on signature pad dialog.
+         */
+
+        collectSignatureData: function() {
+            return signingRoomModals.signaturePad(this)
+        },
+
+        /**
+         * Will display modal window to confirm signer
+         * that is going to be signing document next. Return promise.
+         * After user clicks "Sign" will set this.confirmed to true
+         * and promise will be resolve.
+         */
+        confirm: function() {
+            return signingRoomModals.confirmSigner(this)
+        },
+
+        /**
+         * @returns {*|{signature, initials}}
+         */
+        getData: function() {
+            return signingRoomModals.getSigData()
+        }
+
+
+    };
+
+    return Signer;
+}).
 
 /**
  * Define Signing Service. Signing service going to keep
@@ -14,7 +72,7 @@ factory('documentsCache', function($cacheFactory){
 
 provider('signingService', function() {
 
-    this.$get = function($apiMock, $location, documentsCache) {
+    this.$get = function($apiMock, $location, documentsCache, Signer) {
 
         var service = {
 
@@ -32,9 +90,11 @@ provider('signingService', function() {
             init: function (initData) {
                 this.docIds = initData.docIds;
                 this.masterIndex = parseInt(initData.masterIndex);
-                this.signers = initData.signers;
-            },
 
+                // for development purposes we hard code signers list here..
+                // The way we receive initial data is to be decided.
+                this.signers = [new Signer({'name': 'Steve Jobs', type: 'buyer'})];
+            },
 
             /**
              * start method will redirect to the appropriate

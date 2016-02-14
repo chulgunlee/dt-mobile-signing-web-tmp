@@ -13,7 +13,7 @@ require('../assets/libs/js/webviewbridge');
 // app components
 require('./signingroom.route.js');
 require('./components/signingroom/signingRoomController.js');
-require('./components/signingroom/signaturePadDialog.js');
+require('./components/signingroom/signingRoomModals.js');
 require('./components/signingroom/signingService.js');
 require('./components/signingroom/signature.js');
 require('./components/signingroom/ui.js');
@@ -50,7 +50,7 @@ config(function($mdThemingProvider, $apiMockProvider) {
     // this is temporary solution to fill document placeholder
     $apiMockProvider.setDocPage(require('../images/doc_page.png'));
 
-   var signingRoomTheme = $mdThemingProvider.extendPalette('grey', {});
+    var signingRoomTheme = $mdThemingProvider.extendPalette('grey', {});
 
     $mdThemingProvider.definePalette('signingRoomTheme', signingRoomTheme);
 

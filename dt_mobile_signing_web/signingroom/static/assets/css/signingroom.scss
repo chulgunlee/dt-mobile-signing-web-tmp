@@ -9,6 +9,7 @@ html, body {
 
 a {
     color: $ui-link-color;
+    cursor: pointer;
 }
 
 .sr-md-toolbar-top {
@@ -245,11 +246,6 @@ md-sidenav.md-closed.md-locked-open-add-active {
         margin-top: 5px;
     }
 
-    a {
-        cursor: pointer;
-        color: $ui-link-color;
-    }
-
     span {
         color: #a1a1a1;
     }
@@ -290,4 +286,37 @@ md-sidenav.md-closed.md-locked-open-add-active {
     cursor: pointer;
 }
 
+md-dialog.sr-signore-confirm {
 
+    .sr-signore-confirm-content {
+        height: 240px;
+        width: 240px;
+    }
+
+    .sr-signor-avatar {
+        width: 93px;
+        height: 93px;
+        background: url(./images/icn-signor-lg.png);
+    }
+
+    .sr-signor-name {
+       color: #231F20;
+       font-size: 16px;
+       margin-top: 30px;
+    }
+
+    md-dialog-actions {
+        border-top: $ui-border;
+        padding: 0;
+        height: 44px;
+        min-height: 44px;
+    }
+
+    .md-button {
+        margin: 0;
+    }
+
+    a {
+        font-size: 15px;
+    }
+}

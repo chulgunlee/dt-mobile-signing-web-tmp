@@ -26,12 +26,13 @@ angular.module('dc.components.signingroom.signature', [])
  * Provides function bindings for cleaning and accepting drawings from signature pad.
 * */
 
-.directive('signaturePad', ['$window', 'signaturePadConfig',
+.directive('signatureInput', ['$window', 'signaturePadConfig',
   function ($window, signaturePadConfig) {
 
     return {
-      restrict: 'EA',
+      restrict: 'E',
       replace: true,
+      require: 'ngModel',
       template: '<div class="signature" ng-style="{height: height + \'px\', width: width + \'px\'}"><canvas height="{{ height }}" width="{{ width }}"></canvas></div>',
       scope: {
         accept: '=',
@@ -40,37 +41,38 @@ angular.module('dc.components.signingroom.signature', [])
         height: '@',
         width: '@'
       },
-      controller: ['$scope', function ($scope) {
-          $scope.accept = function () {
-            var signature = {};
 
-            if (!$scope.signaturePad.isEmpty()) {
-              signature.dataUrl = $scope.signaturePad.toDataURL();
-              signature.isEmpty = false;
-            } else {
-              signature.dataUrl = 'data:image/gif;base64,R0lGODlhAQABAAAAACwAAAAAAQABAAA=';
-              signature.isEmpty = true;
-            }
+      link: function (scope, element, attrs, ngModelCtrl) {
 
-            return signature;
-          };
+        // when we finish write a stroke than this callback will be called
+        // and ng-model variable will be updated.
+        var onEndCallback = function(){
+            ngModelCtrl.$setViewValue(scope.signaturePad.toDataURL());
+            scope.$apply()
+        };
 
-          $scope.clear = function () {
-            $scope.signaturePad.clear();
-          };
-        }
-      ],
-
-      link: function (scope, element) {
         var canvas = element.find('canvas')[0];
-        scope.signaturePad = new signaturePadConfig.signaturePad(canvas);
+
+        // we instantiate signature pad here. Also provide callback to be trigered
+        // every time stroke drawing is done.
+        scope.signaturePad = new signaturePadConfig.signaturePad(canvas, {
+            onEnd: onEndCallback
+        });
+
+        // render will be called when value is set from outside of the derective
+        // we need to clear signaturePad if value is falsy, or draw provided value
+        // on a canvas
+        ngModelCtrl.$render = function(){
+            if (ngModelCtrl.$isEmpty(ngModelCtrl.$viewValue)) {
+                scope.signaturePad.clear();
+            } else {
+                scope.signaturePad.fromDataURL(ngModelCtrl.$viewValue)
+            }
+        };
 
         if (!scope.height) scope.height = 220;
         if (!scope.width) scope.width = 568;
 
-        if (scope.signature && !scope.signature.$isEmpty && scope.signature.dataUrl) {
-          scope.signaturePad.fromDataURL(scope.signature.dataUrl);
-        }
       }
     };
   }

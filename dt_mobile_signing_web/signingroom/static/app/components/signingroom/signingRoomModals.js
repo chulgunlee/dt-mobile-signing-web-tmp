@@ -1,13 +1,14 @@
 var signature_pad_dialog = require('./signature_pad_dialog.html');
+var confirm_signer_dialog = require('./confirm_signer_dialog.html');
 
-angular.module('dc.components.signingroom.signaturePadDialog', []).
+angular.module('dc.components.signingroom.signingRoomModals', []).
 
 /**
- * Signature Pad Dialog Service. Service is responsible for
- * collecting and validating signatures and initials.
+ * Signing Room Dialogs Service. Service
+ * provides modal components to the application.
  */
 
-provider('signaturePadDialog', function() {
+provider('signingRoomModals', function() {
 
     this.$get = function($mdDialog) {
 
@@ -24,7 +25,7 @@ provider('signaturePadDialog', function() {
              *          signaturePadDialog.show({'name': 'Food Bar'})
              */
 
-            show: function (signer) {
+            signaturePad: function (signer) {
 
                if (!signer) {
                    throw "You must provide signer instance as a first parameter" +
@@ -34,9 +35,9 @@ provider('signaturePadDialog', function() {
 
                return $mdDialog.show({
                   disableParentScroll: false,
-                  clickOutsideToClose: true,
+                  clickOutsideToClose: false,
                   templateUrl: signature_pad_dialog,
-                  controller: function DialogController($scope, $mdDialog) {
+                  controller: function ($scope, $mdDialog) {
 
                     $scope.signer =  signer;
 
@@ -45,23 +46,21 @@ provider('signaturePadDialog', function() {
                     };
 
                     $scope.applyAction = function(){
-                      var signature = $scope.acceptSignature();
-                      var initials = $scope.acceptInitials();
-                      if (signature.isEmpty){
+                      if (!$scope.signature){
                           $scope.error = 'Please draw your signature';
-                      } else if (signature.dataUrl.length < 5000) {
-                          $scope.clearSignature();
+                      } else if ($scope.signature.length < 5000) {
+                          $scope.signature = null;
                           $scope.error = "The Signature entered was too short." +
                               " Please try again with a longer signature.";
-                      } else if(initials.isEmpty) {
+                      } else if(!$scope.initials) {
                           $scope.error = "Please draw your initials";
-                      } else if (initials.dataUrl.length < 3000) {
-                          $scope.clearInitials();
+                      } else if ($scope.initials.length < 3000) {
+                          $scope.initials = null;
                           $scope.error = "The Initials entered was too short." +
                               " Please try again with a longer initials.";
                       } else {
-                          service.signatureData = signature.dataUrl;
-                          service.initialsData = initials.dataUrl;
+                          service.signatureData = $scope.signature;
+                          service.initialsData = $scope.initials;
                           $scope.closeDialog();
                       }
                     }
@@ -73,15 +72,31 @@ provider('signaturePadDialog', function() {
              * Call this method to retrieve signature and initials data as object that
              * contain base64 encoded strings as following attributes: signature and initials
              */
-            getData: function(){
+            getSigData: function(){
                  return {
                      'signature': service.signatureData,
                      'initials': service.initialsData
                  }
+            },
 
+            /**
+             * Call this method to display and receive confirmation about
+             * signer that is going to sign now a document.
+             * Displays modal window with one button on it "Sign"
+             */
+            confirmSigner: function(signer){
+               return $mdDialog.show({
+                  disableParentScroll: false,
+                  clickOutsideToClose: false,
+                  templateUrl: confirm_signer_dialog,
+                  controller: function ($scope, $mdDialog) {
+                      $scope.signer = signer;
+                      $scope.closeDialog = function() {
+                          $mdDialog.hide();
+                      };
+                  }
+               })
             }
-
-
         };
 
         return service;

@@ -8,15 +8,15 @@
               <div class="sr-signature-block sr-first">
                   <span>Signature</span>
                   <span flex></span>
-                  <a ng-click="clearSignature()" class="sr-pull-right">Clear</a>
+                  <a ng-click="signature=null;" class="sr-pull-right">Clear</a>
                   <md-divider class="sr-boundary"></md-divider>
-                  <signature-pad accept="acceptSignature" clear="clearSignature" height="155" width="425"></signature-pad>
+                  <signature-input ng-model="signature" height="155" width="425"></signature-input>
               </div>
               <div class="sr-signature-block sr-second">
                   <span>Initials</span>
-                  <a ng-click="clearInitials()" class="sr-pull-right">Clear</a>
+                  <a ng-click="initials=null;" class="sr-pull-right">Clear</a>
                   <md-divider class="sr-boundary"></md-divider>
-                  <signature-pad accept="acceptInitials" clear="clearInitials" height="155" width="155"></signature-pad>
+                  <signature-input ng-model="initials" height="155" width="155"></signature-input>
               </div>
          </div>
      </div>

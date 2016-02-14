@@ -2,7 +2,6 @@ angular.module('dc.components.signingroom.SigningRoomCtrl', [
     'ngRoute',
     'dc.components.signingroom.ui',
     'dc.components.signingroom.signingService',
-    'dc.components.signingroom.signaturePadDialog',
     'dc.shared.api.api',
     'dc.shared.api.api_mock'
 ]).
@@ -11,20 +10,19 @@ angular.module('dc.components.signingroom.SigningRoomCtrl', [
  * Controller for signing room
  */
 
-controller('SigningRoomCtrl', function($scope, $routeParams, $mdSidenav, signingService, signaturePadDialog) {
+controller('SigningRoomCtrl', function($scope, $routeParams, $mdSidenav, signingService) {
+
+        signingService.signers[0].confirm();
 
         $scope.toggleSide = function(){
             $mdSidenav('left').toggle()
         };
 
         $scope.showSignaturePad = function(){
-          signaturePadDialog.show({'name': 'Rogesrs Johnson'}).then(function(){
-              console.log(signaturePadDialog.getData());
-          });
-        };
-
-        $scope.collectData = function(){
-            console.log(signaturePadDialog.getData());
+          signingService.signers[0].collectSignatureData().then(function(){
+                  console.log(signingService.signers[0].getData());
+              }
+          )
         };
 
         // Here we are going to keep the state of currently loaded document
