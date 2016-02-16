@@ -151,12 +151,23 @@ directive('doc', function() {
              * Update doc type
              */
             $scope.editDoc = function() {
-                docTypeDialog({
+
+                var options = {
                     title: 'Update Properties',
                     ok: 'Save',
                     docType: $scope.doc.docType,
-                    applicantType: $scope.doc.scanApplicant
-                }).then(function(result) {
+                    docTypeDisabled: false,
+                    applicantType: $scope.doc.scanApplicant,
+                    applicantTypeDisabled: false,
+                };
+
+                // check if co-applicant exists
+                if (signerService.cobuyer === null) {
+                    options.applicantType = 'buyer';
+                    options.applicantTypeDisabled = true;
+                }
+
+                docTypeDialog(options).then(function(result) {
 
                     // TODO: set update data
                     $api.updateDoc($scope.doc.id, {}).then(function(response) {
