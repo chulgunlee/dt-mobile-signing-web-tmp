@@ -48,7 +48,7 @@ angular.module('dc.components.signingroom.signature', [])
         // and ng-model variable will be updated.
         var onEndCallback = function(){
             ngModelCtrl.$setViewValue(scope.signaturePad.toDataURL());
-            scope.$apply()
+            scope.$apply();
         };
 
         var canvas = element.find('canvas')[0];
@@ -59,14 +59,14 @@ angular.module('dc.components.signingroom.signature', [])
             onEnd: onEndCallback
         });
 
-        // render will be called when value is set from outside of the derective
+        // render will be called when value is set from outside of the directive
         // we need to clear signaturePad if value is falsy, or draw provided value
         // on a canvas
         ngModelCtrl.$render = function(){
             if (ngModelCtrl.$isEmpty(ngModelCtrl.$viewValue)) {
                 scope.signaturePad.clear();
             } else {
-                scope.signaturePad.fromDataURL(ngModelCtrl.$viewValue)
+                scope.signaturePad.fromDataURL(ngModelCtrl.$viewValue);
             }
         };
 
