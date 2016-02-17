@@ -12,18 +12,22 @@ angular.module('dc.components.signingroom.SigningRoomCtrl', [
 
 controller('SigningRoomCtrl', function($scope, $routeParams, $mdSidenav, signingService) {
 
+        signingService.signers[0].confirm();
+
         $scope.toggleSide = function(){
             $mdSidenav('left').toggle()
         };
 
+        $scope.showSignaturePad = function(){
+          signingService.signers[0].collectSignatureData().then(function(){
+                  console.log(signingService.signers[0].getData());
+              }
+          )
+        };
+
         // Here we are going to keep the state of currently loaded document
         // for now current document should have following fields: title, pages, id
-
-        console.log($routeParams.docId);
-
         $scope.currentDocument = signingService.getDocument($routeParams.docId);
-
-        console.log($scope.currentDocument);
 
         signingService.getDocumentImages($routeParams.docId)
             .then(function(documentPages){

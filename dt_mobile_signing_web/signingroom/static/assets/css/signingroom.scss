@@ -7,6 +7,11 @@ html, body {
   font-family: "Helvetica Neue";
 }
 
+a {
+    color: $ui-link-color;
+    cursor: pointer;
+}
+
 .sr-md-toolbar-top {
     background: #f3f6f8;
     color: #202020;
@@ -212,4 +217,106 @@ md-sidenav.md-closed.md-locked-open-add-active {
 
 .sr-document {
     border: $ui-border;
+}
+
+.sr-md-dialog {
+    border-radius: 0px;
+    background-color: rgb(255,255,255);
+}
+
+.sr-pull-right {
+  float: right;
+}
+
+.sr-signature-block {
+    margin: 0 35px 25px 35px;
+    font-size: 14px;
+
+    &.sr-first{
+        margin-right: 25px;
+    }
+
+    &.sr-second{
+        margin-left: 0;
+    }
+
+    .signature {
+        border: $ui-border;
+        cursor: crosshair;
+        margin-top: 5px;
+    }
+
+    span {
+        color: #a1a1a1;
+    }
+}
+
+.sr-md-dialog-content {
+    padding-top: 45px;
+    padding-bottom: 52px;
+
+    .sr-signer-name {
+        font-size: 24px;
+        color: #231F20;
+        margin-bottom: 10px;
+    }
+
+    .sr-info {
+        margin-bottom: 45px;
+        font-size: 16px;
+        color: #a1a1a1;
+    }
+
+    .sr-error {
+        margin-bottom: 45px;
+        font-size: 16px;
+        color: #f93631;
+    }
+}
+
+.sr-boundary {
+    position: absolute;
+    top: 130px;
+    z-index: 99999;
+}
+
+.sr-md-dialog-actions {
+    margin-right: 37px;
+    font-size: 15px;
+    cursor: pointer;
+}
+
+md-dialog.sr-signore-confirm {
+
+    .sr-signore-confirm-content {
+        height: 240px;
+        width: 240px;
+    }
+
+    .sr-signor-avatar {
+        width: 93px;
+        height: 93px;
+        background: url(./images/icn-signor-lg.png);
+    }
+
+    .sr-signor-name {
+       color: #231F20;
+       font-size: 16px;
+       margin-top: 30px;
+    }
+
+    md-dialog-actions {
+        border-top: $ui-border;
+        padding: 0;
+        height: 44px;
+        min-height: 44px;
+    }
+
+    .md-button {
+        margin: 0;
+    }
+
+    a {
+        font-size: 15px;
+    }
 }

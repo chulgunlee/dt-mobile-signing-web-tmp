@@ -2,19 +2,20 @@
 // libraries
 var FastClick = require('fastclick');
 require('lodash');
+var SignaturePad = require('signature_pad');
 require('angular');
 require('angular-animate');
 require('angular-route');
 require('angular-aria');
 require('angular-material');
-
 require('../assets/libs/js/webviewbridge');
 
 // app components
 require('./signingroom.route.js');
-//require('./components/doclist/constants.js')
 require('./components/signingroom/signingRoomController.js');
+require('./components/signingroom/signingRoomModals.js');
 require('./components/signingroom/signingService.js');
+require('./components/signingroom/signature.js');
 require('./components/signingroom/ui.js');
 require('./shared/api/api.js');
 require('./shared/api/api_mock.js');
@@ -35,6 +36,7 @@ angular.module('dc.signingroom', [
     'ngMaterial',
     'dc.signingroom.route',
     'dc.components.signingroom.signingService',
+    'dc.components.signingroom.signature',
     'dc.shared.webviewbridge.webviewbridge'
 ]).
 
@@ -48,12 +50,16 @@ config(function($mdThemingProvider, $apiMockProvider) {
     // this is temporary solution to fill document placeholder
     $apiMockProvider.setDocPage(require('../images/doc_page.png'));
 
-   var signingRoomTheme = $mdThemingProvider.extendPalette('grey', {});
+    var signingRoomTheme = $mdThemingProvider.extendPalette('grey', {});
 
     $mdThemingProvider.definePalette('signingRoomTheme', signingRoomTheme);
 
     $mdThemingProvider.theme('default')
         .primaryPalette('signingRoomTheme');
+}).
+
+config(function(signaturePadConfigProvider){
+        signaturePadConfigProvider.setSignaturePad(SignaturePad)
 }).
 
 
