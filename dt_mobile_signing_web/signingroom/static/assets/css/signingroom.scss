@@ -37,14 +37,30 @@ a {
   min-height: 60px;
 }
 
+.sr-menu-content {
+    padding: 0 !important;
+    border-radius: 3px;
+
+    md-menu-item {
+        border-bottom: $ui-border;
+        height: 44px;
+        min-height: 44px;
+    }
+
+    a {
+        padding: 0 20px 0 20px !important;
+        font-size: 14px;
+    }
+}
+
 .sr-md-toolbar-tools-bottom {
     height: 60px;
     background: #202020;
     color: #f6f6f6;
 }
 
-.md-button span {
-    color: #c6c6c6;
+.sr-start-button {
+    color: #c6c6c6 !important;
     -webkit-user-select: none; /* Chrome/Safari */
     -webkit-tap-highlight-color: transparent;
 }
@@ -320,3 +336,31 @@ md-dialog.sr-signore-confirm {
         font-size: 15px;
     }
 }
+
+.sr-consent-confirm {
+
+    width: 660px;
+
+    .sr-consent-top-panel {
+      padding: 13px;
+      border-bottom: $ui-border;
+
+      .sr-consent-title {
+            margin-left: 5px;
+            font-size: 15px;
+            color: $ui-text-color;
+      }
+
+     }
+
+    .sr-consent-content {
+      height: 505px;
+      padding: 25px 25px 0 25px;
+      margin-bottom: 25px;
+      font-size: 14px;
+      color: $ui-text-color;
+    }
+}
+
+
+

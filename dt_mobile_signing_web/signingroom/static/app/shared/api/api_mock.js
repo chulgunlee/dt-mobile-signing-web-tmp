@@ -39,7 +39,7 @@ provider('$apiMock', function() {
 
             var deferred = $q.defer();
 
-            deferred.resolve(return_data)
+            deferred.resolve(return_data);
 
             return deferred.promise;
         };
@@ -135,24 +135,24 @@ provider('$apiMock', function() {
                 return request('GET', 'docs/sigstring/', return_data)
             },
 
-            // this will be used to save collected signatures for document. fully and parcially
+            // this will be used to save collected signatures for document. fully and partially
             saveSigningInfo: function(master_index_id, signatures){
                 alert('saved');
             },
 
             // this is to set signer consent
-            setConsent: function(master_index_id, signee_type){
-             alert('consent set')
+            setConsent: function(masterIndexId, signeeType){
+             return request('POST', 'docs/consent/');
             },
 
             // to check if user has consent to sign the document
-            getConsent: function(master_index_id, signee_type){
-             alert('consent set');
+            getConsent: function(masterIndexId, signeeType){
+             console.log(masterIndexId, signeeType)
             },
 
             // this is to withdrow consent
             removeConsent: function(master_index, signee_type){
-                alert('removed consent')
+                console.log(masterIndexId, signeeType)
             }
         };
 
