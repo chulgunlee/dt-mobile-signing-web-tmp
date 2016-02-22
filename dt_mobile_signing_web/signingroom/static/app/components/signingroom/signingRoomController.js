@@ -32,10 +32,7 @@ angular.module('dc.components.signingroom.SigningRoomCtrl', [
         // for now current document should have following fields: title, pages, id
         $scope.currentDocument = $scope.signingService.getDocument($routeParams.docId);
 
-        $scope.currentDocument.getImages($routeParams.docId)
-            .then(function (documentPages) {
-                $scope.currentDocument.pages = documentPages;
-        });
+        $scope.currentDocument.getImages();
 
         $scope.checked = true;
 

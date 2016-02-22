@@ -94,10 +94,14 @@ angular.module('dc.components.signingroom.signingService', [
         Document.prototype = {
           /**
              * Will use REST api to retrieve background images for
-             * document is provided.
+             * current document instance.
              */
             getImages: function () {
-                return $apiMock.getDocumentImages(this.document_id);
+                var self = this;
+                return $apiMock.getDocumentImages(this.document_id)
+                    .then(function (documentPages) {
+                        self.pages = documentPages;
+                    });
             }
         };
         return Document;
