@@ -27,7 +27,7 @@
                     <span class="sr-signed-in">You are signing as {{ signingService.currentSigner.name }} </span>
                     <ul class="sr-text-dimmed">
                         <li>Review the document</li>
-                        <li>You need to sign in <a ng-click="">1 locations {{ currentDocument.reviewed }}</a></li>
+                        <li>You need to sign in <a ng-click="">1 locations</a></li>
                     </ul>
                 </div>
 
@@ -60,7 +60,7 @@
                </md-menu-content>
              </md-menu>
              <span flex></span> <!-- fill space in the middle -->
-             <div class="sr-review-notice" ng-show="currentDocument.reviewed === false">
+             <div class="sr-review-notice" ng-hide="currentDocument.reviewed">
                  Please review the entire document in order to start signing
              </div>
              <md-button class="sr-start-button" ng-click="showSignaturePad()">Start</md-button>

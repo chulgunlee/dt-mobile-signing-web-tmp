@@ -152,7 +152,7 @@ angular.module('dc.components.signingroom.signingService', [
                     });
                     this.setCurrentSigner(this.signers[0])
                         .then(function () {
-                            console.log('current signer set');
+                            // do actions required after current signer is set
                         });
                 },
                 /**
@@ -192,15 +192,10 @@ angular.module('dc.components.signingroom.signingService', [
                  * attribute.
                  */
                 setCurrentSigner: function (signer) {
-                    var deferred = $q.defer(),
-                        self = this;
-
-                    signer.confirm().then(function () {
+                    var self = this;
+                    return signer.confirm().then(function () {
                         self.currentSigner = signer;
-                        deferred.resolve(signer);
                     });
-
-                    return deferred.promise;
                 }
             };
             return service;

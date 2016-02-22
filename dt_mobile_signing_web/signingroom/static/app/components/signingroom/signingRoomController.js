@@ -14,8 +14,6 @@ angular.module('dc.components.signingroom.SigningRoomCtrl', [
 
     controller('SigningRoomCtrl', function ($scope, $routeParams, $window, $mdSidenav, signingService) {
 
-        $scope.reviewed = false;
-
         $scope.signingService = signingService;
 
         // this should probably go signingroomSideBar directive, however since
