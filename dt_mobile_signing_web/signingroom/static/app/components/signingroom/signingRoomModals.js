@@ -114,7 +114,7 @@ angular.module('dc.components.signingroom.signingRoomModals', []).
                                     });
                             };
                             $scope.disagree = function () {
-                                $mdDialog.hide();
+                                $mdDialog.cancel();
                             };
                         }
                     });

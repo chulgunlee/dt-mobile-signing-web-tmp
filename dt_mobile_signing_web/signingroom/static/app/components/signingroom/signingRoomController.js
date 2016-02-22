@@ -23,7 +23,8 @@ angular.module('dc.components.signingroom.SigningRoomCtrl', [
 
         $scope.showSignaturePad = function () {
             $scope.signingService.signers[0].showConsent().then(function () {
-                console.log(signingService.signers[0].getData());
+                var data = signingService.signers[0].getData();
+                console.log(data);
             });
         };
 
