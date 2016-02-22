@@ -89,6 +89,7 @@ angular.module('dc.components.signingroom.signingService', [
                 throw "docData should contain `document_id` attribute";
             }
             _.extend(this, docData);
+            this.reviewed = false;
         }
 
         Document.prototype = {
@@ -116,7 +117,7 @@ angular.module('dc.components.signingroom.signingService', [
         return $cacheFactory('documentsCache');
     }).
     provider('signingService', function () {
-        this.$get = function ($apiMock, $location, documentsCache, Signer, Document, signingRoomModals) {
+        this.$get = function ($q, $apiMock, $location, documentsCache, Signer, Document, signingRoomModals) {
             var service = {
                 // initial parameters that are set during initialisation of
                 // the application
@@ -146,8 +147,13 @@ angular.module('dc.components.signingroom.signingService', [
                 start: function () {
                     $location.path('/document/' + this.docIds[0]);
                     // for now lets set first signer, however logic needs to be
-                    // developed to go over each signer and select next one in order
-                    this.setCurrentSigner(this.signers[0]);
+                    this.signers.forEach(function(){
+
+                    });
+                    this.setCurrentSigner(this.signers[0])
+                        .then(function () {
+                            console.log('current signer set');
+                        });
                 },
                 /**
                  * Returns a document information by document id
@@ -186,9 +192,15 @@ angular.module('dc.components.signingroom.signingService', [
                  * attribute.
                  */
                 setCurrentSigner: function (signer) {
+                    var deferred = $q.defer(),
+                        self = this;
+
                     signer.confirm().then(function () {
-                        this.currentSigner = signer;
+                        self.currentSigner = signer;
+                        deferred.resolve(signer);
                     });
+
+                    return deferred.promise;
                 }
             };
             return service;

@@ -7,7 +7,7 @@
 
       <div layout="row" flex layout-align="end center">
           <h2 md-toolbar-item>
-              <span class="sr-heading">{{ currentDocument.title }}</span>
+              <span class="sr-heading">{{ signingService.currentDocument.title }}</span>
           </h2>
       </div>
 
@@ -15,19 +15,19 @@
           <h2 md-toolbar-item>
               <span class="sr-heading">Honda of Manhattan</span>
           </h2>
-          <dt-logo></dt-logo>
+          <div class="sr-dt-logo"></div>
       </div>
   </div>
 </md-toolbar>
 
-<md-content flex>
+<md-content flex sr-scroll-end="currentDocument.reviewed = true;">
         <div layout="row" layout-align="center center">
             <div class="sr-page-container" flex="none">
                 <div class="sr-top-text">
-                    <span class="sr-signed-in">You are signing as Roger Johnson </span>
+                    <span class="sr-signed-in">You are signing as {{ signingService.currentSigner.name }} </span>
                     <ul class="sr-text-dimmed">
                         <li>Review the document</li>
-                        <li>You need to sign in <a href="#">1 locations</a></li>
+                        <li>You need to sign in <a ng-click="">1 locations {{ currentDocument.reviewed }}</a></li>
                     </ul>
                 </div>
 
@@ -60,6 +60,9 @@
                </md-menu-content>
              </md-menu>
              <span flex></span> <!-- fill space in the middle -->
+             <div class="sr-review-notice" ng-show="currentDocument.reviewed === false">
+                 Please review the entire document in order to start signing
+             </div>
              <md-button class="sr-start-button" ng-click="showSignaturePad()">Start</md-button>
         </div>
     </div>
