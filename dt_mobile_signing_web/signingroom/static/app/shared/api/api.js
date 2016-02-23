@@ -21,7 +21,7 @@ provider('$api', function() {
     }
 
 
-    this.$get = function($http, $rootScope, $q, loadingIndicatorService) {
+    this.$get = function($http, $rootScope, $q, $msgbox, loadingIndicatorService) {
     
         // the path base for assemble the api uri
         var pathBase = 'dealjackets/' + $rootScope.dealJacketId + '/deals/' + $rootScope.dealId;
@@ -34,9 +34,7 @@ provider('$api', function() {
             
             loadingIndicatorService.show('Loading data...');
 
-            var deferred = $q.defer();
-
-            $http({
+            return $http({
                 method: method.toUpperCase(),
                 url: getUrl(uri),
                 data: data,
@@ -49,15 +47,14 @@ provider('$api', function() {
             }).then(function(response) {
 
                 loadingIndicatorService.hide();
-                deferred.resolve(response);
+                return response;
 
-            }, function(response) {
+            }, function(reason) {
 
                 loadingIndicatorService.hide();
-                deferred.reject(response);
+                $msgbox.alert({ title: 'Error', msg: reason.statusText + " (" + reason.status + ")" });
+                return $q.reject(reason);
             });
-
-            return deferred.promise;
         };
 
 
