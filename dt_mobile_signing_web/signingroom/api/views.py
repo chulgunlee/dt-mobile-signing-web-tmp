@@ -164,6 +164,7 @@ def _convert_doc(doc):
         'requireFullReview': False,             # TODO
         'signable': r('bool', doc.get('electronic_sig')),
         'status': r('document_status', doc.get('document_status_cd')),
+        'statusLabel': doc.get('processing_status'),                        # human-readable label displayed in the status badge
         'signStatus': {
             'buyer': 'buyer' in sign_status,
             'cobuyer': 'cobuyer' in sign_status,
