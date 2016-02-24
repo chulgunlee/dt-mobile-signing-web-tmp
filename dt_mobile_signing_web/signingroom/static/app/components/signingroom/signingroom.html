@@ -21,7 +21,6 @@
 </md-toolbar>
 
 <md-content flex>
-        <!-- use material conteiners here instead -->
         <div layout="row" layout-align="center center">
             <div class="sr-page-container" flex="none">
                 <div class="sr-top-text">
@@ -39,27 +38,31 @@
                     <div ng-repeat="page in currentDocument.pages" class="sr-document">
                         <img class="sr-document-img" ng-src="/{{ page.Value }}">
                     </div>
-
                 </div>
             </div>
         </div>
 </md-content>
 
   <md-toolbar class="sr-md-toolbar-bottom">
-
     <div class="md-toolbar-tools md-toolbar-tools-bottom sr-md-toolbar-tools-bottom">
-
         <div layout="row" flex>
-            <md-button class="md-icon-button" ng-click="collectData()">
-              <div class="sr-more-button"></div>
-            </md-button>
-        </div>
-
-        <div layout="row" flex layout-align="end end">
-            <md-button class="sr-start-button" ng-click="showSignaturePad()">Start</md-button>
+             <md-menu md-offset="-20 -90">
+               <md-button class="md-icon-button" ng-click="$mdOpenMenu()">
+                  <div md-menu-origin class="sr-more-button"></div>
+               </md-button>
+               <md-menu-content class="sr-menu-content">
+                 <md-menu-item>
+                     <a ng-click="signingService.saveAndExit()">Save &amp; Exit</a>
+                 </md-menu-item>
+                 <md-menu-item>
+                     <a ng-click="signingService.withdrawConsent()">Withdraw Consent</a>
+                 </md-menu-item>
+               </md-menu-content>
+             </md-menu>
+             <span flex></span> <!-- fill space in the middle -->
+             <md-button class="sr-start-button" ng-click="showSignaturePad()">Start</md-button>
         </div>
     </div>
-
   </md-toolbar>
 
 
