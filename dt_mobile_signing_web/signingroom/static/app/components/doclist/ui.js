@@ -4,6 +4,7 @@ var templates = {
     'bottom_bar.html': require('./bottom_bar.html'),
     'select_signer_modal.html': require('./select_signer_modal.html'),
     'submit_docs_confirm.html': require('./submit_docs_confirm.html'),
+    'delete_docs_confirm.html': require('./delete_docs_confirm.html'),
     'signstatus_popover.html': require('./signstatus_popover.html'),
     'more_popover.html': require('./more_popover.html'),
 }
@@ -184,9 +185,16 @@ directive('doc', function() {
              * Delete doc (delete scanned pdf, not delete doc from dealjacket)
              */
             $scope.deleteDoc = function() {
-                $api.deleteDoc($scope.doc.id).then(function() {
-                    webViewBridge.logEvent('document id=' + $scope.doc.id + ' was deleted.');
-                    docService.refresh();
+                $msgbox.confirm({
+                    templateUrl: templates['delete_docs_confirm.html'],
+                    scope: $scope,
+                    title: 'Delete Document',
+                    ok: 'Delete',
+                }).then(function() {
+                    $api.deleteDoc($scope.doc.id).then(function() {
+                        webViewBridge.logEvent('document id=' + $scope.doc.id + ' was deleted.');
+                        docService.refresh();
+                    });
                 });
             };
 

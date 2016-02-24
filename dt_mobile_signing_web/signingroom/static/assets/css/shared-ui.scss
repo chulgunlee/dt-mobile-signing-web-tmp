@@ -53,17 +53,20 @@
 
     .modal-header {
         border-bottom: 0;
+        font-weight: 500 !important;
     }
 
     .modal-body {
         padding: 15px 45px 30px;
 
         ul {
+            margin-top: 20px;
             list-style-type: disc;
+            font-weight: 500;
         }
 
         li {
-            margin-left: 30px;
+            margin-left: 20px;
         }
     }
 
