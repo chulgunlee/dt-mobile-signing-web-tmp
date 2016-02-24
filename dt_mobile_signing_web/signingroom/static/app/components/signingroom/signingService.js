@@ -59,7 +59,7 @@ angular.module('dc.components.signingroom.signingService', [
             /**
              * Call this method to request a consent status.
              * Will return promise. We should think when exactly do we
-             * want request this information, since consent is and
+             * want request this information, since consent is an
              * attribute of package, than it makes sense to request this
              * information on the initial loading of signing room, in that case
              * this method will be able to return consentStatus instead of

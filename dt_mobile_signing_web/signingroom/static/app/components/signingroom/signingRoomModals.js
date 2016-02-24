@@ -6,14 +6,13 @@ var confirm_consent_dialog = require('./confirm_consent_dialog.html');
 
 angular.module('dc.components.signingroom.signingRoomModals', []).
 
-/**
- * Signing Room Dialogs Service. Service
- * provides modal components to the application.
- */
+    /**
+     * Signing Room Dialogs Service. Service
+     * provides modal components to the application.
+     */
 
     provider('signingRoomModals', function () {
         this.$get = function ($mdDialog) {
-
             var service = {
                 signatureData: null,
                 initialsData: null,
@@ -23,8 +22,8 @@ angular.module('dc.components.signingroom.signingRoomModals', []).
                 validateSigner: function (signer) {
                     if (!signer) {
                         throw "You must provide signer instance as a first parameter" +
-                                 "in show(signer) function for person that is going to " +
-                                 "provide signature and initials";
+                              "in show(signer) function for person that is going to " +
+                              "provide signature and initials";
                     }
                 },
                 /**
@@ -41,12 +40,12 @@ angular.module('dc.components.signingroom.signingRoomModals', []).
                         clickOutsideToClose: false,
                         templateUrl: signature_pad_dialog,
                         controller: function ($scope, $mdDialog) {
-                            $scope.signer =  signer;
-                            $scope.closeDialog = function() {
+                            $scope.signer = signer;
+                            $scope.closeDialog = function () {
                                 $mdDialog.hide();
                             };
-                            $scope.applyAction = function(){
-                                if (!$scope.signature){
+                            $scope.applyAction = function () {
+                                if (!$scope.signature) {
                                     $scope.error = 'Please draw your signature';
                                 } else if ($scope.signature.length < 5000) {
                                     $scope.signature = null;
@@ -126,7 +125,7 @@ angular.module('dc.components.signingroom.signingRoomModals', []).
                 confirmConsentWithdrawal: function () {
                     var confirm = $mdDialog.confirm({
                         textContent: 'Are you sure you want to Withdraw your consent? ' +
-                                     'Signatures on this document will not be saved"',
+                                     'Signatures on this document will not be saved.',
                         ok: 'Yes',
                         cancel: 'No'
                     });
@@ -149,5 +148,4 @@ angular.module('dc.components.signingroom.signingRoomModals', []).
             };
             return service;
         };
-
     });
