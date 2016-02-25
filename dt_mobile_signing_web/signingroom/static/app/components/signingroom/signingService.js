@@ -146,10 +146,6 @@ angular.module('dc.components.signingroom.signingService', [
                  */
                 start: function () {
                     $location.path('/document/' + this.docIds[0]);
-                    // for now lets set first signer, however logic needs to be
-                    this.signers.forEach(function(){
-
-                    });
                     this.setCurrentSigner(this.signers[0])
                         .then(function () {
                             // do actions required after current signer is set
