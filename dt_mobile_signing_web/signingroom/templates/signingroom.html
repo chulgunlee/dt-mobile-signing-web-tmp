@@ -28,7 +28,7 @@
     <script src="/static/common.js"></script>
     <script src="/static/signingroom.bundle.js"></script>
     <script>
-            angular.module('dc.signingroom').run(function($rootScope, signingService) {
+            angular.module('dc.signingroom').run(function($document, $rootScope, signingService) {
 
                 signingService.init(
                         {

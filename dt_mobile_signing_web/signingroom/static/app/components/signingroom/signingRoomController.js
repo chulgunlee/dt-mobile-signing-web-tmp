@@ -12,11 +12,12 @@ angular.module('dc.components.signingroom.SigningRoomCtrl', [
  * Controller for signing room
  */
 
-    controller('SigningRoomCtrl', function($scope, $routeParams, $mdSidenav, signingService) {
+    controller('SigningRoomCtrl', function ($scope, $routeParams, $window, $mdSidenav, signingService) {
 
         $scope.signingService = signingService;
 
-        // this should probably go signingroomSideBar directive
+        // this should probably go signingroomSideBar directive, however since
+        // sidenaw is out of scope of the current contr
         $scope.toggleSide = function () {
             $mdSidenav('left').toggle();
         };
