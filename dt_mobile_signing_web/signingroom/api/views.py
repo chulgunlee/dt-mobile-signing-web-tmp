@@ -81,6 +81,10 @@ class DealJacketView(BaseAPIView):
         # get the required signers for each doc
         for doc in docs:
             doc['required_signers'] = dc.signers(doc['document_index_id'], doc['latest_doc_version_cd'])
+      
+        converted_docs = [_convert_doc(doc) for doc in docs]
+
+        sorted_docs = sorted(converted_docs, key=lambda k: k['createdTs'])  
 
         result = {
             'id': str(deal_id),
@@ -90,7 +94,7 @@ class DealJacketView(BaseAPIView):
                 'cobuyer': get_applicant_info(deal, 'coapplicant'),
                 'dealer': 'Mark Chart',
             },
-            'docs': [_convert_doc(doc) for doc in docs],
+            'docs': sorted_docs
         }
 
         return Response(result)
@@ -145,8 +149,12 @@ class DocListView(APIView):
         # call doccenter api to get docs
         dc = get_doccenter_api(request.context_data)
         docs = dc.get_docs_by_dj_id(dealjacket_id)
+        
+        converted_docs = [_convert_doc(doc) for doc in docs]
 
-        result = {'docs': [_convert_doc(doc) for doc in docs]}
+        sorted_docs = sorted(converted_docs, key=lambda k: k['createdTs'])  
+
+        result = {'docs': sorted_docs}
 
         return Response(result)
 
@@ -155,6 +163,7 @@ def _convert_doc(doc):
     sign_status = r('sig_status_cd', doc.get('sig_status_cd', 'ALLNS'), ())
 
     return {
+        'createdTs': doc['created_ts'],
         'id': doc['document_index_id'],
         'packageId': doc['master_index_id'],
         'docType': doc.get('template_doc_type'),
